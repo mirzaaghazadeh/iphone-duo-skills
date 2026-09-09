@@ -1,0 +1,9 @@
+# Transcripts fetched by scripts/fetch-transcripts.py are Apple's content.
+# They are research input, not redistributable — keep them out of the repo.
+transcript-*.txt
+*.m3u8
+*.vtt
+
+.DS_Store
+__pycache__/
+*.pyc
