@@ -1,0 +1,40 @@
+{
+  "name": "iphone-duo-skills",
+  "version": "1.0.0",
+  "description": "Agent skills for building iOS apps on iPhone Duo, Apple's first foldable iPhone — adaptive layout, vertical bars, hinge and scenes, camera, and design review.",
+  "keywords": [
+    "agent-skill",
+    "agent-skills",
+    "skills",
+    "claude",
+    "claude-code",
+    "ai-agent",
+    "iphone-duo",
+    "foldable",
+    "ios",
+    "swift",
+    "swiftui",
+    "uikit",
+    "adaptive-layout",
+    "apple"
+  ],
+  "homepage": "https://github.com/mirzaaghazadeh/iphone-duo-skills#readme",
+  "bugs": {
+    "url": "https://github.com/mirzaaghazadeh/iphone-duo-skills/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mirzaaghazadeh/iphone-duo-skills.git"
+  },
+  "license": "MIT",
+  "author": "Navid Mirzaaghazadeh <mirzaaghazadeh@icloud.com>",
+  "files": [
+    "skills",
+    "reference",
+    "README.md",
+    "LICENSE"
+  ],
+  "publishConfig": {
+    "access": "public"
+  }
+}
