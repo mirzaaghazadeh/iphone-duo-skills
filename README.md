@@ -11,20 +11,47 @@ API surface.
 
 ## Install
 
-Drop the skills into whichever agent you use.
+```bash
+npx skills add mirzaaghazadeh/iphone-duo-skills
+```
 
-**Claude Code** — user-level (all projects):
+Installs all six. The CLI detects your agent — Claude Code, Cursor, Copilot,
+Gemini and others — and puts them where that agent looks.
+
+Useful flags:
+
+```bash
+# just one skill
+npx skills add mirzaaghazadeh/iphone-duo-skills --skill iphone-duo-readiness
+
+# user-level instead of project-level
+npx skills add mirzaaghazadeh/iphone-duo-skills --global
+
+# see what's in here without installing
+npx skills add mirzaaghazadeh/iphone-duo-skills --list
+```
+
+To try a skill without installing it at all:
+
+```bash
+npx skills use mirzaaghazadeh/iphone-duo-skills@iphone-duo-readiness
+```
+
+<details>
+<summary>Manual install</summary>
 
 ```bash
 git clone https://github.com/mirzaaghazadeh/iphone-duo-skills.git
 cp -r iphone-duo-skills/skills/* ~/.claude/skills/
 ```
 
-Or project-level, into `.claude/skills/` in a repo. Restart the session and the
-skills appear; invoke one by name or just describe the task.
+Or project-level, into `.claude/skills/` in a repo.
+
+</details>
 
 Each skill is a self-contained `SKILL.md` with YAML frontmatter, so it also works
-anywhere that reads plain Markdown instructions.
+anywhere that reads plain Markdown instructions. Restart the session and the
+skills appear; invoke one by name or just describe the task.
 
 ## The skills
 
