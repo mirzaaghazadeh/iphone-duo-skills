@@ -67,6 +67,14 @@ skills appear; invoke one by name or just describe the task.
 | **iphone-duo-hinge-and-scenes** | Hinge-driven effects, Split View, multiple scenes, dual-display UI via scene accessories. |
 | **iphone-duo-camera** | Capture apps. Virtual front camera vs individual cameras, direction coordinator, mirroring, preview. |
 | **iphone-duo-design-review** | Design critique rather than code — poses, side controls, asymmetry, fold avoidance, sheets. |
+| **iphone-duo-flutter** | The app is Flutter/Dart. What `MediaQuery` gives you, why `displayFeatures` doesn't work here, bridging via platform channels. |
+| **iphone-duo-react-native** | The app is React Native or Expo. Asymmetric insets, resize handling, bridging via a native module. |
+
+The first six are Swift-focused; the last two cover cross-platform apps. Worth
+knowing up front that **neither framework has iPhone Duo support yet** — Flutter's
+`displayFeatures` is documented as populated only on Android, and React Native has
+no fold API at all. Both skills separate what works today from what needs a native
+bridge, so you don't spend an afternoon hunting for an API that isn't there.
 
 ## Reference
 

@@ -30,6 +30,25 @@ original notes and instructions written from the technical facts.
 - What's new in SwiftUI (WWDC26)
 - Support the Center Stage front camera in your iOS app (WWDC26)
 
+## Cross-platform
+
+For the Flutter and React Native skills. Neither framework had iPhone Duo
+support at the time of writing — these are the sources establishing what each
+does and does not provide:
+
+- [`DisplayFeature`](https://api.flutter.dev/flutter/dart-ui/DisplayFeature-class.html) —
+  Flutter API docs, which state the property is **populated only on Android**.
+  Exposes `bounds`, `type` (`hinge` / `fold` / `cutout`) and `state`
+  (`postureFlat` / `postureHalfOpened` / `unknown`).
+- [`dual_screen`](https://pub.dev/packages/dual_screen) — `TwoPane`,
+  `hingeAngleEvents`, `hasHingeAngleSensor`. Last published around three years
+  ago; Android-only in practice.
+- [`react-native-safe-area-context`](https://github.com/AppAndFlow/react-native-safe-area-context) —
+  `useSafeAreaInsets()`, the per-edge inset hook the React Native skill builds on.
+- [Supporting safe areas](https://reactnavigation.org/docs/handling-safe-area/) —
+  React Navigation, on preferring the hook over the deprecated core
+  `SafeAreaView`.
+
 ## Documentation still pending
 
 As of September 10, 2026 these were listed as "coming soon" or "coming later
