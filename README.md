@@ -1,5 +1,9 @@
 # iPhone Duo Skills
 
+![iPhone Duo, partially folded, showing the inner display with the dock and controls running vertically down the right side](assets/iphone-duo-hero.webp)
+
+<sup>Image © Apple Inc., from the [iPhone Duo developer page](https://developer.apple.com/iphone-duo/), used for identification. Not affiliated with or endorsed by Apple.</sup>
+
 Agent skills for building iOS apps on **iPhone Duo** — Apple's first foldable
 iPhone, announced September 9, 2026.
 
