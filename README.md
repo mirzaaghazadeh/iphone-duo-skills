@@ -19,7 +19,7 @@ API surface.
 npx skills add mirzaaghazadeh/iphone-duo-skills
 ```
 
-Installs all six. The CLI detects your agent — Claude Code, Cursor, Copilot,
+Installs all eight. The CLI detects your agent — Claude Code, Cursor, Copilot,
 Gemini and others — and puts them where that agent looks.
 
 Useful flags:
@@ -59,22 +59,47 @@ skills appear; invoke one by name or just describe the task.
 
 ## The skills
 
-| Skill | Use it when |
-|---|---|
-| **iphone-duo-readiness** | Entry point. Auditing or porting an existing app — SDK tiers, fixed-assumption hunting, safe areas, routing to the rest. |
-| **iphone-duo-adaptive-layout** | Content lands in the fold. Reserved regions, division vs occlusion, displacement patterns, `ArrangementView`. |
-| **iphone-duo-vertical-bars** | Toolbars and tab bars. The vertical axis, symbol vs text, `AxisBehavior`, overflow and visibility priority. |
-| **iphone-duo-hinge-and-scenes** | Hinge-driven effects, Split View, multiple scenes, dual-display UI via scene accessories. |
-| **iphone-duo-camera** | Capture apps. Virtual front camera vs individual cameras, direction coordinator, mirroring, preview. |
-| **iphone-duo-design-review** | Design critique rather than code — poses, side controls, asymmetry, fold avoidance, sheets. |
-| **iphone-duo-flutter** | The app is Flutter/Dart. What `MediaQuery` gives you, why `displayFeatures` doesn't work here, bridging via platform channels. |
-| **iphone-duo-react-native** | The app is React Native or Expo. Asymmetric insets, resize handling, bridging via a native module. |
+| Skill | Works with | Use it when |
+|---|---|---|
+| **iphone-duo-readiness** | SwiftUI · UIKit | Entry point. Auditing or porting an existing app — SDK tiers, fixed-assumption hunting, safe areas, routing to the rest. |
+| **iphone-duo-adaptive-layout** | SwiftUI · UIKit | Content lands in the fold. Reserved regions, division vs occlusion, displacement patterns, `ArrangementView`. |
+| **iphone-duo-vertical-bars** | SwiftUI · UIKit | Toolbars and tab bars. The vertical axis, symbol vs text, `AxisBehavior`, overflow and visibility priority. |
+| **iphone-duo-hinge-and-scenes** | SwiftUI · UIKit | Hinge-driven effects, Split View, multiple scenes, dual-display UI via scene accessories. |
+| **iphone-duo-camera** | AVFoundation · AVKit | Capture apps. Virtual front camera vs individual cameras, direction coordinator, mirroring, preview. |
+| **iphone-duo-design-review** | Any framework | Design critique rather than code — poses, side controls, asymmetry, fold avoidance, sheets. |
+| **iphone-duo-flutter** | Flutter · Dart | The app is Flutter. What `MediaQuery` gives you, why `displayFeatures` doesn't work here, bridging via platform channels. |
+| **iphone-duo-react-native** | React Native · Expo | The app is React Native. Asymmetric insets, resize handling, bridging via a native module. |
 
-The first six are Swift-focused; the last two cover cross-platform apps. Worth
-knowing up front that **neither framework has iPhone Duo support yet** — Flutter's
-`displayFeatures` is documented as populated only on Android, and React Native has
-no fold API at all. Both skills separate what works today from what needs a native
-bridge, so you don't spend an afternoon hunting for an API that isn't there.
+### Which skills apply to your stack
+
+**Native iOS — SwiftUI or UIKit.** All eight are relevant; start with
+`iphone-duo-readiness`, which routes you to the rest. The six Swift-focused skills
+name real iOS 27.1 APIs you can call directly.
+
+**Flutter.** Read `iphone-duo-flutter` first, then `iphone-duo-design-review` —
+the design guidance is framework-neutral and applies unchanged. Skim
+`iphone-duo-adaptive-layout` for the *reasoning* behind reserved regions and
+displacement; the concepts transfer even though the code doesn't.
+
+**React Native or Expo.** Same shape: `iphone-duo-react-native`, then
+`iphone-duo-design-review`, then `iphone-duo-adaptive-layout` for background.
+
+**Any framework, if you capture photo or video.** `iphone-duo-camera` matters
+regardless of stack, because the two front cameras and the "which way is this
+camera facing" problem are AVFoundation-level facts. Cross-platform apps hit them
+through whatever camera plugin they use, or through their own bridge.
+
+**Kotlin Multiplatform, .NET MAUI, Capacitor, Unity and friends.** No dedicated
+skill, but the pattern from the Flutter and React Native skills carries over
+directly: everything is either *resize and safe-area handling you can do in your
+existing layer*, or *a native bridge to the iOS 27.1 APIs*. Read whichever
+cross-platform skill is closer to your setup, plus `iphone-duo-design-review`.
+
+> **Cross-platform reality check.** Neither Flutter nor React Native supports
+> iPhone Duo yet. Flutter's `MediaQuery.displayFeatures` is documented as
+> populated **only on Android**, so it returns an empty list here; React Native has
+> no fold API at all. Both skills split what works today from what needs a native
+> bridge, so you don't lose an afternoon hunting for an API that isn't there.
 
 ## Reference
 
