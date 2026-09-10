@@ -1,7 +1,7 @@
 {
   "name": "iphone-duo-skills",
-  "version": "1.1.0",
-  "description": "Agent skills for building iOS apps on iPhone Duo, Apple's first foldable iPhone — adaptive layout, vertical bars, hinge and scenes, camera, design review, plus Flutter and React Native ports.",
+  "version": "1.2.0",
+  "description": "Agent skills for building iOS apps on iPhone Duo, Apple's first foldable iPhone — adaptive layout, vertical bars, hinge and scenes, camera, design review, games, plus Flutter and React Native ports.",
   "keywords": [
     "agent-skill",
     "agent-skills",
@@ -20,7 +20,9 @@
     "flutter",
     "dart",
     "react-native",
-    "expo"
+    "expo",
+    "unity",
+    "gamedev"
   ],
   "homepage": "https://github.com/mirzaaghazadeh/iphone-duo-skills#readme",
   "bugs": {

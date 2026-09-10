@@ -29,11 +29,24 @@ side or the other.
 as frames sitting inside your bounds. The inner FaceTime camera is an occlusion
 region.
 
+Concretely, iPhone Duo has **three** reserved regions, and it's worth knowing
+which is which because they behave differently:
+
+| Region | Kind | When it's there |
+|---|---|---|
+| Outer front camera | occlusion | **Always.** Sits in the corner, aligned with the side controls, and expands into the Dynamic Island for Live Activities. |
+| Inner front camera | occlusion | Only while that camera is active. It's under the display and invisible otherwise; when it activates, UI moves aside to reveal it. |
+| The folding region | division | Only while the device is partially folded, dividing the inner display and excluding the curved centre. |
+
 Regions are **active or inactive**:
 
 - The fold's division region is active only while the device is actually folded.
   Flat, it is inactive and has zero width.
 - The camera's occlusion region is active only while that camera is streaming.
+
+Note the asymmetry between the two cameras: the outer one is a permanent fact of
+your layout, while the inner one appears and disappears under you. Handle the
+second as a change you animate through, not a constant you read once.
 
 By default you get only the active ones. Pass the `includeInactive` option to
 also see regions that exist but aren't currently in play — which is what you want

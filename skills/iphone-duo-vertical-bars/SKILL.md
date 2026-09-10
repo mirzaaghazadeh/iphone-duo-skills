@@ -132,6 +132,18 @@ custom content legible either way. And flexible spacers collapse to zero on the
 vertical axis while fixed spacers keep their minimum — though your app shouldn't
 be adding bar spacing manually on either axis.
 
+**Group instead of spacing.** Rather than inserting spacers by hand, express the
+relationship: `ToolbarItemGroup` in SwiftUI, `UIBarButtonItemGroup` in UIKit.
+Groups space themselves against neighbouring groups and re-space as the available
+room changes — which on this device happens constantly. Manual spacing is fixed
+at exactly the moment it needs to be fluid.
+
+**Keep controls near what they act on.** When a control belongs to a content area
+that isn't the trailing one, leave it with that area instead of sending it to the
+side bar. Proximity is what tells someone the control applies to *that* pane. In a
+mail-style layout, controls acting on the message list belong above the list, not
+in the shared vertical bar where they'd read as applying to the open message.
+
 ## Overflow
 
 Items overflow more readily here — the outer display in landscape has little
@@ -149,13 +161,14 @@ Configure this per view with the toolbar compression behavior API.
 
 **Consolidate into the system overflow.** If the app has its own overflow menu,
 fold its actions into the system-managed one — `ToolbarOverflowMenu` in SwiftUI,
-`additionalOverflowItems` in UIKit. Reserve the ellipsis symbol for overflow
-specifically; give other menus their own distinct symbols rather than importing
-conventions from other platforms.
+`UINavigationItem.additionalOverflowItems` in UIKit. Reserve the ellipsis symbol
+for overflow specifically; give other menus their own distinct symbols rather
+than importing conventions from other platforms.
 
-**Then set priorities.** By default items overflow bottom to top. Assign
-`visibilityPriority` — high, low, or a custom value — to control the collapse
-order. Prioritize by group first, then within a group if you need to.
+**Then set priorities.** By default items overflow bottom to top. Assign a
+visibility priority — `ToolbarItemVisibilityPriority` in SwiftUI,
+`UIBarButtonItemVisibilityPriority` in UIKit — to control the collapse order.
+Prioritize by group first, then within a group if you need finer control.
 
 Two things deserve high priority: actions people reach for constantly (compose,
 new note), and controls conveying status such as badged items, which are useless
@@ -163,10 +176,18 @@ once hidden.
 
 ## When to turn it off
 
-Most apps want vertical bars. Two cases don't:
+**Default answer: don't.** Side-mounted controls are a defining pattern of this
+device, and Apple's guidance is explicit that you generally shouldn't override the
+placement. Familiar control positions are what let someone pick up your app and
+already know it, and every app that opts out erodes that a little.
 
-- **Single-screen, bottom-heavy layouts** — a calculator, say — where horizontal
-  bars let the content expand fully.
+The legitimate exceptions are narrow:
+
+- **Interfaces that don't need bars at all** — a calculator-style layout that
+  spans the full display width. This works for visual, immersive, non-scrolling
+  interfaces, provided nothing collides with the Dynamic Island or status bar. You
+  can also mix: a full-width background or header with the scrollable content
+  inset.
 - **Control-light sheets**, where one close button doesn't justify surrendering
   the width.
 

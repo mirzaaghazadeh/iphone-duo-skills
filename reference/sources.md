@@ -8,6 +8,14 @@ original notes and instructions written from the technical facts.
 
 - [Get ready for iPhone Duo](https://developer.apple.com/iphone-duo/)
 
+## Human Interface Guidelines
+
+- [Designing for iPhone Duo](https://developer.apple.com/design/human-interface-guidelines/designing-for-iphone-duo)
+  — published September 9, 2026. Covers device anatomy and poses, dynamic
+  layouts, the three reserved regions, split views, arrangement views, and
+  vertical controls. It is also the source that confirms several toolbar API
+  names, and the only source so far for the **games** guidance.
+
 ## Tech Talks
 
 | ID | Title | Covered by |
@@ -51,13 +59,15 @@ does and does not provide:
 
 ## Documentation still pending
 
-As of September 10, 2026 these were listed as "coming soon" or "coming later
-this month" on the landing page. Check them before trusting any signature in
-`api-index.md`:
+Re-checked September 10, 2026. *Designing for iPhone Duo* has now shipped (see
+above). Still outstanding, and still the reason to treat signatures in
+`api-index.md` as unconfirmed:
 
-- Xcode 27.1 beta
-- *Designing for iPhone Duo* (Human Interface Guidelines)
-- *Preparing your app for iPhone Duo*
+- **Xcode 27.1 beta** — "coming later this month". Until this lands, no API
+  signature here can be verified against real headers, and there is no iPhone Duo
+  simulator to test poses in.
+- **Preparing your app for iPhone Duo** — the developer-facing companion article.
+  Not yet live under `documentation/uikit/` or `documentation/swiftui/`.
 
 ## Keeping this current
 

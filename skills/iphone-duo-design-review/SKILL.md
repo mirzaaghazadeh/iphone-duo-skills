@@ -107,12 +107,30 @@ and you inherit it.
 The design goal is simple: keep interactive elements out of the curve as much as
 possible.
 
+Two refinements when you do adapt to the fold:
+
+**Prefer containers that adapt themselves.** A split view that rebalances its
+pane widths handles the fold better than anything you position by hand. In grids,
+prefer an **even number of columns** so content divides cleanly either side of
+the centre.
+
+**Move as little as possible.** Controls that vanish or jump across the screen as
+someone bends the device are hard to find and harder to track. Favour small
+adjustments that keep things visible and tappable over rearranging the layout.
+
 ## Using the inner display well
 
 A stretched-out iPhone app is the failure mode. Three approaches that work:
 
-**Split views.** Surface multiple levels of hierarchy at once — provided the
-hierarchy itself doesn't change between displays.
+**Split views.** Surface multiple levels of hierarchy at once. The nuance worth
+getting right: your information hierarchy must stay the same across displays, but
+you may reveal *one more level of it* on the larger display. A mail app showing
+either the message list or a single message when closed, and both side by side
+when open, is the same hierarchy with more of it visible — not a different app.
+That is the distinction between adapting and reinventing.
+
+Standard split views also adapt to reserved regions on their own, rebalancing
+column widths and margins so both panes stay visible as the device folds.
 
 **Reflow to columns.** A vertically stacked layout that becomes a two-column
 layout when horizontal space allows.
@@ -157,3 +175,12 @@ Ask these of any iPhone Duo design:
 7. Does the layout hold up in Split View on both sides, and with PiP pinned?
 8. Are custom components reimplementing fold avoidance that system components
    would have provided?
+9. Do controls sit near the content they act on, rather than being swept into the
+   side bar away from the pane they belong to?
+10. Does anything change *state* between displays, rather than just layout? State
+    should survive opening and closing the device.
+
+If the project is a game, most of this doesn't apply — see
+`../iphone-duo-games/SKILL.md` instead, which covers filling the screen across
+poses, aspect ratio versus letterboxing, and keeping touch controls out of the
+fold.

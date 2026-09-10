@@ -7,11 +7,11 @@
 Agent skills for building iOS apps on **iPhone Duo** — Apple's first foldable
 iPhone, announced September 9, 2026.
 
-Apple's developer material for iPhone Duo currently lives in six Tech Talk
-videos; the written documentation and HIG pages were still marked "coming soon"
-at the time this was written. These skills distill that material into structured
-guidance an agent can act on, plus reference sheets for device facts and the full
-API surface.
+Apple's developer material for iPhone Duo is six Tech Talk videos plus the
+[Designing for iPhone Duo](https://developer.apple.com/design/human-interface-guidelines/designing-for-iphone-duo)
+HIG page. Xcode 27.1 and the *Preparing your app for iPhone Duo* article are still
+listed as coming. These skills distill what exists into structured guidance an
+agent can act on, plus reference sheets for device facts and the full API surface.
 
 ## Install
 
@@ -19,7 +19,7 @@ API surface.
 npx skills add mirzaaghazadeh/iphone-duo-skills
 ```
 
-Installs all eight. The CLI detects your agent — Claude Code, Cursor, Copilot,
+Installs all nine. The CLI detects your agent — Claude Code, Cursor, Copilot,
 Gemini and others — and puts them where that agent looks.
 
 Useful flags:
@@ -67,14 +67,15 @@ skills appear; invoke one by name or just describe the task.
 | **iphone-duo-hinge-and-scenes** | SwiftUI · UIKit | Hinge-driven effects, Split View, multiple scenes, dual-display UI via scene accessories. |
 | **iphone-duo-camera** | AVFoundation · AVKit | Capture apps. Virtual front camera vs individual cameras, direction coordinator, mirroring, preview. |
 | **iphone-duo-design-review** | Any framework | Design critique rather than code — poses, side controls, asymmetry, fold avoidance, sheets. |
+| **iphone-duo-games** | Unity · Unreal · Godot · SpriteKit · Metal | The project is a game. Filling the screen across poses, aspect ratio vs letterboxing, touch controls clear of the fold. |
 | **iphone-duo-flutter** | Flutter · Dart | The app is Flutter. What `MediaQuery` gives you, why `displayFeatures` doesn't work here, bridging via platform channels. |
 | **iphone-duo-react-native** | React Native · Expo | The app is React Native. Asymmetric insets, resize handling, bridging via a native module. |
 
 ### Which skills apply to your stack
 
-**Native iOS — SwiftUI or UIKit.** All eight are relevant; start with
-`iphone-duo-readiness`, which routes you to the rest. The six Swift-focused skills
-name real iOS 27.1 APIs you can call directly.
+**Native iOS — SwiftUI or UIKit.** Start with `iphone-duo-readiness`, which routes
+you to the rest. The five Swift-focused skills name real iOS 27.1 APIs you can
+call directly; `iphone-duo-design-review` applies whatever you build in.
 
 **Flutter.** Read `iphone-duo-flutter` first, then `iphone-duo-design-review` —
 the design guidance is framework-neutral and applies unchanged. Skim
@@ -89,11 +90,15 @@ regardless of stack, because the two front cameras and the "which way is this
 camera facing" problem are AVFoundation-level facts. Cross-platform apps hit them
 through whatever camera plugin they use, or through their own bridge.
 
-**Kotlin Multiplatform, .NET MAUI, Capacitor, Unity and friends.** No dedicated
-skill, but the pattern from the Flutter and React Native skills carries over
-directly: everything is either *resize and safe-area handling you can do in your
-existing layer*, or *a native bridge to the iOS 27.1 APIs*. Read whichever
-cross-platform skill is closer to your setup, plus `iphone-duo-design-review`.
+**Games — Unity, Unreal, Godot, SpriteKit, Metal.** Read `iphone-duo-games`. Games
+sidestep most of the UI guidance but not resizing, and the fold is a genuine
+hazard for on-screen touch controls.
+
+**Kotlin Multiplatform, .NET MAUI, Capacitor and friends.** No dedicated skill,
+but the pattern from the Flutter and React Native skills carries over directly:
+everything is either *resize and safe-area handling you can do in your existing
+layer*, or *a native bridge to the iOS 27.1 APIs*. Read whichever cross-platform
+skill is closer to your setup, plus `iphone-duo-design-review`.
 
 > **Cross-platform reality check.** Neither Flutter nor React Native supports
 > iPhone Duo yet. Flutter's `MediaQuery.displayFeatures` is documented as
@@ -133,10 +138,14 @@ arrangements.
 
 ## Accuracy
 
-Every technical claim traces to Apple's Tech Talks or Newsroom announcement.
-Nothing is invented — but these APIs were announced while Xcode 27.1 was still
-rolling out, so treat the names as the *shape* of the API and confirm exact
-signatures against the SDK headers before relying on a build.
+Every technical claim traces to Apple's Tech Talks, the *Designing for iPhone Duo*
+HIG page, or the Newsroom announcement. Nothing is invented — but most of these
+APIs were announced while Xcode 27.1 was still rolling out, so treat the names as
+the *shape* of the API and confirm exact signatures against the SDK headers before
+relying on a build.
+
+A handful of toolbar API names are now confirmed by the published HIG;
+`reference/api-index.md` marks which ones.
 
 `scripts/fetch-transcripts.py` re-fetches the Tech Talk transcripts from the
 WebVTT subtitle track in each video's HLS manifest, which is how this repo was

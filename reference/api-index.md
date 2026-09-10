@@ -94,12 +94,20 @@ not considered.
 | Prominent action | `topBarPinnedTrailing` placement | `pinnedTrailingGroup` |
 | Force an axis | `AxisBehavior` (horizontal-only / vertical) | `AxisBehavior` |
 | Detect a vertical bar | `toolbarVerticalEdge` environment value | `toolbarVerticalEdge` trait |
-| Consolidate overflow | `ToolbarOverflowMenu` | `additionalOverflowItems` |
-| Control collapse order | `visibilityPriority` | `visibilityPriority` |
+| Consolidate overflow | `ToolbarOverflowMenu` | `UINavigationItem.additionalOverflowItems` |
+| Control collapse order | `ToolbarItemVisibilityPriority` | `UIBarButtonItemVisibilityPriority` |
+| Group items (instead of manual spacers) | `ToolbarItemGroup` | `UIBarButtonItemGroup` |
+| Title + symbol on an item | `Label` | `UIBarButtonItem` |
 | Toolbar vs tab bar compression | toolbar compression behavior | toolbar compression behavior |
 | Turn vertical bars off | `toolbarVerticalBehavior` | `preferredVerticalBarBehavior` |
 | Tab bar as sidebar | default tab bar placement → `.sidebar` | tab bar controller sidebar preferred placement → `.sidebar` |
 | Badges (iOS 26) | badge API | badge API |
+
+Names in this table marked against the HIG — `ToolbarItemVisibilityPriority`,
+`UIBarButtonItemVisibilityPriority`, `ToolbarItemGroup`, `UIBarButtonItemGroup`,
+`UINavigationItem.additionalOverflowItems`, `ToolbarOverflowMenu`, `Label`,
+`UIBarButtonItem` — are confirmed by Apple's published *Designing for iPhone Duo*
+page. The rest still come from Tech Talk sessions only.
 
 ## Hinge and scenes
 
