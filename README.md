@@ -123,6 +123,16 @@ a foldable port comes from an app asserting something fixed (this idiom, this
 orientation, this screen, this width, this symmetric inset), and every fix
 replaces that assertion with a question about the space available right now.
 
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="assets/layout-model-dark.svg">
+  <img alt="Three device states — closed on the 5.4-inch outer display (compact by regular, bars move to the side), partially folded with a division region down the centre of the inner display (regular by regular, keep touch targets out of the curve), and open flat on the 7.6-inch inner display (regular by regular, room for a split view). Below, the chain: pose, available space, size class, what the system moves." src="assets/layout-model.svg" width="900">
+</picture>
+
+<sup>Diagram by this project. The underlying behavior is documented across Apple's
+[iPhone Duo Tech Talks](https://developer.apple.com/iphone-duo/) and
+[Designing for iPhone Duo](https://developer.apple.com/design/human-interface-guidelines/designing-for-iphone-duo);
+see [`reference/sources.md`](reference/sources.md).</sup>
+
 Three concrete consequences:
 
 1. **The inner display ignores your supported interface orientations.** Branch on

@@ -1,0 +1,100 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 430" width="900" height="430" role="img" aria-labelledby="t d">
+<title id="t">How a pose becomes a layout decision on iPhone Duo</title>
+<desc id="d">Three device states — closed, partially folded, and open — each showing the resulting size class and what the system changes. Closed uses the 5.4-inch outer display, is compact width by regular height, and moves toolbars and the tab bar to the side. Partially folded uses the inner display with a division region down the centre, is regular by regular, and requires keeping interactive elements out of the fold. Open flat uses the 7.6-inch inner display, is regular by regular, and affords a split view or sidebar. Below, the chain reads: pose determines available space, which determines size class, which determines what the system moves.</desc>
+<style>
+  :root{--fg:#1d1d1f;--muted:#6e6e73;--line:#c7c7cc;--soft:#e8e8ed;--accent:#0071e3;--warn:#c2410c;}
+  @media (prefers-color-scheme:dark){
+    :root{--fg:#f5f5f7;--muted:#a1a1a6;--line:#48484a;--soft:#2c2c2e;--accent:#2997ff;--warn:#fb923c;}
+  }
+  .fg{fill:var(--fg)} .mu{fill:var(--muted)} .ac{fill:var(--accent)} .wn{fill:var(--warn)}
+  .ln{stroke:var(--line);fill:none} .sf{fill:var(--soft)}
+  .h{font:600 15px -apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif}
+  .s{font:500 11.5px -apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif}
+  .b{font:600 11.5px ui-monospace,SFMono-Regular,Menlo,monospace}
+  .c{font:400 12px -apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif}
+  .tt{font:600 12.5px -apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif}
+</style>
+
+<!-- ─────────── 1. CLOSED ─────────── -->
+<g transform="translate(40,28)">
+  <text class="h fg" x="0" y="0">Closed</text>
+  <text class="c mu" x="0" y="18">5.4″ outer display</text>
+
+  <!-- device: narrow, controls rail on right -->
+  <rect class="sf" x="46" y="34" width="104" height="150" rx="14"/>
+  <rect class="ln" x="46" y="34" width="104" height="150" rx="14"/>
+  <!-- content area -->
+  <rect class="ln" x="56" y="44" width="68" height="130" rx="6" stroke-dasharray="3 3"/>
+  <!-- side control rail -->
+  <rect class="ac" x="130" y="44" width="10" height="130" rx="5" opacity=".16"/>
+  <circle class="ac" cx="135" cy="56" r="3.2"/>
+  <circle class="ac" cx="135" cy="70" r="3.2"/>
+  <circle class="ac" cx="135" cy="150" r="3.2"/>
+  <circle class="ac" cx="135" cy="164" r="3.2"/>
+  <!-- outer camera, always present -->
+  <circle class="wn" cx="135" cy="40" r="3.6"/>
+
+  <text class="b ac" x="0" y="214">compact × regular</text>
+  <text class="c mu" x="0" y="236">Bars move to the side.</text>
+  <text class="c mu" x="0" y="253">Outer camera always</text>
+  <text class="c mu" x="0" y="270">reserved.</text>
+</g>
+
+<!-- ─────────── 2. PARTIALLY FOLDED ─────────── -->
+<g transform="translate(330,28)">
+  <text class="h fg" x="0" y="0">Partially folded</text>
+  <text class="c mu" x="0" y="18">inner display, divided</text>
+
+  <rect class="sf" x="10" y="34" width="176" height="150" rx="14"/>
+  <rect class="ln" x="10" y="34" width="176" height="150" rx="14"/>
+  <!-- the division region down the centre -->
+  <rect class="wn" x="92" y="34" width="12" height="150" opacity=".18"/>
+  <line class="ln" x1="98" y1="34" x2="98" y2="184" stroke-dasharray="4 4"/>
+  <!-- two usable regions -->
+  <rect class="ln" x="20" y="44" width="64" height="130" rx="6" stroke-dasharray="3 3"/>
+  <rect class="ln" x="112" y="44" width="52" height="130" rx="6" stroke-dasharray="3 3"/>
+  <rect class="ac" x="170" y="44" width="8" height="130" rx="4" opacity=".16"/>
+  <text class="s wn" x="98" y="200" text-anchor="middle">division region</text>
+
+  <text class="b ac" x="0" y="214">regular × regular</text>
+  <text class="c mu" x="0" y="236">Fold splits the display.</text>
+  <text class="c mu" x="0" y="253">Keep touch targets out</text>
+  <text class="c mu" x="0" y="270">of the curve.</text>
+</g>
+
+<!-- ─────────── 3. OPEN ─────────── -->
+<g transform="translate(640,28)">
+  <text class="h fg" x="0" y="0">Open flat</text>
+  <text class="c mu" x="0" y="18">7.6″ inner display</text>
+
+  <rect class="sf" x="10" y="34" width="196" height="150" rx="14"/>
+  <rect class="ln" x="10" y="34" width="196" height="150" rx="14"/>
+  <!-- split view: two columns -->
+  <rect class="ln" x="20" y="44" width="66" height="130" rx="6" stroke-dasharray="3 3"/>
+  <rect class="ln" x="94" y="44" width="90" height="130" rx="6" stroke-dasharray="3 3"/>
+  <rect class="ac" x="190" y="44" width="8" height="130" rx="4" opacity=".16"/>
+  <!-- inner camera: only when active -->
+  <circle class="ln" cx="108" cy="52" r="3.6" stroke-dasharray="1.5 1.5"/>
+  <text class="s mu" x="108" y="200" text-anchor="middle">camera when active</text>
+
+  <text class="b ac" x="0" y="214">regular × regular</text>
+  <text class="c mu" x="0" y="236">Room for a split view</text>
+  <text class="c mu" x="0" y="253">or sidebar — one more</text>
+  <text class="c mu" x="0" y="270">level of hierarchy.</text>
+</g>
+
+<!-- ─────────── the chain ─────────── -->
+<g transform="translate(0,330)">
+  <line class="ln" x1="40" y1="0" x2="860" y2="0"/>
+  <g transform="translate(40,34)">
+    <text class="tt fg" x="0" y="0">pose</text>
+    <text class="mu c" x="52" y="0">→</text>
+    <text class="tt fg" x="74" y="0">available space</text>
+    <text class="mu c" x="184" y="0">→</text>
+    <text class="tt fg" x="206" y="0">size class</text>
+    <text class="mu c" x="282" y="0">→</text>
+    <text class="tt fg" x="304" y="0">what the system moves</text>
+  </g>
+  <text class="c mu" x="40" y="62">Never branch on idiom, orientation, screen or a fixed width. Ask what space you have right now.</text>
+</g>
+</svg>
