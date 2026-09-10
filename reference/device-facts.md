@@ -76,7 +76,8 @@ automatically; it exposes only the intersection of their capabilities
 
 ## Poses
 
-An agent should reason about these five, not about "portrait vs landscape":
+Reason about poses, not about "portrait vs landscape". These five are the ones
+Apple's HIG prose and the Tech Talks name explicitly:
 
 1. **Closed** — outer display only, compact and one-handed.
 2. **Open flat** — inner display, full canvas.
@@ -85,6 +86,13 @@ An agent should reason about these five, not about "portrait vs landscape":
 4. **Tabletop / laptop** — seated on a surface, inner display facing the user;
    top region for viewing, bottom region for touch.
 5. **Tent / standing on edge** — hands-free viewing.
+
+> **Unresolved:** the HIG's poses illustration is captioned as showing *six*
+> device poses, and the five above are all the surrounding prose names. A sixth
+> is unaccounted for — plausibly a flipped/reversed configuration, since the
+> camera guidance describes the device being flipped while open so the rear
+> cameras face the user. Treat this list as the confirmed five rather than a
+> complete set, and resolve it against the illustration when possible.
 
 ## Size classes
 
