@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 640" width="1280" height="640">
+<defs>
+  <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0" stop-color="#16161a"/>
+    <stop offset="1" stop-color="#0b0b0d"/>
+  </linearGradient>
+  <linearGradient id="glow" x1="0" y1="0" x2="1" y2="0">
+    <stop offset="0" stop-color="#2997ff" stop-opacity=".18"/>
+    <stop offset="1" stop-color="#2997ff" stop-opacity="0"/>
+  </linearGradient>
+</defs>
+<style>
+  .t{font:700 62px -apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;fill:#f5f5f7}
+  .s{font:400 27px -apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;fill:#a1a1a6}
+  .m{font:600 19px ui-monospace,SFMono-Regular,Menlo,monospace;fill:#2997ff}
+  .f{font:400 19px -apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;fill:#6e6e73}
+  .cap{font:500 15px -apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;fill:#86868b}
+  .ln{stroke:#48484a;fill:none}
+  .sf{fill:#2c2c2e}
+</style>
+
+<rect width="1280" height="640" fill="url(#bg)"/>
+<rect width="1280" height="640" fill="url(#glow)"/>
+<rect x="0" y="0" width="1280" height="5" fill="#2997ff" opacity=".85"/>
+
+<!-- text block -->
+<text class="t" x="80" y="222">iPhone Duo Skills</text>
+<text class="s" x="80" y="274">Agent skills for Apple’s first foldable iPhone</text>
+
+<text class="m" x="80" y="344">npx skills add mirzaaghazadeh/iphone-duo-skills</text>
+
+<line class="ln" x1="80" y1="386" x2="700" y2="386"/>
+
+<text class="f" x="80" y="430">9 skills · SwiftUI · UIKit · Flutter · React Native · Unity</text>
+<text class="f" x="80" y="462">Fold-aware layout · vertical bars · hinge &amp; scenes · camera · design review</text>
+
+<!-- three device states, right side, same visual language as the layout-model diagram -->
+<g transform="translate(792,240)">
+  <!-- closed -->
+  <g>
+    <rect class="sf" x="0" y="26" width="74" height="126" rx="13"/>
+    <rect class="ln" x="0" y="26" width="74" height="126" rx="13"/>
+    <rect class="ln" x="9" y="35" width="46" height="108" rx="5" stroke-dasharray="3 3"/>
+    <rect x="61" y="35" width="6" height="108" rx="3" fill="#2997ff" opacity=".55"/>
+    <circle cx="64" cy="31" r="3.2" fill="#fb923c"/>
+    <text class="cap" x="37" y="176" text-anchor="middle">closed</text>
+  </g>
+  <!-- folded -->
+  <g transform="translate(108,0)">
+    <rect class="sf" x="0" y="26" width="126" height="126" rx="13"/>
+    <rect class="ln" x="0" y="26" width="126" height="126" rx="13"/>
+    <rect x="58" y="26" width="10" height="126" fill="#fb923c" opacity=".28"/>
+    <rect class="ln" x="9" y="35" width="44" height="108" rx="5" stroke-dasharray="3 3"/>
+    <rect class="ln" x="73" y="35" width="34" height="108" rx="5" stroke-dasharray="3 3"/>
+    <rect x="113" y="35" width="6" height="108" rx="3" fill="#2997ff" opacity=".55"/>
+    <text class="cap" x="63" y="176" text-anchor="middle">folded</text>
+  </g>
+  <!-- open -->
+  <g transform="translate(268,0)">
+    <rect class="sf" x="0" y="26" width="146" height="126" rx="13"/>
+    <rect class="ln" x="0" y="26" width="146" height="126" rx="13"/>
+    <rect class="ln" x="9" y="35" width="52" height="108" rx="5" stroke-dasharray="3 3"/>
+    <rect class="ln" x="69" y="35" width="62" height="108" rx="5" stroke-dasharray="3 3"/>
+    <rect x="133" y="35" width="6" height="108" rx="3" fill="#2997ff" opacity=".55"/>
+    <text class="cap" x="73" y="176" text-anchor="middle">open</text>
+  </g>
+</g>
+
+<text class="f" x="80" y="538">github.com/mirzaaghazadeh/iphone-duo-skills</text>
+</svg>
