@@ -7,11 +7,14 @@
 Agent skills for building iOS apps on **iPhone Duo** — Apple's first foldable
 iPhone, announced September 9, 2026.
 
-Apple's developer material for iPhone Duo is six Tech Talk videos plus the
+Apple's developer material for iPhone Duo is six Tech Talk videos, the
 [Designing for iPhone Duo](https://developer.apple.com/design/human-interface-guidelines/designing-for-iphone-duo)
-HIG page. Xcode 27.1 and the *Preparing your app for iPhone Duo* article are still
-listed as coming. These skills distill what exists into structured guidance an
-agent can act on, plus reference sheets for device facts and the full API surface.
+HIG page, and the API reference — the last of which only went live partway
+through building this, and corrected three things in the process. The
+*Preparing your app for iPhone Duo* article is still listed as coming.
+
+These skills distill what exists into structured guidance an agent can act on,
+plus reference sheets for device facts and the full API surface.
 
 ## Install
 
@@ -149,13 +152,22 @@ arrangements.
 ## Accuracy
 
 Every technical claim traces to Apple's Tech Talks, the *Designing for iPhone Duo*
-HIG page, or the Newsroom announcement. Nothing is invented — but most of these
-APIs were announced while Xcode 27.1 was still rolling out, so treat the names as
-the *shape* of the API and confirm exact signatures against the SDK headers before
-relying on a build.
+HIG page, the published API reference, or the Newsroom announcement.
 
-A handful of toolbar API names are now confirmed by the published HIG;
-`reference/api-index.md` marks which ones.
+**Verified against Apple's API reference on 25 September 2026.** The symbol docs
+are now live, so the signatures in `reference/api-index.md` come from them rather
+than from the Tech Talk sessions. That pass corrected three things that had been
+wrong:
+
+- The direction coordinator's change handler receives an
+  `AVCaptureDeviceDirectionMap`, not an `AVCaptureDeviceDescriptor` — it hands you
+  *arrays* of forward- and backward-facing descriptors to choose from.
+- The UIKit arrangement mutators take an `animated:` parameter.
+- `toolbarVerticalEdge` reports the system's preferred edge **whether or not a
+  vertical bar is visible** — it isn't a "are items vertical right now" flag.
+
+Corrections are marked ⚠ in the API index. Still pending: the *Preparing your app
+for iPhone Duo* article.
 
 `scripts/fetch-transcripts.py` re-fetches the Tech Talk transcripts from the
 WebVTT subtitle track in each video's HLS manifest, which is how this repo was

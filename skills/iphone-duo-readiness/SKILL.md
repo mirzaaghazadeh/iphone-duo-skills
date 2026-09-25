@@ -141,6 +141,13 @@ and claiming otherwise wastes their time.
 
 ## Accuracy note
 
-These APIs were announced in September 2026 Tech Talks while Xcode 27.1 was
-still rolling out. Treat the names in this repo as the shape of the API and
-confirm exact signatures against the SDK headers before promising a build works.
+Signatures in this repo were verified against Apple's published API reference on
+25 September 2026, so they are no longer guesses from the Tech Talk sessions.
+Three claims were wrong and got corrected in that pass — see the ⚠ markers in
+`../../reference/api-index.md`.
+
+Two caveats remain. Apple's *Preparing your app for iPhone Duo* article is still
+unpublished, so anything it eventually covers may add nuance. And nothing here
+has been compiled or run against a real device — pose-dependent layout behaviour
+in particular needs the simulator to confirm, so don't report it as verified on
+the strength of these docs alone.

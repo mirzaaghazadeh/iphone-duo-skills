@@ -88,11 +88,30 @@ from the scene accessories API; see
 The coordinator is tied to a view, so it is **isolated to the main actor**. Your
 change handler must not call AVFoundation APIs directly.
 
-Instead of an `AVCaptureDevice`, it hands you an **`AVCaptureDeviceDescriptor`** —
-a sendable, main-actor-safe stand-in carrying everything needed to construct the
-real device. Pass the descriptor to your camera actor and build the
-`AVCaptureDevice` there. This is the intended path; don't try to smuggle a device
-across the boundary.
+It never hands you an `AVCaptureDevice`. The handler receives an
+**`AVCaptureDeviceDirectionMap`**, which sorts the tracked cameras into two
+arrays:
+
+```swift
+var forwardFacingDeviceDescriptors: [AVCaptureDeviceDescriptor]
+var backwardFacingDeviceDescriptors: [AVCaptureDeviceDescriptor]
+```
+
+The same map is also readable at any time from the coordinator's
+`deviceDirections` property, so you aren't limited to reacting inside the
+handler.
+
+An **`AVCaptureDeviceDescriptor`** is a sendable stand-in for a capture device,
+carrying `uniqueID`, `localizedName`, `deviceType`, `mediaTypes` and `position`.
+Pass a descriptor to your camera actor and construct the `AVCaptureDevice` there.
+That is the intended path; don't try to smuggle a device across the boundary.
+
+Note that both of these types live in **AVKit**, alongside the coordinator — not
+in AVFoundation, where you might reasonably go looking first.
+
+Because you get *arrays* rather than a single device, your handler has to choose:
+typically the first forward-facing descriptor whose `deviceType` matches what
+you're streaming. Don't assume exactly one camera faces forward.
 
 ### What the handler should do
 
@@ -131,8 +150,9 @@ is rotation. Most camera apps on this device want both.
 2. Decide: virtual front camera (automatic, 1080p60, no depth) or individual
    cameras (full capability, manual switching).
 3. If individual, adopt `AVCaptureDeviceDirectionCoordinator` — one per view.
-4. In the change handler, reconfigure the session, re-decide mirroring, update UI.
-   Move devices across actors as `AVCaptureDeviceDescriptor`.
+4. In the change handler, read the `AVCaptureDeviceDirectionMap`, pick a
+   forward-facing descriptor, reconfigure the session, re-decide mirroring, and
+   update UI. Move devices across actors as `AVCaptureDeviceDescriptor`.
 5. Set `videoGravity`, and `dynamicAspectRatio` for front-camera capture.
 6. Adopt `AVCaptureDeviceRotationCoordinator`, then disable sensor-orientation
    compensation.

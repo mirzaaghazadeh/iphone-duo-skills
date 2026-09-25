@@ -57,17 +57,35 @@ does and does not provide:
   React Navigation, on preferring the hook over the deprecated core
   `SafeAreaView`.
 
+## API reference
+
+Re-checked **September 25, 2026**. Apple's symbol documentation is now live, and
+`api-index.md` has been verified against it. The pages used:
+
+- [`ReservedRegion`](https://developer.apple.com/documentation/swiftui/reservedregion)
+  (SwiftUI) and [`UIViewReservedRegion`](https://developer.apple.com/documentation/uikit/uiviewreservedregion),
+  plus [`reservedRegions(kind:options:)`](https://developer.apple.com/documentation/uikit/uiview/reservedregions(kind:options:))
+- [`ArrangementView`](https://developer.apple.com/documentation/swiftui/arrangementview)
+  and [`UIArrangementViewController`](https://developer.apple.com/documentation/uikit/uiarrangementviewcontroller)
+- [`AVCaptureDeviceDirectionCoordinator`](https://developer.apple.com/documentation/avkit/avcapturedevicedirectioncoordinator),
+  [`AVCaptureDeviceDirectionMap`](https://developer.apple.com/documentation/avkit/avcapturedevicedirectionmap),
+  [`AVCaptureDeviceDescriptor`](https://developer.apple.com/documentation/avkit/avcapturedevicedescriptor)
+- [`UIHingeInteraction`](https://developer.apple.com/documentation/uikit/uihingeinteraction)
+  and [`UIHinge`](https://developer.apple.com/documentation/uikit/uihinge)
+- [`ToolbarItemVisibilityPriority`](https://developer.apple.com/documentation/swiftui/toolbaritemvisibilitypriority),
+  [`ToolbarOverflowMenu`](https://developer.apple.com/documentation/swiftui/toolbaroverflowmenu),
+  [`toolbarVerticalEdge`](https://developer.apple.com/documentation/swiftui/environmentvalues/toolbarverticaledge)
+- [`CameraCaptureAccessory`](https://developer.apple.com/documentation/swiftui/cameracaptureaccessory)
+
+That pass produced three corrections — the direction coordinator's change
+handler, the `animated:` parameters on the UIKit arrangement mutators, and the
+meaning of `toolbarVerticalEdge`. They are marked ⚠ in `api-index.md`.
+
 ## Documentation still pending
 
-Re-checked September 10, 2026. *Designing for iPhone Duo* has now shipped (see
-above). Still outstanding, and still the reason to treat signatures in
-`api-index.md` as unconfirmed:
-
-- **Xcode 27.1 beta** — "coming later this month". Until this lands, no API
-  signature here can be verified against real headers, and there is no iPhone Duo
-  simulator to test poses in.
 - **Preparing your app for iPhone Duo** — the developer-facing companion article.
-  Not yet live under `documentation/uikit/` or `documentation/swiftui/`.
+  Still not live under `documentation/uikit/` or `documentation/swiftui/`, and
+  the landing page still lists an item as coming soon.
 
 ## Keeping this current
 

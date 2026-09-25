@@ -57,9 +57,30 @@ the user bends the device.
 ### Querying them
 
 In SwiftUI, get a `GeometryProxy` from `GeometryReader` or `onGeometryChange`,
-then ask it for `reservedRegions(kind:)`, optionally with
-`options: .includeInactive`. In UIKit the same method hangs off `UIView`. Either
-way you read each region's `frame` and fold it into your own layout math.
+then ask it for `reservedRegions(kind:options:)`. In UIKit the same method hangs
+off `UIView`:
+
+```swift
+func reservedRegions(
+    kind: UIView.ReservedRegion.Kind,
+    options: UIView.ReservedRegion.QueryOptions = []
+) -> [UIView.ReservedRegion]
+```
+
+Pass `.includeInactive` in `options` to also get regions that exist but aren't
+currently active.
+
+Each region gives you more than a rectangle:
+
+- **`frame`** — where it sits in the view's coordinate space.
+- **`isActive`** (`active` in Objective-C) — whether it's currently in play.
+- **`kind`** — division or occlusion.
+- **`margins`** — the insets the system recommends keeping *around* the region.
+  This one is easy to miss and worth using: laying content flush against a
+  region's frame is legal but usually looks wrong. Prefer the margins.
+
+Query reserved regions for **custom, manually laid out controls**. If you are
+using system containers, you already have this handled — see below.
 
 Query reserved regions for **custom, manually laid out controls**. If you are
 using system containers, you already have this handled — see below.
@@ -146,9 +167,11 @@ The default. It divides the bounds between the two views — horizontally when t
 view is wider than tall, vertically when taller than wide.
 
 Constrain it when only one axis makes sense: apply `.axes(.horizontal)` to the
-split style (in UIKit, configure `UISplitArrangement` the same way and pass it to
-`updateArrangement(_:)`). When a split arrangement can't split along the view's
-primary axis, it shows a single view rather than producing a bad layout.
+split style. In UIKit, configure `UISplitArrangement` the same way and pass it to
+`updateArrangement(_:animated:)` — note the arrangement methods take an
+`animated:` flag, as does `setViewController(_:for:animated:)`. When a split
+arrangement can't split along the view's primary axis, it shows a single view
+rather than producing a bad layout.
 
 The payoff on this device: when the secondary view is dismissed, the primary
 doesn't recenter across the whole display the way it would on iPad. It stays

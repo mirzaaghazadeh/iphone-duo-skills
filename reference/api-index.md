@@ -4,11 +4,13 @@ Every API named across Apple's six iPhone Duo Tech Talks, grouped by job, with
 the framework and the minimum SDK. Use this as a lookup table; the skills in
 `../skills/` explain when and why to reach for each one.
 
-> **Verify signatures before you ship.** These names were announced in
-> September 2026 Tech Talks. Xcode 27.1 and the iOS 27.1 SDK were still rolling
-> out at that point. Treat spellings and argument labels here as *the shape of
-> the API*, and confirm the exact signature against the SDK headers or
-> developer.apple.com before relying on a build.
+> **Verified against the published API reference on 25 September 2026.**
+> Apple's developer documentation for these symbols is now live, so the
+> signatures below are taken from it rather than from the Tech Talk sessions.
+> Three corrections came out of that pass and are marked ⚠ below.
+>
+> Still missing: the *Preparing your app for iPhone Duo* article is not yet
+> published.
 
 ## SDK gates
 
@@ -46,7 +48,16 @@ device opens and closes, including in Split View.
 | Custom UI outside the safe area (iOS 27.1) | `ReservedRegion` | `UIViewReservedRegion` |
 | Query regions (iOS 27.1) | `reservedRegions(kind:options:)` on a `GeometryProxy`, from `GeometryReader` or `onGeometryChange` | `reservedRegions(kind:options:)` on `UIView` |
 
-Region kinds:
+The UIKit signature, verbatim:
+
+```swift
+@MainActor func reservedRegions(
+    kind: UIView.ReservedRegion.Kind,
+    options: UIView.ReservedRegion.QueryOptions = []
+) -> [UIView.ReservedRegion]
+```
+
+Region kinds (`divisionRegionKind` / `occlusionRegionKind` in Objective-C):
 
 - **`.division`** — splits an area into smaller areas. The fold is a division
   region. It is *active* only while the device is folded; when flat it is
@@ -58,6 +69,11 @@ Option `.includeInactive` returns regions that exist but are not currently
 active — useful for stable high-level decisions (for example, always preferring
 an even column count on a device that *has* a fold).
 
+Each region carries `frame`, `isActive` (`active` in Objective-C), `kind`, an
+`id`/`identifier`, and **`margins`** — the insets the system suggests leaving
+around the region. ⚠ The margins property is not mentioned in the Tech Talks;
+prefer it over laying content flush against `frame`.
+
 Safe areas and layout margins on iPhone Duo are frequently **asymmetric**. Never
 assume opposite insets are equal.
 
@@ -68,10 +84,17 @@ containers, arranging exactly two views by rule.
 
 | Job | SwiftUI | UIKit |
 |---|---|---|
-| Container | `ArrangementView { primary } secondary: { secondary }` | `UIArrangementViewController`, `setViewController(_:for:)` with `.primary` / `.secondary` |
-| Choose style | `.arrangementViewStyle(.split)` / `.overlay` | `updateArrangement(_:)` with `UISplitArrangement` |
+| Container | `ArrangementView(primary:secondary:)` | `UIArrangementViewController`, ⚠ `setViewController(_:for:animated:)` |
+| Choose style | `.arrangementViewStyle(some ArrangementViewStyle)` | ⚠ `updateArrangement(_:animated:)` with `UISplitArrangement` / `UIOverlayArrangement` |
 | Constrain split axis | `.split.axes(.horizontal)` | `.axes(.horizontal)` on the arrangement |
-| Read overlay stacking | `@Environment(\.overlayArrangementZIndex)` | `state(for:)` → `.zIndex` |
+| Read overlay stacking | `@Environment(\.overlayArrangementZIndex)` | `state(for:)` → `ViewState.zIndex` |
+| Look up a placement | — | `viewController(for:)`, `placement(for:)` |
+
+⚠ Both UIKit mutators take an `animated:` parameter. The Tech Talks show them
+without it.
+
+SwiftUI declaration: `struct ArrangementView<Primary, Secondary> where Primary:
+View, Secondary: View`, with `init(primary:secondary:)`.
 
 - **split** — divides the bounds between primary and secondary. Splits
   horizontally when wider than tall, vertically when taller than wide. For
@@ -103,11 +126,23 @@ not considered.
 | Tab bar as sidebar | default tab bar placement → `.sidebar` | tab bar controller sidebar preferred placement → `.sidebar` |
 | Badges (iOS 26) | badge API | badge API |
 
-Names in this table marked against the HIG — `ToolbarItemVisibilityPriority`,
-`UIBarButtonItemVisibilityPriority`, `ToolbarItemGroup`, `UIBarButtonItemGroup`,
-`UINavigationItem.additionalOverflowItems`, `ToolbarOverflowMenu`, `Label`,
-`UIBarButtonItem` — are confirmed by Apple's published *Designing for iPhone Duo*
-page. The rest still come from Tech Talk sessions only.
+**Availability differs within this table, which matters when setting a
+deployment target.** The toolbar APIs are older than the foldable-specific ones:
+
+| Symbol | Introduced |
+|---|---|
+| `ToolbarItemVisibilityPriority` (`.automatic` / `.low` / `.high`, plus `init(higherThan:)` / `init(lowerThan:)`) | iOS 27.0 |
+| `UIBarButtonItemVisibilityPriority` (`.standard` / `.low` / `.high`, plus `init(rawValue:)`) | iOS 27.0 |
+| `ToolbarOverflowMenu` | iOS 27.0 |
+| `toolbarVerticalEdge` | **iOS 27.1** |
+
+⚠ `toolbarVerticalEdge` is a `HorizontalEdge?` reporting the system's *preferred*
+edge for a vertical bar in the current context — **whether or not one is
+visible**. It is not a flag for "are items vertical right now"; use it to align
+your own custom bars with the system's placement.
+
+Note the naming asymmetry: SwiftUI's default is `.automatic`, UIKit's is
+`.standard`.
 
 ## Hinge and scenes
 
@@ -123,6 +158,18 @@ page. The rest still come from Tech Talk sessions only.
 means the device has no hinge. You get a coarse status — closed, partially open,
 fully open — plus a continuous angle.
 
+In UIKit the shape is different from the SwiftUI modifier and worth reading
+directly. `UIHingeInteraction` takes an update handler with **two arguments, the
+interaction and an `Update`** — not a previous/current pair — and has an
+`isEnabled` flag:
+
+```swift
+init(updateHandler: (UIHingeInteraction, UIHingeInteraction.Update) -> Void)
+```
+
+The hinge state itself is a separate `UIHinge` object exposing `angle: CGFloat`
+and `status: UIHinge.Status`. Both are iOS 27.1.
+
 Use the hinge for **interactions and effects**. Use arrangements and reserved
 regions for **layout**.
 
@@ -137,15 +184,31 @@ the inner display. Handle scene-request failures, and prefer
 | Discover a front camera | `AVCaptureDevice.DiscoverySession`, position `.front`, Wide or Ultra Wide device type → resolves to the **virtual front camera** |
 | Address one physical camera | built-in **outer** ultra-wide device type; built-in **inner** ultra-wide device type |
 | Track which way cameras face | `AVCaptureDeviceDirectionCoordinator` (AVKit) |
-| Pass a device across actors | `AVCaptureDeviceDescriptor` — sendable, main-actor safe |
+| Read the current facing | `deviceDirections` on the coordinator, or the map passed to the change handler |
+| Group cameras by facing | ⚠ `AVCaptureDeviceDirectionMap` (AVKit) |
+| Pass a device across actors | `AVCaptureDeviceDescriptor` (AVKit) — sendable |
 | Keep captures upright | `AVCaptureDeviceRotationCoordinator` |
 | Fit the preview | `videoGravity` on `AVCaptureVideoPreviewLayer` |
 | Use the square sensor fully | `dynamicAspectRatio` on `AVCaptureDevice` |
 
-The direction coordinator is built from a `UIView`, the device types to monitor,
-and a change handler; it is main-actor isolated, and it reports facing
-**relative to the display that view is on**. Use one coordinator per view when
-you drive both displays at once.
+The direction coordinator is main-actor isolated and reports facing **relative to
+the display its view is on**. Use one coordinator per view when you drive both
+displays at once.
+
+```swift
+init(view: UIView,
+     deviceTypes: [AVCaptureDevice.DeviceType],
+     changeHandler: ((AVCaptureDeviceDirectionMap) -> Void)?)
+```
+
+⚠ The handler receives an **`AVCaptureDeviceDirectionMap`**, not a descriptor.
+The map holds two arrays — `forwardFacingDeviceDescriptors` and
+`backwardFacingDeviceDescriptors` — so your handler picks a descriptor rather
+than being handed one. The same map is readable any time via `deviceDirections`.
+
+An `AVCaptureDeviceDescriptor` carries `uniqueID`, `localizedName`, `deviceType`,
+`mediaTypes` and `position`. Both it and the map live in **AVKit**, not
+AVFoundation.
 
 Virtual front camera trade-off: automatic switching, but only the capabilities
 common to both physical cameras — 1080p, 60 fps, and **no depth**.

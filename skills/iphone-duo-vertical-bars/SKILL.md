@@ -123,8 +123,15 @@ shrink slightly when vertical to free up room.
 
 To branch on this, read `toolbarVerticalEdge` (environment value in SwiftUI,
 trait in UIKit). It's readable from the content view or from inside the item's
-own view, and it is populated only when items can be on the vertical axis — `nil`
-or unspecified otherwise.
+own view.
+
+Read the semantics carefully, because they're easy to get backwards. It is a
+`HorizontalEdge?`, and it reports **which edge the system prefers for the
+vertical bar in the current context — whether or not a vertical bar is actually
+visible.** So it is not a "are my items going vertical right now?" flag. It's
+"if there's a vertical bar here, it belongs on this side," which is exactly what
+you need to align your own custom bars and edge-anchored UI with the system's
+placement.
 
 Two behavioral details worth knowing: a vertical bar has no scroll edge effect by
 default, but it *does* get a background when Reduce Transparency is on, so keep
