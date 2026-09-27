@@ -21,6 +21,20 @@ Both give you:
 - a **continuous angle**, updated live
 
 `onHingeChange` hands your closure the previous and current hinge context.
+`UIHingeInteraction` hands its handler the interaction and an `Update` instead,
+and also fires when the view moves between hierarchies.
+
+Watch the types — they differ between frameworks:
+
+- SwiftUI's angle is an `Angle`; **UIKit's is a `CGFloat` in radians**.
+- SwiftUI's `DeviceHinge.Status` is a struct (a `switch` needs `default`);
+  UIKit's `UIHinge.Status` is an enum with a fourth case, **`.unknown`**.
+- The system decides the status from the angle *and* device orientation, so
+  don't recompute it from thresholds. Update rate and precision are system
+  policy — don't assume a frequency.
+
+Full signatures, a reusable normaliser, and effect patterns are in
+`../iphone-duo-dual-pane-patterns/SKILL.md`.
 
 Two things to check before using the value:
 

@@ -22,7 +22,7 @@ plus reference sheets for device facts and the full API surface.
 npx skills add mirzaaghazadeh/iphone-duo-skills
 ```
 
-Installs all nine. The CLI detects your agent — Claude Code, Cursor, Copilot,
+Installs all ten. The CLI detects your agent — Claude Code, Cursor, Copilot,
 Gemini and others — and puts them where that agent looks.
 
 Useful flags:
@@ -69,6 +69,7 @@ skills appear; invoke one by name or just describe the task.
 | **iphone-duo-vertical-bars** | SwiftUI · UIKit | Toolbars and tab bars. The vertical axis, symbol vs text, `AxisBehavior`, overflow and visibility priority. |
 | **iphone-duo-hinge-and-scenes** | SwiftUI · UIKit | Hinge-driven effects, Split View, multiple scenes, dual-display UI via scene accessories. |
 | **iphone-duo-camera** | AVFoundation · AVKit | Capture apps. Virtual front camera vs individual cameras, direction coordinator, mirroring, preview. |
+| **iphone-duo-dual-pane-patterns** | SwiftUI · UIKit | Deciding what goes in each pane. Real pixel/point dimensions, exact hinge callback types, pose → pattern mapping, hinge-driven effects, two-pane paywalls, fold-aware onboarding. |
 | **iphone-duo-design-review** | Any framework | Design critique rather than code — poses, side controls, asymmetry, fold avoidance, sheets. |
 | **iphone-duo-games** | Unity · Unreal · Godot · SpriteKit · Metal | The project is a game. Filling the screen across poses, aspect ratio vs letterboxing, touch controls clear of the fold. |
 | **iphone-duo-flutter** | Flutter · Dart | The app is Flutter. What `MediaQuery` gives you, why `displayFeatures` doesn't work here, bridging via platform channels. |
@@ -111,8 +112,8 @@ skill is closer to your setup, plus `iphone-duo-design-review`.
 
 ## Reference
 
-- [`reference/device-facts.md`](reference/device-facts.md) — displays, silicon,
-  cameras, poses, and the size-class table
+- [`reference/device-facts.md`](reference/device-facts.md) — displays (pixels,
+  ppi, points), dimensions, silicon, cameras, poses, and the size-class table
 - [`reference/api-index.md`](reference/api-index.md) — every announced API by
   job, with framework and minimum SDK
 - [`reference/sources.md`](reference/sources.md) — every source, linked
@@ -165,6 +166,16 @@ wrong:
 - The UIKit arrangement mutators take an `animated:` parameter.
 - `toolbarVerticalEdge` reports the system's preferred edge **whether or not a
   vertical bar is visible** — it isn't a "are items vertical right now" flag.
+
+A second pass on **27 September 2026** covered the hinge types and the SwiftUI
+reserved-region query, and corrected three more:
+
+- UIKit's `UIHinge.angle` is in **radians**, and `UIHinge.Status` has a fourth
+  case, `.unknown`. SwiftUI's `DeviceHinge.Status` is a struct, not an enum.
+- The SwiftUI `reservedRegions` query takes a `layoutDirectionBehavior:`
+  parameter (default `.mirrors`).
+- A reserved region's `frame` **already includes** its `margins` — they aren't
+  extra padding to add around it.
 
 Corrections are marked ⚠ in the API index. Still pending: the *Preparing your app
 for iPhone Duo* article.

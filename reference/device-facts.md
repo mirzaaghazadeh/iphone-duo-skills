@@ -18,18 +18,35 @@ assumptions; do **not** hardcode any of it into a layout.
 | Form factor | Book-style inward fold, grade 5 titanium, precision hinge |
 | Colors | Night Sky, Star White |
 | Durability | Ceramic Shield 2 front, Ceramic Shield back, IP68 |
+| Dimensions, open | 164.6 × 117.8 × 5.2 mm (6.48 × 4.64 × 0.21 in) |
+| Dimensions, closed | 84.1 × 117.8 × 11.3 mm (3.31 × 4.64 × 0.44 in) |
+| Weight | 254 g (8.96 oz) |
+| Biometrics | Touch ID in the side button — **no Face ID** |
+| LiDAR | Not listed in the specs — plan a fallback for RoomPlan / scene depth |
 
 ## Displays
 
 | | Inner | Outer |
 |---|---|---|
 | Size | 7.6-inch (7.58 in diagonal as a rectangle) | 5.4-inch (5.36 in diagonal as a rectangle) |
+| Resolution | 1878 × 2670 px at 430 ppi | 1398 × 2034 px at 460 ppi |
+| Aspect ratio | ≈1.42 : 1 — landscape when open | ≈1.45 : 1 — portrait |
+| App Store screenshot | 2007 × 2853 px | 1398 × 2034 px |
 | Panel | Super Retina XDR, foldable OLED | Super Retina XDR |
 | Finish | Nano-texture, anti-glare | Standard |
 | Notes | Under-display FaceTime camera | ~90% of the screen area of iPhone 18 Pro |
 
 Both displays share the **same aspect ratio**, so the experience stays
-continuous as the device opens and closes. Both are wider and shorter than a
+continuous as the device opens and closes. In pixels, the open inner display is
+close to the outer display turned sideways, and **each half of the inner display
+(≈1335 × 1878 px) is close to one outer display** — a phone-shaped UI fits one
+half and the other half is extra.
+
+**Points are not published.** The outer display works out to 466 × 678 pt at 3×
+either way. The inner display is ambiguous: 626 × 890 pt if the 1878 × 2670
+panel is native 3×, or 669 × 951 pt if the (larger, same-ratio) 2007 × 2853
+screenshot size is the 3× render and the panel is downsampled. Read the scene
+bounds in the simulator rather than trusting either. Both are wider and shorter than a
 traditional iPhone display — which is why system controls move to the side.
 
 Peak outdoor brightness 3000 nits, ProMotion, Always On.
