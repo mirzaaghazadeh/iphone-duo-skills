@@ -24,6 +24,7 @@ reserved regions at runtime.
 | | Outer display | Inner display (open) | Each half of the inner display |
 |---|---|---|---|
 | Diagonal | 5.4 in | 7.6 in | — |
+| Points (w × h, as held) | **466 × 678** portrait | **951 × 669** landscape | **475.5 × 669** portrait |
 | Pixels (w × h, as held) | **1398 × 2034** portrait | **2670 × 1878** landscape | **≈1335 × 1878** portrait |
 | Density | 460 ppi | 430 ppi | 430 ppi |
 | Aspect ratio | ≈1.45 : 1 (tall) | ≈1.42 : 1 (wide) | ≈1.41 : 1 (tall) |
@@ -43,19 +44,79 @@ Three consequences worth internalising:
 3. **The fold runs down the middle of the long edge** when open, so default
    two-pane layouts are side by side, and tabletop layouts are top/bottom.
 
-### Points — not yet published
+### Points
 
-Apple has published pixels, not points. Two readings circulate; don't hardcode
-either:
+Apple's Tech Specs list pixels only. The point sizes come from the iPhone Duo
+templates in Apple's **iOS and iPadOS 27 design resource** (as reproduced in
+Noah Elhadedy's community *iPhone Duo Adaptive Design Starter Kit*, aligned to
+Apple's templates on 23 September 2026):
 
-| Reading | Outer | Inner (open, landscape) | Basis |
-|---|---|---|---|
-| Panel ÷ 3 | 466 × 678 pt | 890 × 626 pt (445 × 626 per half) | Native 3× on the stated panel |
-| Screenshot ÷ 3 | 466 × 678 pt | 951 × 669 pt | App Store Connect screenshot size for the inner display is 2853 × 2007 px — larger than the panel, same ratio, which suggests a downsampled render like iPhone 6 Plus |
+- Outer: **466 × 678 pt** — exactly the 1398 × 2034 panel at 3×.
+- Inner: **951 × 669 pt** (669 × 951 in portrait). That is **not** an exact 3×
+  of the 2670 × 1878 panel: the system renders at 2853 × 2007 (the App Store
+  Connect screenshot size) and downsamples, like iPhone 6 Plus did. Export
+  inner-display assets at 3× of the point size, not from the panel pixels.
+- The fold sits at **475.5 pt** from the edge — the centre of 951 — in both
+  orientations.
 
-The outer display agrees either way (its screenshot size equals its panel). For
-the inner display, read `GeometryProxy.size` or the scene bounds on the Xcode
-27.1 simulator and trust that over any table.
+Still confirm in the Xcode 27.1 simulator; read `GeometryProxy.size` or scene
+bounds rather than hardcoding any of this.
+
+## Layout tokens (pt)
+
+For mockups and for sanity-checking what the system gives you at runtime. The
+**Source** column matters: only *Apple* values come from Apple's design
+resource; *kit* values are design choices from the community starter kit that
+you're free to change.
+
+**Safe areas** — asymmetric by design; never mirror one side onto the other.
+
+| State | Top | Bottom | Leading | Trailing | Safe content size | Source |
+|---|---|---|---|---|---|---|
+| Outer portrait | 0 | 0 | 0 | **84** (vertical bar) | 382 × 678 | Apple |
+| Outer landscape | 0 | 0 | 0 | **84**, on the camera edge | 594 × 466 | Apple |
+| Inner landscape (flat or book) | 0 | 0 | 0 | **84** (vertical bar) | 867 × 669 | Apple |
+| Inner portrait (flat or tabletop) | **84** (status + top bar) | **95** (tab bar) | 0 | 0 | 669 × 772 | Apple |
+
+Horizontal bars return **only** on the inner display in portrait. Everywhere
+else, navigation, toolbar and tab bar share one 84 pt vertical bar in the order
+back → prominent action → toolbar groups → tab bar, top to bottom.
+
+**Bars and controls**
+
+| Element | Size | Source |
+|---|---|---|
+| Vertical bar width | 84 pt | Apple |
+| Horizontal navigation bar / toolbar (inner portrait) | 48 pt tall | Apple |
+| Horizontal tab bar (inner portrait) | 95 pt tall inset | Apple |
+| Bar button / prominent bar button | 36 pt / 48 pt | Apple |
+| Touch target | 44 × 44 pt default, 28 × 28 pt minimum | Apple HIG |
+
+**Margins, gaps, fold**
+
+| Token | Value | Source |
+|---|---|---|
+| Layout margin, both displays | 20 pt | Apple |
+| Division region width when flat | 0 pt | Apple |
+| Division region width when folded | not published — read `ReservedRegion.frame` | — |
+| Fold avoidance band (mockups) | 27 pt, centred on 475.5 pt | kit |
+| Gap between panes | 16 pt outer, 24 pt inner | kit |
+| Max width for running text | 600 pt | kit |
+
+**Columns** — Apple asks for an even count; the counts themselves are kit values.
+
+| State | Columns | Gutter |
+|---|---|---|
+| Outer portrait | 4 | 16 |
+| Outer landscape | 6 | 16 |
+| Inner portrait | 6 | 24 |
+| Inner landscape | 8 | 24 |
+| Inner, book-folded | 4 + 4, meeting at the fold, none on it | 24 |
+
+**Typical pane widths** inside the 867 pt inner-landscape safe area (kit):
+list 300–320 + detail 546–566; sidebar 280; player/primary ≈462 (one half) +
+context ≈404. Keep a pane's content close to its outer-display size rather than
+stretching it.
 
 ### Physical
 
@@ -162,8 +223,8 @@ sees **size class, reserved regions and hinge status**. Map them like this:
 |---|---|---|
 | Closed | outer display, compact width | The phone app you already have. Secondary pane collapses to a sheet or a push. |
 | Open flat | regular × regular, division region inactive (zero width) | Two panes side by side, media may cross the centre. |
-| Book (partly folded, vertical fold) | division region **active and taller than wide** | Two panes, left/right. Nothing interactive in the curve. |
-| Tabletop / laptop | division region **active and wider than tall** | Content in the raised half, controls in the flat half. |
+| Book (partly folded, inner landscape) | division region **active and taller than wide** | Two panes, left/right. Nothing interactive in the curve. |
+| Tabletop / laptop (partly folded, inner portrait) | division region **active and wider than tall** | Content in the raised half, controls in the flat half. |
 | Tent | partially open, often flipped | Hands-free viewing; don't rely on touch. |
 
 Detect orientation of the fold from the region, not the hinge:

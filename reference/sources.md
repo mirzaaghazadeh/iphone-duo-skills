@@ -55,6 +55,17 @@ which agrees with Apple's guidance on every point it overlaps:
 - [App Review Guidelines 3.1.2](https://developer.apple.com/app-store/review/guidelines/)
   and [`SubscriptionStoreView`](https://developer.apple.com/documentation/storekit/subscriptionstoreview) — for the paywall section.
 
+## Community design resources
+
+- [iPhone Duo Adaptive Design Starter Kit](https://www.figma.com/community/file/1681029753837117390/iphone-duo-adaptive-design-starter-kit)
+  — Noah Elhadedy, Figma Community, v1.0, September 2026. Unofficial. Its safe
+  areas, logical sizes, 84 pt vertical bar and 20 pt margins are aligned with the
+  iPhone Duo templates in Apple's iOS and iPadOS 27 design resource (checked
+  23 September 2026); every value carries an Official / Derived / Recommended /
+  Assumption badge, and the dual-pane skill keeps that distinction. Column
+  counts, pane gaps, the 27 pt fold band and the 600 pt text measure are the
+  kit's own recommendations.
+
 ## Cross-platform
 
 For the Flutter and React Native skills. Neither framework had iPhone Duo

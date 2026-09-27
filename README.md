@@ -69,7 +69,7 @@ skills appear; invoke one by name or just describe the task.
 | **iphone-duo-vertical-bars** | SwiftUI · UIKit | Toolbars and tab bars. The vertical axis, symbol vs text, `AxisBehavior`, overflow and visibility priority. |
 | **iphone-duo-hinge-and-scenes** | SwiftUI · UIKit | Hinge-driven effects, Split View, multiple scenes, dual-display UI via scene accessories. |
 | **iphone-duo-camera** | AVFoundation · AVKit | Capture apps. Virtual front camera vs individual cameras, direction coordinator, mirroring, preview. |
-| **iphone-duo-dual-pane-patterns** | SwiftUI · UIKit | Deciding what goes in each pane. Real pixel/point dimensions, exact hinge callback types, pose → pattern mapping, hinge-driven effects, two-pane paywalls, fold-aware onboarding. |
+| **iphone-duo-dual-pane-patterns** | SwiftUI · UIKit | Deciding what goes in each pane. Pixel/point dimensions, safe-area and layout tokens, exact hinge callback types, pose → pattern mapping, hinge-driven effects, two-pane paywalls, fold-aware onboarding. |
 | **iphone-duo-design-review** | Any framework | Design critique rather than code — poses, side controls, asymmetry, fold avoidance, sheets. |
 | **iphone-duo-games** | Unity · Unreal · Godot · SpriteKit · Metal | The project is a game. Filling the screen across poses, aspect ratio vs letterboxing, touch controls clear of the fold. |
 | **iphone-duo-flutter** | Flutter · Dart | The app is Flutter. What `MediaQuery` gives you, why `displayFeatures` doesn't work here, bridging via platform channels. |

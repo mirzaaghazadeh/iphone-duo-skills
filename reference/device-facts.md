@@ -42,12 +42,18 @@ close to the outer display turned sideways, and **each half of the inner display
 (≈1335 × 1878 px) is close to one outer display** — a phone-shaped UI fits one
 half and the other half is extra.
 
-**Points are not published.** The outer display works out to 466 × 678 pt at 3×
-either way. The inner display is ambiguous: 626 × 890 pt if the 1878 × 2670
-panel is native 3×, or 669 × 951 pt if the (larger, same-ratio) 2007 × 2853
-screenshot size is the 3× render and the panel is downsampled. Read the scene
-bounds in the simulator rather than trusting either. Both are wider and shorter than a
-traditional iPhone display — which is why system controls move to the side.
+**Points.** Apple's iOS and iPadOS 27 design resource uses **466 × 678 pt** for
+the outer display (exactly 3× its panel) and **951 × 669 pt** for the inner
+display (669 × 951 in portrait). The inner size is *not* an exact 3× of the
+2670 × 1878 panel — the system renders at the 2853 × 2007 screenshot size and
+downsamples. The fold is at **475.5 pt**, the centre of the inner display, in
+both orientations.
+
+**Safe areas** (same source): 84 pt trailing for the vertical bar on the outer
+display and on the inner display in landscape, 0 on the other edges; on the
+inner display in portrait, 84 pt top (status bar and top bar) and 95 pt bottom
+(tab bar). Layout margin 20 pt. See
+`../skills/iphone-duo-dual-pane-patterns/SKILL.md` for the full token table.
 
 Peak outdoor brightness 3000 nits, ProMotion, Always On.
 
