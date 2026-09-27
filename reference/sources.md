@@ -30,6 +30,8 @@ original notes and instructions written from the technical facts.
 ## Announcement and specs
 
 - [Apple unveils iPhone Duo](https://www.apple.com/newsroom/2026/09/apple-unveils-iphone-duo/) — Apple Newsroom, September 9, 2026
+- [iPhone Duo — Technical Specifications](https://www.apple.com/iphone-duo/specs/) —
+  display resolutions and ppi, dimensions, weight, Touch ID. Checked September 27, 2026.
 - [iPhone Duo](https://en.wikipedia.org/wiki/IPhone_Duo) — Wikipedia, for consolidated specs
 
 ## Related sessions referenced by the Tech Talks
@@ -37,6 +39,32 @@ original notes and instructions written from the technical facts.
 - Modernize your UIKit app (WWDC26)
 - What's new in SwiftUI (WWDC26)
 - Support the Center Stage front camera in your iOS app (WWDC26)
+
+## Dual-screen patterns
+
+For `iphone-duo-dual-pane-patterns`. Prior art from other foldable platforms,
+which agrees with Apple's guidance on every point it overlaps:
+
+- [Introduction to dual-screen devices](https://learn.microsoft.com/en-us/dual-screen/introduction) —
+  Microsoft Surface Duo: extended canvas, list-detail, two page, dual view,
+  companion pane.
+- [Postures and orientation](https://developer.android.com/design/ui/mobile/guides/layout-and-content/postures-and-orientation)
+  and [Make your app fold aware](https://developer.android.com/develop/adaptive-apps/guides/foldables/make-your-app-fold-aware) — Android.
+- [Designing for foldables](https://developer.samsung.com/one-ui/largescreen-and-foldable/designing_for_foldable.html)
+  and [Adapt your app for Flex Mode](https://developer.samsung.com/sdp/blog/en-us/2021/01/11/adapt-your-app-for-galaxy-flex-mode) — Samsung.
+- [App Review Guidelines 3.1.2](https://developer.apple.com/app-store/review/guidelines/)
+  and [`SubscriptionStoreView`](https://developer.apple.com/documentation/storekit/subscriptionstoreview) — for the paywall section.
+
+## Community design resources
+
+- [iPhone Duo Adaptive Design Starter Kit](https://www.figma.com/community/file/1681029753837117390/iphone-duo-adaptive-design-starter-kit)
+  — Noah Elhadedy, Figma Community, v1.0, September 2026. Unofficial. Its safe
+  areas, logical sizes, 84 pt vertical bar and 20 pt margins are aligned with the
+  iPhone Duo templates in Apple's iOS and iPadOS 27 design resource (checked
+  23 September 2026); every value carries an Official / Derived / Recommended /
+  Assumption badge, and the dual-pane skill keeps that distinction. Column
+  counts, pane gaps, the 27 pt fold band and the 600 pt text measure are the
+  kit's own recommendations.
 
 ## Cross-platform
 
@@ -70,8 +98,14 @@ Re-checked **September 25, 2026**. Apple's symbol documentation is now live, and
 - [`AVCaptureDeviceDirectionCoordinator`](https://developer.apple.com/documentation/avkit/avcapturedevicedirectioncoordinator),
   [`AVCaptureDeviceDirectionMap`](https://developer.apple.com/documentation/avkit/avcapturedevicedirectionmap),
   [`AVCaptureDeviceDescriptor`](https://developer.apple.com/documentation/avkit/avcapturedevicedescriptor)
-- [`UIHingeInteraction`](https://developer.apple.com/documentation/uikit/uihingeinteraction)
-  and [`UIHinge`](https://developer.apple.com/documentation/uikit/uihinge)
+- [`UIHingeInteraction`](https://developer.apple.com/documentation/uikit/uihingeinteraction),
+  [`UIHinge`](https://developer.apple.com/documentation/uikit/uihinge) and
+  [`UIHinge.Status`](https://developer.apple.com/documentation/uikit/uihinge/status-swift.enum)
+- [`onHingeChange(isEnabled:_:)`](https://developer.apple.com/documentation/swiftui/view/onhingechange(isenabled:_:)),
+  [`DeviceHingeContext`](https://developer.apple.com/documentation/swiftui/devicehingecontext),
+  [`DeviceHinge`](https://developer.apple.com/documentation/swiftui/devicehinge) and
+  [`DeviceHinge.Status`](https://developer.apple.com/documentation/swiftui/devicehinge/status-swift.struct)
+- [`reservedRegions(kind:options:layoutDirectionBehavior:)`](https://developer.apple.com/documentation/swiftui/geometryproxy/reservedregions(kind:options:layoutdirectionbehavior:))
 - [`ToolbarItemVisibilityPriority`](https://developer.apple.com/documentation/swiftui/toolbaritemvisibilitypriority),
   [`ToolbarOverflowMenu`](https://developer.apple.com/documentation/swiftui/toolbaroverflowmenu),
   [`toolbarVerticalEdge`](https://developer.apple.com/documentation/swiftui/environmentvalues/toolbarverticaledge)

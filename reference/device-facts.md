@@ -18,19 +18,42 @@ assumptions; do **not** hardcode any of it into a layout.
 | Form factor | Book-style inward fold, grade 5 titanium, precision hinge |
 | Colors | Night Sky, Star White |
 | Durability | Ceramic Shield 2 front, Ceramic Shield back, IP68 |
+| Dimensions, open | 164.6 × 117.8 × 5.2 mm (6.48 × 4.64 × 0.21 in) |
+| Dimensions, closed | 84.1 × 117.8 × 11.3 mm (3.31 × 4.64 × 0.44 in) |
+| Weight | 254 g (8.96 oz) |
+| Biometrics | Touch ID in the side button — **no Face ID** |
+| LiDAR | Not listed in the specs — plan a fallback for RoomPlan / scene depth |
 
 ## Displays
 
 | | Inner | Outer |
 |---|---|---|
 | Size | 7.6-inch (7.58 in diagonal as a rectangle) | 5.4-inch (5.36 in diagonal as a rectangle) |
+| Resolution | 1878 × 2670 px at 430 ppi | 1398 × 2034 px at 460 ppi |
+| Aspect ratio | ≈1.42 : 1 — landscape when open | ≈1.45 : 1 — portrait |
+| App Store screenshot | 2007 × 2853 px | 1398 × 2034 px |
 | Panel | Super Retina XDR, foldable OLED | Super Retina XDR |
 | Finish | Nano-texture, anti-glare | Standard |
 | Notes | Under-display FaceTime camera | ~90% of the screen area of iPhone 18 Pro |
 
 Both displays share the **same aspect ratio**, so the experience stays
-continuous as the device opens and closes. Both are wider and shorter than a
-traditional iPhone display — which is why system controls move to the side.
+continuous as the device opens and closes. In pixels, the open inner display is
+close to the outer display turned sideways, and **each half of the inner display
+(≈1335 × 1878 px) is close to one outer display** — a phone-shaped UI fits one
+half and the other half is extra.
+
+**Points.** Apple's iOS and iPadOS 27 design resource uses **466 × 678 pt** for
+the outer display (exactly 3× its panel) and **951 × 669 pt** for the inner
+display (669 × 951 in portrait). The inner size is *not* an exact 3× of the
+2670 × 1878 panel — the system renders at the 2853 × 2007 screenshot size and
+downsamples. The fold is at **475.5 pt**, the centre of the inner display, in
+both orientations.
+
+**Safe areas** (same source): 84 pt trailing for the vertical bar on the outer
+display and on the inner display in landscape, 0 on the other edges; on the
+inner display in portrait, 84 pt top (status bar and top bar) and 95 pt bottom
+(tab bar). Layout margin 20 pt. See
+`../skills/iphone-duo-dual-pane-patterns/SKILL.md` for the full token table.
 
 Peak outdoor brightness 3000 nits, ProMotion, Always On.
 

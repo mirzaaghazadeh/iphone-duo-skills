@@ -46,7 +46,7 @@ device opens and closes, including in Split View.
 | Keep foreground in safe area | default behavior | `view.safeAreaInsets`, or the safe area layout guide |
 | Let background bleed | `.ignoresSafeArea()` | `view.bounds` |
 | Custom UI outside the safe area (iOS 27.1) | `ReservedRegion` | `UIViewReservedRegion` |
-| Query regions (iOS 27.1) | `reservedRegions(kind:options:)` on a `GeometryProxy`, from `GeometryReader` or `onGeometryChange` | `reservedRegions(kind:options:)` on `UIView` |
+| Query regions (iOS 27.1) | `reservedRegions(kind:options:layoutDirectionBehavior:)` on a `GeometryProxy`, from `GeometryReader` or `onGeometryChange` | `reservedRegions(kind:options:)` on `UIView` |
 
 The UIKit signature, verbatim:
 
@@ -56,6 +56,20 @@ The UIKit signature, verbatim:
     options: UIView.ReservedRegion.QueryOptions = []
 ) -> [UIView.ReservedRegion]
 ```
+
+The SwiftUI signature adds a layout-direction parameter:
+
+```swift
+func reservedRegions(
+    kind: ReservedRegion.Kind,
+    options: ReservedRegion.QueryOptions = [],
+    layoutDirectionBehavior: LayoutDirectionBehavior = .mirrors
+) -> [ReservedRegion]
+```
+
+Region geometry is physical — the camera doesn't move for right-to-left
+languages — so by default SwiftUI **mirrors** the frames for you, which suits a
+custom `Layout`. Pass `.fixed` when you need the unmirrored frames.
 
 Region kinds (`divisionRegionKind` / `occlusionRegionKind` in Objective-C):
 
@@ -70,9 +84,17 @@ active — useful for stable high-level decisions (for example, always preferrin
 an even column count on a device that *has* a fold).
 
 Each region carries `frame`, `isActive` (`active` in Objective-C), `kind`, an
-`id`/`identifier`, and **`margins`** — the insets the system suggests leaving
-around the region. ⚠ The margins property is not mentioned in the Tech Talks;
-prefer it over laying content flush against `frame`.
+`id`/`identifier`, and **`margins`** (`EdgeInsets` / `UIEdgeInsets`). ⚠ Per the
+reference, `frame` **already includes** the margins — they are the part of the
+frame kept clear for interactive content. Avoiding `frame` is enough; don't add
+`margins` on top. Inset `frame` by `margins` to get the bare hardware area,
+which is what full-bleed media may run up to. The margins property is not
+mentioned in the Tech Talks.
+
+⚠ The reference also says the query returns every region that intersects the
+view *regardless* of whether it is active, which sits oddly beside the
+`.includeInactive` option. Always filter on `isActive` for current-state
+decisions rather than relying on the default options.
 
 Safe areas and layout margins on iPhone Duo are frequently **asymmetric**. Never
 assume opposite insets are equal.
@@ -154,9 +176,20 @@ Note the naming asymmetry: SwiftUI's default is `.automatic`, UIKit's is
 | Outer-display camera UI | `CameraCaptureAccessory` | `CameraCaptureAccessory` |
 | React to accessory availability | `onAvailabilityChange` | observation tracking |
 
-`onHingeChange` hands you the previous and current hinge context. A `nil` hinge
-means the device has no hinge. You get a coarse status — closed, partially open,
-fully open — plus a continuous angle.
+SwiftUI, verbatim:
+
+```swift
+nonisolated func onHingeChange(
+    isEnabled: Bool = true,
+    _ action: @escaping (DeviceHingeContext, DeviceHingeContext) -> Void
+) -> some View
+```
+
+The closure gets the previous and current `DeviceHingeContext`. Its `hinge` is a
+`DeviceHinge?` — `nil` means the device has no hinge. `DeviceHinge` exposes
+`angle: Angle` and `status: DeviceHinge.Status`. ⚠ `DeviceHinge.Status` is a
+**struct** with static members `.closed`, `.partiallyOpen`, `.fullyOpen`
+(Equatable and Hashable), not an enum — a `switch` over it needs `default`.
 
 In UIKit the shape is different from the SwiftUI modifier and worth reading
 directly. `UIHingeInteraction` takes an update handler with **two arguments, the
@@ -167,8 +200,21 @@ interaction and an `Update`** — not a previous/current pair — and has an
 init(updateHandler: (UIHingeInteraction, UIHingeInteraction.Update) -> Void)
 ```
 
-The hinge state itself is a separate `UIHinge` object exposing `angle: CGFloat`
-and `status: UIHinge.Status`. Both are iOS 27.1.
+`Update.hinge` is a `UIHinge?`, `nil` when the interaction leaves a hierarchy
+that provides hinge updates. The handler fires on hinge changes **and** when the
+interaction moves between hierarchies. `UIHinge` exposes `angle: CGFloat` —
+⚠ **in radians** — and `status: UIHinge.Status`, an `Int`-backed enum with
+⚠ **four** cases: `.closed`, `.partiallyOpen`, `.fullyOpen` and `.unknown`.
+All of these types are iOS 27.1.
+
+What the reference says about the values:
+
+- The status is determined by the system from the angle **and device
+  orientation** — don't recompute it from angle thresholds.
+- The rate and granularity of angle updates are system policy and can change —
+  don't depend on a frequency or precision.
+- If closed / partially open / fully open is all you need, prefer `status`.
+- The angle range is not documented; don't assume flat is exactly 180°.
 
 Use the hinge for **interactions and effects**. Use arrangements and reserved
 regions for **layout**.

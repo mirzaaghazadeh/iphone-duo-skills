@@ -127,6 +127,7 @@ updated for the shapes on this device.
 | has custom layout, split-like views, or content that lands in the fold | `iphone-duo-adaptive-layout` |
 | wants hinge-driven effects, multiple windows, or dual-display UI | `iphone-duo-hinge-and-scenes` |
 | captures photo or video | `iphone-duo-camera` |
+| needs to decide what goes in each pane, size assets, or build a two-pane paywall / onboarding | `iphone-duo-dual-pane-patterns` |
 | needs a design pass rather than a code pass | `iphone-duo-design-review` |
 
 Device numbers live in `../../reference/device-facts.md`; every API name and its

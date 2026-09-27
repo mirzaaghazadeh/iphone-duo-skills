@@ -48,8 +48,10 @@ Note the asymmetry between the two cameras: the outer one is a permanent fact of
 your layout, while the inner one appears and disappears under you. Handle the
 second as a change you animate through, not a constant you read once.
 
-By default you get only the active ones. Pass the `includeInactive` option to
-also see regions that exist but aren't currently in play — which is what you want
+The Tech Talks say you get only the active ones by default — though the API
+reference describes the query as returning intersecting regions *regardless* of
+active state, so filter on `isActive` yourself when it matters. Pass the
+`includeInactive` option to also see regions that exist but aren't currently in play — which is what you want
 for stable, high-level decisions. A grid, for instance, can prefer an even column
 count on any device that *has* a fold, so the layout doesn't reshuffle every time
 the user bends the device.
@@ -75,12 +77,15 @@ Each region gives you more than a rectangle:
 - **`frame`** — where it sits in the view's coordinate space.
 - **`isActive`** (`active` in Objective-C) — whether it's currently in play.
 - **`kind`** — division or occlusion.
-- **`margins`** — the insets the system recommends keeping *around* the region.
-  This one is easy to miss and worth using: laying content flush against a
-  region's frame is legal but usually looks wrong. Prefer the margins.
+- **`margins`** — the clearance the system keeps for interactive content. The
+  reference is explicit that **`frame` already includes these margins**, so
+  keeping controls out of `frame` is enough; don't pad by `margins` a second
+  time. Inset `frame` by `margins` to get the bare hardware area — the limit for
+  full-bleed media, which may run closer than controls.
 
-Query reserved regions for **custom, manually laid out controls**. If you are
-using system containers, you already have this handled — see below.
+In SwiftUI the query takes a third parameter, `layoutDirectionBehavior`
+(default `.mirrors`), which flips region frames for right-to-left layouts so a
+custom `Layout` doesn't have to. Pass `.fixed` for the physical frames.
 
 Query reserved regions for **custom, manually laid out controls**. If you are
 using system containers, you already have this handled — see below.
