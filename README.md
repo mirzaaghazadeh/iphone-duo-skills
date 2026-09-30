@@ -98,7 +98,13 @@ through whatever camera plugin they use, or through their own bridge.
 sidestep most of the UI guidance but not resizing, and the fold is a genuine
 hazard for on-screen touch controls.
 
-**Kotlin Multiplatform, .NET MAUI, Capacitor and friends.** No dedicated skill,
+**Capacitor and Ionic.** Covered by a separate set,
+[iphone-duo-capacitor-skills](https://github.com/erkamyaman/iphone-duo-capacitor-skills):
+crease-aware layout, hinge angle and posture, size classes, the outer display, and
+a Device Posture and Viewport Segments polyfill, on top of a plugin that supplies
+the native bridge. Pair it with `iphone-duo-design-review`.
+
+**Kotlin Multiplatform, .NET MAUI and friends.** No dedicated skill,
 but the pattern from the Flutter and React Native skills carries over directly:
 everything is either *resize and safe-area handling you can do in your existing
 layer*, or *a native bridge to the iOS 27.1 APIs*. Read whichever cross-platform
