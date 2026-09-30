@@ -22,7 +22,7 @@ plus reference sheets for device facts and the full API surface.
 npx skills add mirzaaghazadeh/iphone-duo-skills
 ```
 
-Installs all ten. The CLI detects your agent — Claude Code, Cursor, Copilot,
+Installs all eleven. The CLI detects your agent — Claude Code, Cursor, Copilot,
 Gemini and others — and puts them where that agent looks.
 
 Useful flags:
@@ -74,6 +74,7 @@ skills appear; invoke one by name or just describe the task.
 | **iphone-duo-games** | Unity · Unreal · Godot · SpriteKit · Metal | The project is a game. Filling the screen across poses, aspect ratio vs letterboxing, touch controls clear of the fold. |
 | **iphone-duo-flutter** | Flutter · Dart | The app is Flutter. What `MediaQuery` gives you, why `displayFeatures` doesn't work here, bridging via platform channels. |
 | **iphone-duo-react-native** | React Native · Expo | The app is React Native. Asymmetric insets, resize handling, bridging via a native module. |
+| **iphone-duo-capacitor** | Capacitor · Ionic · Angular · React · Vue | The app runs in a web view. Why Device Posture and Viewport Segments do not reach it, safe-area asymmetry, and getting fold state from the native side. |
 
 ### Which skills apply to your stack
 
@@ -98,7 +99,12 @@ through whatever camera plugin they use, or through their own bridge.
 sidestep most of the UI guidance but not resizing, and the fold is a genuine
 hazard for on-screen touch controls.
 
-**Kotlin Multiplatform, .NET MAUI, Capacitor and friends.** No dedicated skill,
+**Capacitor, Ionic or another web view.** Read `iphone-duo-capacitor` first,
+then `iphone-duo-design-review`. The twist there is that the standard web APIs
+for this exist but are flagged off in a `WKWebView`, so the fold has to come
+from the native side even though the CSS for it is specified.
+
+**Kotlin Multiplatform, .NET MAUI and friends.** No dedicated skill,
 but the pattern from the Flutter and React Native skills carries over directly:
 everything is either *resize and safe-area handling you can do in your existing
 layer*, or *a native bridge to the iOS 27.1 APIs*. Read whichever cross-platform
