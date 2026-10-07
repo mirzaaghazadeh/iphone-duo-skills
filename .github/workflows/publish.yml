@@ -1,0 +1,63 @@
+name: Publish to npm
+
+# Publishes when you cut a GitHub release, so the npm version can't drift
+# from the repo the way it has before.
+#
+# Requires a repository secret named NPM_TOKEN. Because this account has 2FA
+# required for publishing, an ordinary automation token is NOT enough — create
+# a *granular access token* with "bypass 2FA" enabled, scoped to the
+# iphone-duo-skills package, at npmjs.com → Access Tokens.
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Pack only, do not publish'
+        type: boolean
+        default: true
+
+permissions:
+  contents: read
+  id-token: write   # npm provenance
+
+jobs:
+  publish:
+    name: Validate, then publish
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      # Never publish something that wouldn't pass CI.
+      - name: Validate
+        run: python3 scripts/validate-skills.py
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Check the tag matches package.json
+        if: github.event_name == 'release'
+        run: |
+          pkg=$(node -p "require('./package.json').version")
+          tag="${GITHUB_REF_NAME#v}"
+          if [ "$pkg" != "$tag" ]; then
+            echo "::error::package.json is $pkg but the release tag is $tag"
+            exit 1
+          fi
+          echo "Version $pkg matches the tag."
+
+      - name: Pack
+        run: npm pack --dry-run
+
+      - name: Publish
+        if: github.event_name == 'release' || inputs.dry_run == false
+        run: npm publish --provenance --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

@@ -1,0 +1,38 @@
+name: Validate skills
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    name: Structure, links and packaging
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Validate SKILL.md frontmatter and cross-references
+        run: python3 scripts/validate-skills.py
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      # Catches a files/ entry or a JSON mistake that would ship a broken
+      # package, without publishing anything.
+      - name: Verify the npm package still builds
+        run: npm pack --dry-run
+
+      # The install path people actually use. If this breaks, the README lies.
+      - name: Verify the skills CLI can resolve the repo
+        if: github.event_name == 'push'
+        run: npx -y skills@latest add "${GITHUB_REPOSITORY}" --list

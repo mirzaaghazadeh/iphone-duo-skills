@@ -1,0 +1,98 @@
+{
+  "api.ArrangementView": {
+    "hash": "abb86ea01100fd65",
+    "len": 1501,
+    "status": 200,
+    "url": "https://developer.apple.com/tutorials/data/documentation/swiftui/arrangementview.json"
+  },
+  "api.CameraCaptureAccessory": {
+    "hash": "d6267ac2a91fd4d3",
+    "len": 517,
+    "status": 200,
+    "url": "https://developer.apple.com/tutorials/data/documentation/swiftui/cameracaptureaccessory.json"
+  },
+  "api.DeviceDescriptor": {
+    "hash": "6e41c2e8fe529e4e",
+    "len": 611,
+    "status": 200,
+    "url": "https://developer.apple.com/tutorials/data/documentation/avkit/avcapturedevicedescriptor.json"
+  },
+  "api.DirectionCoordinator": {
+    "hash": "c0c0121f756e7b42",
+    "len": 2060,
+    "status": 200,
+    "url": "https://developer.apple.com/tutorials/data/documentation/avkit/avcapturedevicedirectioncoordinator.json"
+  },
+  "api.DirectionMap": {
+    "hash": "c92a2c631fc42e4c",
+    "len": 770,
+    "status": 200,
+    "url": "https://developer.apple.com/tutorials/data/documentation/avkit/avcapturedevicedirectionmap.json"
+  },
+  "api.ReservedRegion": {
+    "hash": "95240095e3cf82d5",
+    "len": 1738,
+    "status": 200,
+    "url": "https://developer.apple.com/tutorials/data/documentation/swiftui/reservedregion.json"
+  },
+  "api.UIArrangementViewController": {
+    "hash": "77da9f4e1c711930",
+    "len": 1608,
+    "status": 200,
+    "url": "https://developer.apple.com/tutorials/data/documentation/uikit/uiarrangementviewcontroller.json"
+  },
+  "api.UIHinge": {
+    "hash": "e2147bb15ddf4e43",
+    "len": 350,
+    "status": 200,
+    "url": "https://developer.apple.com/tutorials/data/documentation/uikit/uihinge.json"
+  },
+  "api.UIHingeInteraction": {
+    "hash": "cae6e3dc4fd066ee",
+    "len": 595,
+    "status": 200,
+    "url": "https://developer.apple.com/tutorials/data/documentation/uikit/uihingeinteraction.json"
+  },
+  "api.UIViewReservedRegion": {
+    "hash": "e39938d8bc5c15f8",
+    "len": 723,
+    "status": 200,
+    "url": "https://developer.apple.com/tutorials/data/documentation/uikit/uiviewreservedregion.json"
+  },
+  "api.toolbarVerticalEdge": {
+    "hash": "9c38e9649d9e294a",
+    "len": 582,
+    "status": 200,
+    "url": "https://developer.apple.com/tutorials/data/documentation/swiftui/environmentvalues/toolbarverticaledge.json"
+  },
+  "hig": {
+    "hash": "246a8aa6f40999a1",
+    "len": 12545,
+    "status": 200,
+    "url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/designing-for-iphone-duo.json"
+  },
+  "landing": {
+    "hash": "294f69da4dee824d",
+    "len": 1833,
+    "status": 200,
+    "url": "https://developer.apple.com/iphone-duo/"
+  },
+  "pending.swiftui-prepare": {
+    "hash": "",
+    "len": 0,
+    "status": 404,
+    "url": "https://developer.apple.com/tutorials/data/documentation/swiftui/preparing-your-app-for-iphone-duo.json"
+  },
+  "pending.uikit-prepare": {
+    "hash": "",
+    "len": 0,
+    "status": 404,
+    "url": "https://developer.apple.com/tutorials/data/documentation/uikit/preparing-your-app-for-iphone-duo.json"
+  },
+  "prepare": {
+    "hash": "3f5316189386b7c1",
+    "len": 6153,
+    "status": 200,
+    "url": "https://developer.apple.com/iphone-duo/prepare/"
+  }
+}

@@ -1,0 +1,77 @@
+name: Watch Apple docs
+
+# Apple shipped the HIG page, then the API reference, then the Prepare
+# checklist — each found by accident, and the API reference turned out to
+# correct three claims in this repo. This checks on a schedule instead.
+
+on:
+  schedule:
+    # Fridays at 06:00 UTC (09:00 Europe/Istanbul).
+    - cron: '0 6 * * 5'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  issues: write
+
+concurrency:
+  group: watch-apple-docs
+  cancel-in-progress: false
+
+jobs:
+  check:
+    name: Compare Apple's documentation against last known state
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Check sources
+        id: check
+        continue-on-error: true   # exit 2 means "changed", not "failed"
+        run: python3 scripts/check-sources.py
+
+      - name: Fail on a real error
+        if: steps.check.outcome == 'failure' && steps.check.outputs.changed != 'true'
+        run: |
+          echo "::error::check-sources.py failed for a reason other than detected changes"
+          exit 1
+
+      - name: Commit refreshed state
+        if: steps.check.outputs.changed == 'true'
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add .github/sources-state.json
+          if git diff --cached --quiet; then
+            echo "State unchanged; nothing to commit."
+          else
+            git commit -m "Refresh Apple docs watch state"
+            git push
+          fi
+
+      - name: Open an issue describing what moved
+        if: steps.check.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          BODY: ${{ steps.check.outputs.body }}
+        run: |
+          printf '%s\n' "$BODY" > /tmp/body.md
+          # Reuse one open issue rather than filing a new one every week.
+          existing=$(gh issue list --label apple-docs --state open \
+                      --limit 1 --json number --jq '.[0].number // empty')
+          if [ -n "$existing" ]; then
+            gh issue comment "$existing" --body-file /tmp/body.md
+            echo "Commented on #$existing"
+          else
+            gh label create apple-docs \
+              --description "Upstream Apple documentation changed" \
+              --color 0E8A16 2>/dev/null || true
+            gh issue create \
+              --title "Apple docs changed — repo may need updating" \
+              --label apple-docs \
+              --body-file /tmp/body.md
+          fi
