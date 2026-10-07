@@ -32,37 +32,87 @@ Find out what the app is building against, because the SDK is the gate:
 
 | Built against | Behavior on iPhone Duo |
 |---|---|
-| Pre-iOS 27 | Runs. Closed, it uses the space to the left of the status bar and camera. Open, it gets a familiar size and aspect ratio. |
-| iOS 27 SDK | Extends left of the status bar area on the inner display. |
-| **iOS 27.1 SDK** | Content reaches the screen edge, standard bars lay out vertically, and the reserved-region and arrangement APIs become available. |
+| iOS 26 SDK or earlier | Runs, but doesn't adapt. Open, the app sits **centered with empty space around it**. Closed, content shows to the left of the status bar and camera. |
+| iOS 27 SDK | Resizes to fill most of the inner display, but still avoids the status bar on the right edge. |
+| **iOS 27.1 SDK or later** | Extends to the full display, with toolbars and tab bars vertical below the status bar. Unlocks the reserved-region and arrangement APIs. |
 
 Check the deployment target and the SDK in the project, then say plainly which
 tier the app is in. Getting to the 27.1 tier is the single highest-leverage
 change; almost everything else in this skill assumes it.
 
-Then open the app in the **iPhone Duo simulator in Device Hub** (Xcode 27.1) and
-drive the controls that open, close, rotate and fold it. Also try **Split View**
-by dragging the app to one side with the home indicator. Bugs here are visual
-and pose-dependent — you will not find them by reading code alone.
+One caution before you ship at the 27.1 tier: that's the point where the bars go
+vertical, so confirm the content adapts to that before releasing. Jumping tiers
+without checking is how an app ends up with controls overlapping its own layout.
 
-Xcode 27.1 also ships an **App Resizability** skill (renamed from the app
-modernization skill, now covering SwiftUI and iPhone Duo). Run it. It mechanizes
-much of Step 2.
+### Let the tooling do the first pass
+
+Xcode ships an **App Resizability** skill (renamed from the app modernization
+skill; it now covers SwiftUI and iPhone Duo). In Xcode, ask the coding assistant
+to *get my app ready for iPhone Duo* and it scans for the patterns in Step 2,
+explaining each and proposing a fix.
+
+Not using Xcode's assistant? Export the skill and use it in another agent:
+
+```bash
+xcrun agent skills export
+```
+
+It catches most issues but not all, so still work Step 2 by hand afterwards.
+
+### Then look at it running
+
+Three tools, in increasing fidelity:
+
+- **The iOS resizable simulator** in Device Hub — fastest way to find layouts
+  that break under arbitrary sizes.
+- **iPhone Mirroring on macOS 27** — resize the window to extremes in both
+  directions. Good for catching cached-size bugs.
+- **The iPhone Duo simulator in Xcode 27.1** — the only one that gives you the
+  real thing. Drive open, close, rotate and fold, and try Split View by dragging
+  the app to one side with the home indicator.
+
+Bugs here are visual and pose-dependent. You will not find them by reading code.
 
 ## Step 2 — Hunt the fixed assumptions
 
 Grep the codebase for these. Each one is a real defect on this device:
 
-**Idiom and orientation branches.** `userInterfaceIdiom`, `isPad`, any layout
-decision keyed off `interfaceOrientation`. The inner display *does not honor
-supported interface orientations* — it rotates regardless of what the app
-declared. Replace with size classes.
+**Orientation branches.** Grep for `UIDevice.current.orientation`,
+`statusBarOrientation`, and `interfaceOrientation` — including
+`windowScene.effectiveGeometry.interfaceOrientation`. The inner display *does
+not honor supported interface orientations*, and orientation no longer tells you
+what shape your app is. To learn whether you're wider than tall, compare width
+and height of the space you actually have: `view.bounds` in a view controller,
+`superview.bounds` in a view, or the `GeometryReader` size in SwiftUI.
 
 **`UIScreen.main`.** Ambiguous on a two-display device and slated for
-deprecation. Prefer no screen reference at all — use the environment, the trait
-collection, or the scene's bounds. For scale, `traitCollection.displayScale`.
-If you genuinely need the screen, reach it from the scene:
-`window?.windowScene?.screen`.
+deprecation. Each use has a specific replacement:
+
+| Instead of | Use |
+|---|---|
+| `UIScreen.main.bounds` | `view.bounds` / `window.bounds`; `GeometryReader` or `onGeometryChange` in SwiftUI |
+| `UIScreen.main.scale` | `traitCollection.displayScale`, or `@Environment(\.displayScale)` |
+| `UIWindow(frame: UIScreen.main.bounds)` | `UIWindow(windowScene:)` |
+| A stored `UIScreen` | `view.window?.windowScene?.screen`, read on demand |
+
+**Size read once, then cached.** This one hides well. Reading size at launch —
+or in `viewIsAppearing` — isn't enough, because a fold resizes your app
+*mid-session*. Do size-dependent layout in `layoutSubviews` /
+`viewDidLayoutSubviews`, and use `viewWillTransition(to:with:)` for work that
+must run on the change itself.
+
+**"Regular width means iPad."** The trap most likely to produce a visibly wrong
+screen. Plenty of apps show an iPad-only layout when `horizontalSizeClass ==
+.regular`, and assume iPhone is always compact. The inner display is regular
+width, so that iPad layout now runs on a phone. Check both directions: branches
+that fire on regular, and branches that assume compact. Related: delete any
+comparison against a specific device size, like `bounds.height == 844` or a table
+of known iPhone dimensions — none of them match this device.
+
+**Full-bleed media.** Hero images and video set to `.scaleAspectFill` or
+`.aspectRatio(contentMode: .fill)` crop more aggressively on a wider display and
+can lose the subject entirely. Choose fill versus fit from the current size class
+or aspect ratio, or set a focal point.
 
 **Symmetric inset math.** This is the subtle one. On iPhone Duo the safe area
 and layout margins are routinely asymmetric — vertical controls sit on one side
@@ -133,6 +183,23 @@ updated for the shapes on this device.
 Device numbers live in `../../reference/device-facts.md`; every API name and its
 framework is in `../../reference/api-index.md`.
 
+## Step 6 — Shipping it
+
+Adapting the app is most of the job, but the App Store side is easy to forget and
+cheap to do:
+
+- **Screenshots and previews.** Capture the app across orientations and poses so
+  the product page shows it actually working on the device, not a phone layout
+  stretched wide. Check the current screenshot specifications for the required
+  sizes.
+- **Preview before you publish.** App Store Connect has a preview tool for
+  checking how your assets render on iPhone Duo. Worth using — an asset that
+  looks right in Xcode can still read badly on the product page.
+- **Featuring nomination.** App Store Connect lets you submit one, and in the
+  Helpful Details section you can state that the app is optimized for iPhone Duo,
+  including support for all device poses. Being early matters here: there won't be
+  many optimized apps at launch, which is exactly when editorial is looking.
+
 ## Reporting back
 
 Give the user the tier they're on, the concrete defects found with
@@ -147,8 +214,10 @@ Signatures in this repo were verified against Apple's published API reference on
 Three claims were wrong and got corrected in that pass — see the ⚠ markers in
 `../../reference/api-index.md`.
 
-Two caveats remain. Apple's *Preparing your app for iPhone Duo* article is still
-unpublished, so anything it eventually covers may add nuance. And nothing here
-has been compiled or run against a real device — pose-dependent layout behaviour
-in particular needs the simulator to confirm, so don't report it as verified on
-the strength of these docs alone.
+Apple's *Prepare* checklist has since been published and is folded in here too,
+so the written guidance is now complete rather than inferred from the videos.
+
+One caveat remains, and it matters: nothing here has been compiled or run against
+a real device. Pose-dependent layout behaviour in particular needs the simulator
+to confirm, so don't report it as verified on the strength of documentation
+alone.

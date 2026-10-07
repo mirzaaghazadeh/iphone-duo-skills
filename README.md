@@ -7,13 +7,14 @@
 Agent skills for building iOS apps on **iPhone Duo** — Apple's first foldable
 iPhone, announced September 9, 2026.
 
-Apple's developer material for iPhone Duo is six Tech Talk videos, the
+Apple's developer material for iPhone Duo is now six Tech Talk videos, the
 [Designing for iPhone Duo](https://developer.apple.com/design/human-interface-guidelines/designing-for-iphone-duo)
-HIG page, and the API reference — the last of which only went live partway
-through building this, and corrected three things in the process. The
-*Preparing your app for iPhone Duo* article is still listed as coming.
+HIG page, the [Prepare](https://developer.apple.com/iphone-duo/prepare/)
+checklist, and the API reference. The last two landed after this repo started —
+the API reference corrected three claims, and the Prepare guide added several
+more. Both passes are reflected here.
 
-These skills distill what exists into structured guidance an agent can act on,
+These skills distill all of it into structured guidance an agent can act on,
 plus reference sheets for device facts and the full API surface.
 
 ## Install

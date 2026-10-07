@@ -115,11 +115,19 @@ That pass produced three corrections — the direction coordinator's change
 handler, the `animated:` parameters on the UIKit arrangement mutators, and the
 meaning of `toolbarVerticalEdge`. They are marked ⚠ in `api-index.md`.
 
-## Documentation still pending
+## Prepare guide
 
-- **Preparing your app for iPhone Duo** — the developer-facing companion article.
-  Still not live under `documentation/uikit/` or `documentation/swiftui/`, and
-  the landing page still lists an item as coming soon.
+- [Prepare — iPhone Duo](https://developer.apple.com/iphone-duo/prepare/) —
+  published early October 2026, and the article that had been pending. A
+  three-step developer checklist: run the App Resizability skill, fix a named set
+  of patterns, then test resizing. Also the source for the `xcrun agent skills
+  export` command, the SDK-tier behaviour descriptions, and the App Store
+  guidance (screenshots, the Connect preview tool, featuring nominations).
+
+Checked October 7, 2026: this page is live at `/iphone-duo/prepare/` rather than
+under `documentation/`, which is why earlier probes for
+`documentation/uikit/preparing-your-app-for-iphone-duo` returned 404 — they still
+do.
 
 ## Keeping this current
 
