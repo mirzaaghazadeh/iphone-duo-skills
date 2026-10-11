@@ -59,15 +59,28 @@ the user bends the device.
 ### Querying them
 
 In SwiftUI, get a `GeometryProxy` from `GeometryReader` or `onGeometryChange`,
-then ask it for `reservedRegions(kind:options:)`. In UIKit the same method hangs
-off `UIView`:
+then ask it for reserved regions. Note the two signatures differ — SwiftUI takes
+a third parameter UIKit doesn't:
 
 ```swift
+// SwiftUI, on GeometryProxy
+func reservedRegions(
+    kind: ReservedRegion.Kind,
+    options: ReservedRegion.QueryOptions,
+    layoutDirectionBehavior: LayoutDirectionBehavior
+) -> [ReservedRegion]
+
+// UIKit, on UIView
 func reservedRegions(
     kind: UIView.ReservedRegion.Kind,
     options: UIView.ReservedRegion.QueryOptions = []
 ) -> [UIView.ReservedRegion]
 ```
+
+The `layoutDirectionBehavior` argument matters in right-to-left layouts: the fold
+is fixed in hardware, so whether you want region positions mirrored with your
+content or left in physical coordinates is a decision you have to make rather
+than inherit.
 
 Pass `.includeInactive` in `options` to also get regions that exist but aren't
 currently active.
@@ -188,6 +201,13 @@ the curve.
 Where split prefers side-by-side, overlay prefers stacking one view above the
 other — and moves them side-by-side when the device folds, which is exactly when
 the stacked view would otherwise get cramped.
+
+Precisely: with no active division region — closed, or fully open — the primary
+view sits on top of the secondary. Once partially folded, the primary moves to
+the **trailing or bottom** region relative to the fold, and the secondary to the
+**leading or top**. That ordering is worth internalising before you pick which
+view is primary: the primary is the one that ends up where the thumb is, not the
+one that gets the larger area.
 
 Because the relationship changes with the pose, you often want to change the
 subordinate view's presentation to match. Read the stacking state and adapt: in

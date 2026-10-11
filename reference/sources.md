@@ -115,6 +115,25 @@ That pass produced three corrections — the direction coordinator's change
 handler, the `animated:` parameters on the UIKit arrangement mutators, and the
 meaning of `toolbarVerticalEdge`. They are marked ⚠ in `api-index.md`.
 
+## Developer article
+
+- [Preparing your app for iPhone Duo](https://developer.apple.com/documentation/technologyoverviews/preparing-your-app-for-iphone-duo)
+  — the full developer article, published under **technologyoverviews**, not
+  under `uikit/` or `swiftui/` where earlier guesses looked. It is the source for
+  the exact toolbar symbol names (`ToolbarItemAxisBehavior`,
+  `UIBarButtonItem.AxisBehavior`, `leadingItemGroups`,
+  `additionalOverflowItems` as a `UIDeferredMenuElement?`), the SwiftUI
+  `reservedRegions` third parameter, and the overlay arrangement's
+  primary-to-trailing behaviour when folded.
+- Referenced from it: *Choosing a camera by the direction it faces* and
+  *Registering a camera capture accessory on iPhone Duo*.
+
+## Group Labs
+
+- [iPhone Duo Group Lab](https://developer.apple.com/videos/play/meet-with-apple/285/) (285)
+  and [a second session](https://developer.apple.com/videos/play/meet-with-apple/286/) (286)
+  — recorded Q&A with Apple engineers. Now watched by `scripts/check-sources.py`.
+
 ## Prepare guide
 
 - [Prepare — iPhone Duo](https://developer.apple.com/iphone-duo/prepare/) —

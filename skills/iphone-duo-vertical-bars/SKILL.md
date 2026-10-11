@@ -1,6 +1,6 @@
 ---
 name: iphone-duo-vertical-bars
-description: Adapt toolbars, navigation bars and tab bars for the vertical axis on iPhone Duo — item ordering, symbol vs text representations, AxisBehavior, overflow menus, visibility priority, and when to opt out. Use when toolbar items look wrong, overflow too early, or need to move to the side on the outer display.
+description: Adapt toolbars, navigation bars and tab bars for the vertical axis on iPhone Duo — item ordering, symbol vs text representations, axis behavior, overflow menus, visibility priority, and when to opt out. Use when toolbar items look wrong, overflow too early, or need to move to the side on the outer display.
 ---
 
 # Bars on the vertical axis
@@ -58,11 +58,12 @@ right-to-left languages. Content adapts around it; the bar itself does not move.
 Audit your toolbar configuration against this hierarchy, top to bottom:
 
 1. **Primary navigation** — back, close. With a navigation controller the back
-   button is added for you. For a custom back or close, use the
-   `cancellationAction` placement in SwiftUI; in UIKit use a leading item and
-   leave `leftItemsSupplementBackButton` at its default of `false`.
+   button is added for you. For a custom back or close, make a `ToolbarItem`
+   with `cancellationAction` placement in SwiftUI; in UIKit add an item to
+   `leadingItemGroups`.
 2. **Prominent actions** — done, and similar. Use the `topBarPinnedTrailing`
-   placement in SwiftUI, `pinnedTrailingGroup` in UIKit.
+   placement in SwiftUI, `pinnedTrailingGroup` in UIKit. Group related items
+   with `ToolbarItemPlacement` semantics rather than positioning them by hand.
 3. **Everything else**, keeping its original grouping. A vertical spacer
    separates top and bottom placements even once they're unified into one bar.
 
@@ -88,9 +89,11 @@ to be used. Use a SwiftUI `Label` or the corresponding `UIBarButtonItem`
 properties. The title is what the system falls back on in overflow menus and
 expanded forms.
 
-### Overriding with AxisBehavior
+### Overriding with axis behavior
 
-The inference is usually right. When it isn't, `AxisBehavior` lets you correct it:
+The inference is usually right. When it isn't, override it: the
+`.axisBehavior(_:)` modifier taking a `ToolbarItemAxisBehavior` in SwiftUI, or
+`UIBarButtonItem.axisBehavior` (a `UIBarButtonItem.AxisBehavior`) in UIKit.
 
 **Force horizontal** when an item alternates between a symbol and text — an edit
 button that becomes "Done", for example. Even though the symbol could sit in a
@@ -210,7 +213,8 @@ the front camera and the status bar repositions itself.
 4. Order items: navigation, then prominent actions, then the rest.
 5. Convert text+symbol items to symbols with badges where the text is
    supplementary.
-6. Apply `AxisBehavior` to items that alternate between symbol and text.
+6. Apply `.axisBehavior(_:)` / `UIBarButtonItem.axisBehavior` to items that
+   alternate between symbol and text.
 7. Choose toolbar-first or tab-bar-first compression per view.
 8. Consolidate custom overflow into the system menu, and assign
    `visibilityPriority`.

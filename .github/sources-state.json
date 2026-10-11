@@ -1,4 +1,7 @@
 {
+  "_discovered": {
+    "urls": []
+  },
   "api.ArrangementView": {
     "hash": "abb86ea01100fd65",
     "len": 1501,
@@ -65,11 +68,35 @@
     "status": 200,
     "url": "https://developer.apple.com/tutorials/data/documentation/swiftui/environmentvalues/toolbarverticaledge.json"
   },
+  "article.camera-direction": {
+    "hash": "51641ab1c897d881",
+    "len": 8129,
+    "status": 200,
+    "url": "https://developer.apple.com/tutorials/data/documentation/avkit/choosing-a-camera-by-the-direction-it-faces.json"
+  },
+  "article.capture-accessory": {
+    "hash": "",
+    "len": 0,
+    "status": 404,
+    "url": "https://developer.apple.com/tutorials/data/documentation/swiftui/registering-a-camera-capture-accessory-on-iphone-duo.json"
+  },
   "hig": {
     "hash": "246a8aa6f40999a1",
     "len": 12545,
     "status": 200,
     "url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/designing-for-iphone-duo.json"
+  },
+  "lab.285": {
+    "hash": "02c423f670098311",
+    "len": 494,
+    "status": 200,
+    "url": "https://developer.apple.com/videos/play/meet-with-apple/285/"
+  },
+  "lab.286": {
+    "hash": "02c423f670098311",
+    "len": 494,
+    "status": 200,
+    "url": "https://developer.apple.com/videos/play/meet-with-apple/286/"
   },
   "landing": {
     "hash": "294f69da4dee824d",
@@ -77,22 +104,52 @@
     "status": 200,
     "url": "https://developer.apple.com/iphone-duo/"
   },
-  "pending.swiftui-prepare": {
-    "hash": "",
-    "len": 0,
-    "status": 404,
-    "url": "https://developer.apple.com/tutorials/data/documentation/swiftui/preparing-your-app-for-iphone-duo.json"
-  },
-  "pending.uikit-prepare": {
-    "hash": "",
-    "len": 0,
-    "status": 404,
-    "url": "https://developer.apple.com/tutorials/data/documentation/uikit/preparing-your-app-for-iphone-duo.json"
-  },
   "prepare": {
     "hash": "3f5316189386b7c1",
     "len": 6153,
     "status": 200,
     "url": "https://developer.apple.com/iphone-duo/prepare/"
+  },
+  "prepare-article": {
+    "hash": "a5ca90a4ea1491ec",
+    "len": 7685,
+    "status": 200,
+    "url": "https://developer.apple.com/tutorials/data/documentation/technologyoverviews/preparing-your-app-for-iphone-duo.json"
+  },
+  "talk.111461": {
+    "hash": "2bd84afefbd06f26",
+    "len": 15236,
+    "status": 200,
+    "url": "https://developer.apple.com/videos/play/tech-talks/111461/"
+  },
+  "talk.111462": {
+    "hash": "f25a74030dd59fd2",
+    "len": 23890,
+    "status": 200,
+    "url": "https://developer.apple.com/videos/play/tech-talks/111462/"
+  },
+  "talk.111463": {
+    "hash": "229cedf8ceb91710",
+    "len": 26865,
+    "status": 200,
+    "url": "https://developer.apple.com/videos/play/tech-talks/111463/"
+  },
+  "talk.111464": {
+    "hash": "56c40c1e983b3e84",
+    "len": 13643,
+    "status": 200,
+    "url": "https://developer.apple.com/videos/play/tech-talks/111464/"
+  },
+  "talk.111465": {
+    "hash": "83e06dd33da58745",
+    "len": 15178,
+    "status": 200,
+    "url": "https://developer.apple.com/videos/play/tech-talks/111465/"
+  },
+  "talk.111466": {
+    "hash": "3b1a77c4bf4b86ee",
+    "len": 13146,
+    "status": 200,
+    "url": "https://developer.apple.com/videos/play/tech-talks/111466/"
   }
 }

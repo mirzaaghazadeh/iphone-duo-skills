@@ -50,9 +50,41 @@ SOURCES: list[tuple[str, str, str]] = [
     ("api.UIHinge", "docc", DOCC + "documentation/uikit/uihinge.json"),
     ("api.toolbarVerticalEdge", "docc", DOCC + "documentation/swiftui/environmentvalues/toolbarverticaledge.json"),
     ("api.CameraCaptureAccessory", "docc", DOCC + "documentation/swiftui/cameracaptureaccessory.json"),
-    # Still 404 as of 2026-10-07. Kept so their appearance is reported as NEW.
-    ("pending.uikit-prepare", "docc", DOCC + "documentation/uikit/preparing-your-app-for-iphone-duo.json"),
-    ("pending.swiftui-prepare", "docc", DOCC + "documentation/swiftui/preparing-your-app-for-iphone-duo.json"),
+    # The developer article. It lives under technologyoverviews, NOT under
+    # uikit/ or swiftui/ — this watcher originally guessed those paths, so it
+    # reported "no changes" while the article had been live for days. Derive
+    # URLs from the landing page rather than guessing them.
+    ("prepare-article", "docc", DOCC + "documentation/technologyoverviews/preparing-your-app-for-iphone-duo.json"),
+    ("article.camera-direction", "docc", DOCC + "documentation/avkit/choosing-a-camera-by-the-direction-it-faces.json"),
+    ("article.capture-accessory", "docc", DOCC + "documentation/swiftui/registering-a-camera-capture-accessory-on-iphone-duo.json"),
+    # The six Tech Talks this repo was built from, plus the Group Labs. Watched
+    # so a seventh session shows up rather than going unnoticed.
+    ("talk.111461", "page", DEV + "videos/play/tech-talks/111461/"),
+    ("talk.111462", "page", DEV + "videos/play/tech-talks/111462/"),
+    ("talk.111463", "page", DEV + "videos/play/tech-talks/111463/"),
+    ("talk.111464", "page", DEV + "videos/play/tech-talks/111464/"),
+    ("talk.111465", "page", DEV + "videos/play/tech-talks/111465/"),
+    ("talk.111466", "page", DEV + "videos/play/tech-talks/111466/"),
+    ("lab.285", "page", DEV + "videos/play/meet-with-apple/285/"),
+    ("lab.286", "page", DEV + "videos/play/meet-with-apple/286/"),
+]
+
+# A page watched as DocC JSON is linked publicly at a different URL. Without
+# this, discovery reports pages we already track.
+PUBLIC_EQUIVALENTS = [
+    DEV + "design/human-interface-guidelines/designing-for-iphone-duo/",
+    DEV + "documentation/technologyoverviews/preparing-your-app-for-iphone-duo/",
+]
+
+# Link patterns that should exist on the landing page. If one stops matching,
+# Apple has added or moved something this watcher doesn't know about — which is
+# exactly how the prepare article was missed.
+LANDING_URL = DEV + "iphone-duo/"
+EXPECTED_LINK_PATTERNS = [
+    r"/videos/play/tech-talks/1114(6[1-6])/",
+    r"/design/human-interface-guidelines/designing-for-iphone-duo",
+    r"/iphone-duo/prepare/",
+    r"/documentation/technologyoverviews/preparing-your-app-for-iphone-duo",
 ]
 
 
@@ -120,6 +152,46 @@ def docc_content(raw: bytes) -> str:
     return re.sub(r"\s+", " ", " ".join(p for p in parts if p)).strip()
 
 
+def discover_links(tracked: set[str]) -> list[str]:
+    """Report documentation links on the landing page we aren't watching.
+
+    The hardcoded list above is only as good as the URLs someone guessed. This
+    reads what Apple actually links to, so a newly published page shows up even
+    when it lands at a path nobody predicted.
+    """
+    status, raw = fetch(LANDING_URL)
+    if status != 200 or not raw:
+        print(f"  ?? landing page returned {status}; skipping link discovery")
+        return []
+
+    text = raw.decode("utf-8", "replace")
+    interesting = re.compile(
+        r'href="((?:https://developer\.apple\.com)?/'
+        r"(?:videos/play/[^\"']+|documentation/[^\"']*iphone-duo[^\"']*|"
+        r"design/human-interface-guidelines/[^\"']*iphone-duo[^\"']*|"
+        r"iphone-duo/[a-z-]+/))\"",
+        re.I,
+    )
+    found: set[str] = set()
+    for m in interesting.findall(text):
+        url = m if m.startswith("http") else "https://developer.apple.com" + m
+        url = url.rstrip("/") + "/"
+        found.add(url)
+
+    # Normalise what we already watch to the same shape as the scraped links.
+    known = {u.rstrip("/") + "/" for u in tracked}
+    for u in tracked:
+        if u.startswith(DOCC):
+            public = DEV + u[len(DOCC) :]
+            if public.endswith(".json"):
+                public = public[: -len(".json")]
+            known.add(public.rstrip("/") + "/")
+    known |= {u.rstrip("/") + "/" for u in PUBLIC_EQUIVALENTS}
+
+    unknown = sorted(u for u in found if u not in known)
+    return unknown
+
+
 def main() -> int:
     try:
         with open(STATE, encoding="utf-8") as f:
@@ -161,6 +233,17 @@ def main() -> int:
                 f"**CHANGED** `{key}` content moved ({delta:+d} chars) — {url}"
             )
         print(f"  {'ok' if exists else '--'} {key}: {status}")
+
+    # Catch anything Apple links that this script doesn't already watch.
+    tracked_urls = {url for _, _, url in SOURCES}
+    seen_before = set(prev.get("_discovered", {}).get("urls", []))
+    unknown = discover_links(tracked_urls)
+    new_links = [u for u in unknown if u not in seen_before]
+    if new_links:
+        for u in new_links:
+            changes.append(f"**UNTRACKED** landing page links a page we don't watch — {u}")
+    state["_discovered"] = {"urls": sorted(set(unknown) | seen_before)}
+    print(f"  -- link discovery: {len(unknown)} untracked, {len(new_links)} new")
 
     os.makedirs(os.path.dirname(STATE), exist_ok=True)
     with open(STATE, "w", encoding="utf-8") as f:

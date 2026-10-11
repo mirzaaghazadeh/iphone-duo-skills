@@ -135,11 +135,11 @@ not considered.
 
 | Job | SwiftUI | UIKit |
 |---|---|---|
-| Custom back/close | `cancellationAction` placement | leading item, `leftItemsSupplementBackButton = false` |
+| Custom back/close | `ToolbarItem` with `cancellationAction` placement | an item in `leadingItemGroups: [UIBarButtonItemGroup]` |
 | Prominent action | `topBarPinnedTrailing` placement | `pinnedTrailingGroup` |
-| Force an axis | `AxisBehavior` (horizontal-only / vertical) | `AxisBehavior` |
+| Force an axis | `.axisBehavior(_:)` taking a `ToolbarItemAxisBehavior` | `UIBarButtonItem.axisBehavior` of type `UIBarButtonItem.AxisBehavior` |
 | Detect a vertical bar | `toolbarVerticalEdge` environment value | `toolbarVerticalEdge` trait |
-| Consolidate overflow | `ToolbarOverflowMenu` | `UINavigationItem.additionalOverflowItems` |
+| Consolidate overflow | `ToolbarOverflowMenu` | `UINavigationItem.additionalOverflowItems`, a `UIDeferredMenuElement?` |
 | Control collapse order | `ToolbarItemVisibilityPriority` | `UIBarButtonItemVisibilityPriority` |
 | Group items (instead of manual spacers) | `ToolbarItemGroup` | `UIBarButtonItemGroup` |
 | Title + symbol on an item | `Label` | `UIBarButtonItem` |
