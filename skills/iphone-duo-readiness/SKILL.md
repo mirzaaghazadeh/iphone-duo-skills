@@ -192,6 +192,10 @@ cheap to do:
   the product page shows it actually working on the device, not a phone layout
   stretched wide. Check the current screenshot specifications for the required
   sizes.
+- **The badge.** Submitting iPhone Duo screenshots in App Store Connect makes
+  your product page display a badge marking the app as optimized for iPhone Duo.
+  That turns the screenshot work into a visible signal on the listing rather than
+  just better artwork, which makes it the highest-return item in this section.
 - **Preview before you publish.** App Store Connect has a preview tool for
   checking how your assets render on iPhone Duo. Worth using — an asset that
   looks right in Xcode can still read badly on the product page.
