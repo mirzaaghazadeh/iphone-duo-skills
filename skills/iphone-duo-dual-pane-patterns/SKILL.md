@@ -222,7 +222,7 @@ sees **size class, reserved regions and hinge status**. Map them like this:
 | Pose | What your code observes | Pattern |
 |---|---|---|
 | Closed | outer display, compact width | The phone app you already have. Secondary pane collapses to a sheet or a push. |
-| Open flat | regular × regular, division region inactive (zero width) | Two panes side by side, media may cross the centre. |
+| Open flat | regular × regular, division region inactive (returned only with `.includeInactive`) | Two panes side by side, media may cross the centre. |
 | Book (partly folded, inner landscape) | division region **active and taller than wide** | Two panes, left/right. Nothing interactive in the curve. |
 | Tabletop / laptop (partly folded, inner portrait) | division region **active and wider than tall** | Content in the raised half, controls in the flat half. |
 | Tent | partially open, often flipped | Hands-free viewing; don't rely on touch. |

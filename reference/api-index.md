@@ -4,13 +4,11 @@ Every API named across Apple's six iPhone Duo Tech Talks, grouped by job, with
 the framework and the minimum SDK. Use this as a lookup table; the skills in
 `../skills/` explain when and why to reach for each one.
 
-> **Verified against the published API reference on 25 September 2026.**
-> Apple's developer documentation for these symbols is now live, so the
-> signatures below are taken from it rather than from the Tech Talk sessions.
-> Three corrections came out of that pass and are marked ⚠ below.
->
-> Still missing: the *Preparing your app for iPhone Duo* article is not yet
-> published.
+> **Verified against the published API reference on 25 September 2026, and
+> again on 23 October 2026** after Apple expanded the reserved-region and
+> arrangement pages into full articles. The signatures below are taken from the
+> reference rather than from the Tech Talk sessions. Where the two disagree, or
+> where the reference corrected an earlier reading, the line is marked ⚠.
 
 ## SDK gates
 
@@ -74,14 +72,25 @@ custom `Layout`. Pass `.fixed` when you need the unmirrored frames.
 Region kinds (`divisionRegionKind` / `occlusionRegionKind` in Objective-C):
 
 - **`.division`** — splits an area into smaller areas. The fold is a division
-  region. It is *active* only while the device is folded; when flat it is
-  inactive with zero width.
+  region. It is *active* only while the device is partially folded; fully open,
+  it is inactive.
 - **`.occlusion`** — covers part of an area. The inner FaceTime camera is an
-  occlusion region, active only while that camera is active.
+  occlusion region, active only while that camera is in use; the outer camera's
+  region is always active. The API also reports the Dynamic Island and window
+  controls as occlusion regions.
 
-Option `.includeInactive` returns regions that exist but are not currently
-active — useful for stable high-level decisions (for example, always preferring
-an even column count on a device that *has* a fold).
+⚠ The Tech Talk says a flat fold is inactive **with a width of zero**. Two later
+Apple sources say otherwise. The October reference says an inactive region
+"still has a frame, so you can leave room for it", naming folding as the case,
+and an engineer in Group Lab Day 3 describes querying the inactive fold ahead of
+time so a 50/50 layout already clears it and nothing moves when the device
+folds. Treat the talk's line as superseded, but check the inactive frame in the
+simulator before relying on its size.
+
+By default the query returns **only active regions**. Option `.includeInactive`
+adds the ones that exist but are not currently active — useful for stable
+high-level decisions (for example, always preferring an even column count on a
+device that *has* a fold).
 
 Each region carries `frame`, `isActive` (`active` in Objective-C), `kind`, an
 `id`/`identifier`, and **`margins`** (`EdgeInsets` / `UIEdgeInsets`). ⚠ Per the
@@ -91,10 +100,31 @@ frame kept clear for interactive content. Avoiding `frame` is enough; don't add
 which is what full-bleed media may run up to. The margins property is not
 mentioned in the Tech Talks.
 
-⚠ The reference also says the query returns every region that intersects the
-view *regardless* of whether it is active, which sits oddly beside the
-`.includeInactive` option. Always filter on `isActive` for current-state
-decisions rather than relying on the default options.
+⚠ The September reference said the query returned every intersecting region
+*regardless* of whether it was active. The October revision says, on both the
+type and the method pages, that the default returns only active regions — which
+matches the Tech Talks. Filtering on `isActive` is still the right habit once you
+pass `.includeInactive`.
+
+Coordinates, from the October reference:
+
+- `frame` is in the **queried view's own coordinate space**, in points, with
+  `(0, 0)` at its top-leading corner. Only regions that overlap the view come
+  back, and a partial overlap can produce a negative origin or a frame that runs
+  past the view's size.
+- In a custom `Layout`, the `bounds` handed to
+  `placeSubviews(in:proposal:subviews:cache:)` don't always start at `(0, 0)`.
+  Do the arithmetic from zero and add `bounds.origin` only when placing.
+- Query in the view that positions the content, so the frames and the content
+  share coordinates.
+- UIKit tracks the regions you read in `updateConstraints()` and calls it again
+  when they change — the natural place to read them.
+- `ReservedRegion` is `Identifiable`; its `ReservedRegion.ID` is stable across
+  queries, so it can drive a `ForEach` or tell an old region from a new one.
+
+Scrolling containers — lists, tables, scroll views, collection views — do **not**
+split their content around a division. A row can run across the fold; if that
+hurts, read the division and lay the row out yourself.
 
 Safe areas and layout margins on iPhone Duo are frequently **asymmetric**. Never
 assume opposite insets are equal.
@@ -108,24 +138,41 @@ containers, arranging exactly two views by rule.
 |---|---|---|
 | Container | `ArrangementView(primary:secondary:)` | `UIArrangementViewController`, ⚠ `setViewController(_:for:animated:)` |
 | Choose style | `.arrangementViewStyle(some ArrangementViewStyle)` | ⚠ `updateArrangement(_:animated:)` with `UISplitArrangement` / `UIOverlayArrangement` |
-| Constrain split axis | `.split.axes(.horizontal)` | `.axes(.horizontal)` on the arrangement |
+| Constrain an axis | `.split.axes(.vertical)`, `.overlay.axes(_:)` | `.split.axes(.vertical)`, `.overlay.axes(_:)` |
+| Size a split pane | `splitArrangementLayoutRatio(_:)`, `splitArrangementLayoutSize(minWidth:idealWidth:maxWidth:minHeight:idealHeight:maxHeight:)`, `splitArrangementFixedLayoutSize(horizontal:vertical:)` | `UISplitArrangement.DimensionRange` on the view properties' `width` / `height`, then `setViewProperties(_:for:)` |
+| Choose an overlay view's side in landscape | `overlayArrangementEdge(_:)` | `edge` on the overlay's view properties, then `setViewProperties(_:for:)` |
 | Read overlay stacking | `@Environment(\.overlayArrangementZIndex)` | `state(for:)` → `ViewState.zIndex` |
 | Look up a placement | — | `viewController(for:)`, `placement(for:)` |
+| Write a custom style | `ArrangementViewStyle.makeBody(configuration:)`, `ArrangementView(_:)` | — |
 
-⚠ Both UIKit mutators take an `animated:` parameter. The Tech Talks show them
-without it.
+⚠ Both UIKit mutators take `animated: Bool = false`. The Tech Talks' calls
+without it compile, they just don't animate; pass `animated: true` for an
+animated transition. `setViewController(nil, for:)` empties a placement.
 
-SwiftUI declaration: `struct ArrangementView<Primary, Secondary> where Primary:
-View, Secondary: View`, with `init(primary:secondary:)`.
+SwiftUI declaration: `nonisolated struct ArrangementView<Primary, Secondary>
+where Primary: View, Secondary: View`, with `init(primary:secondary:)`. The
+style protocol's default is `.automatic`.
 
-- **split** — divides the bounds between primary and secondary. Splits
-  horizontally when wider than tall, vertically when taller than wide. For
-  main/detail relationships where neither view should be obscured.
-- **overlay** — prefers stacking content above/below, moving to side-by-side
-  when folded. For clear foreground/background relationships.
+- **split** — divides the bounds between primary and secondary, equally by
+  default. Landscape: primary leading, secondary trailing. Portrait: primary
+  on top. For main/detail relationships where neither view should be obscured.
+- **overlay** — flat, the primary sits **above the secondary in z**. Folded, the
+  two go side by side with the **secondary leading (or on top) and the primary
+  trailing (or below)**. For clear foreground/background relationships.
 
-Do **not** put navigation containers (e.g. `NavigationSplitView`) inside an
-arrangement, and do **not** put an arrangement inside `List` or `ScrollView`.
+Two cases show **only the primary view**: a split arrangement on a closed iPhone
+Duo held in landscape, and any arrangement asked to lay out along an axis you
+excluded with `axes(_:)`.
+
+In UIKit, sizing starts from `UISplitArrangement.split.defaultViewProperties`;
+a `DimensionRange` takes `minimum`, `preferred` and `maximum` as `Dimension`
+values such as `.absolute(250)` or `.fractional(0.3)`. In SwiftUI, the view with
+the higher `layoutPriority` gets its requested ratio or size and the other view
+takes what is left.
+
+Do **not** put an arrangement inside a scroll view, list, grid, collection view
+or `NavigationSplitView` / `UISplitViewController`, and do **not** put a
+`NavigationSplitView`, `TabView` or their UIKit counterparts inside one.
 
 ## Bars on the vertical axis
 

@@ -40,21 +40,24 @@ which is which because they behave differently:
 
 Regions are **active or inactive**:
 
-- The fold's division region is active only while the device is actually folded.
-  Flat, it is inactive and has zero width.
+- The fold's division region is active only while the device is partially
+  folded; fully open, it is inactive. The Tech Talk adds that it then has zero
+  width, but the later reference and Group Lab Day 3 both say an inactive region
+  keeps a frame, and suggest reading it ahead of time so a layout already clears
+  the fold and nothing moves when the device bends. Check that frame in the
+  simulator before depending on its size.
 - The camera's occlusion region is active only while that camera is streaming.
 
 Note the asymmetry between the two cameras: the outer one is a permanent fact of
 your layout, while the inner one appears and disappears under you. Handle the
 second as a change you animate through, not a constant you read once.
 
-The Tech Talks say you get only the active ones by default — though the API
-reference describes the query as returning intersecting regions *regardless* of
-active state, so filter on `isActive` yourself when it matters. Pass the
-`includeInactive` option to also see regions that exist but aren't currently in play — which is what you want
-for stable, high-level decisions. A grid, for instance, can prefer an even column
-count on any device that *has* a fold, so the layout doesn't reshuffle every time
-the user bends the device.
+You get only the active ones by default; the Tech Talks and the API reference
+agree on that. Pass the `includeInactive` option to also see regions that exist
+but aren't currently in play — which is what you want for stable, high-level
+decisions. A grid, for instance, can prefer an even column count on any device
+that *has* a fold, so the layout doesn't reshuffle every time the user bends the
+device.
 
 ### Querying them
 
@@ -95,6 +98,22 @@ Each region gives you more than a rectangle:
   keeping controls out of `frame` is enough; don't pad by `margins` a second
   time. Inset `frame` by `margins` to get the bare hardware area — the limit for
   full-bleed media, which may run closer than controls.
+- **`id`** — stable across queries, so you can tell the region you saw last time
+  from a new one. `ReservedRegion` is `Identifiable`, so regions can drive a
+  `ForEach` directly.
+
+Frames are in the coordinate space of the view you queried, with `(0, 0)` at its
+top-leading corner, and only regions that overlap that view come back. A region
+that clips a corner can have a negative origin or run past your bounds, so don't
+assume it lies inside them. Query in the view that does the positioning, so the
+frames and the content share coordinates. Two places this bites:
+
+- In a custom SwiftUI `Layout`, the `bounds` passed to `placeSubviews` don't
+  always start at `(0, 0)`. Compute positions from zero and add `bounds.origin`
+  only when you place each subview.
+- In UIKit, read regions in `updateConstraints()`. UIKit tracks what you read
+  there and calls it again when the regions change, so you don't need an
+  observer of your own.
 
 In SwiftUI the query takes a third parameter, `layoutDirectionBehavior`
 (default `.mirrors`), which flips region frames for right-to-left layouts so a
@@ -158,7 +177,11 @@ Before writing any of this yourself, check whether a system container already
 does it:
 
 - **Navigation** — `NavigationStack`, `NavigationSplitView`, `TabView`
-- **Content** — `List`, `ScrollView`
+- **Content** — `List`, `ScrollView` — with one caveat from Apple's reference:
+  they don't split their rows around the fold, so a row can run across it.
+  That's fine for continuously scrolling content (see displacement, above); where
+  a row's controls end up in the curve, read the division and lay that row out
+  yourself.
 - **Presentations** — action sheets, alerts, menus, popovers all reposition
   themselves around reserved regions automatically
 
@@ -181,15 +204,38 @@ and `.secondary` placements.
 
 ### The split style
 
-The default. It divides the bounds between the two views — horizontally when the
-view is wider than tall, vertically when taller than wide.
+The default. It divides the bounds between the two views, equally unless you say
+otherwise — side by side when the view is wider than tall, with the primary
+leading, and stacked when taller than wide, with the primary on top.
 
 Constrain it when only one axis makes sense: apply `.axes(.horizontal)` to the
 split style. In UIKit, configure `UISplitArrangement` the same way and pass it to
-`updateArrangement(_:animated:)` — note the arrangement methods take an
-`animated:` flag, as does `setViewController(_:for:animated:)`. When a split
-arrangement can't split along the view's primary axis, it shows a single view
-rather than producing a bad layout.
+`updateArrangement(_:animated:)`. That method and
+`setViewController(_:for:animated:)` both default `animated` to `false`, so pass
+`true` when the change should animate.
+
+When the arrangement can't split along an axis — because you excluded it, or
+because a closed iPhone Duo is held in landscape — it shows **only the primary
+view** rather than producing a bad layout. Pick the primary with that in mind:
+it is the view that survives.
+
+Size the panes when equal halves are wrong. In SwiftUI, put one of these on a
+view: `splitArrangementLayoutRatio(_:)` for a fraction of the container,
+`splitArrangementLayoutSize(minWidth:idealWidth:maxWidth:…)` for points, or
+`splitArrangementFixedLayoutSize()` to prefer the view's ideal size. The view
+with the higher `layoutPriority` gets what it asks for and the other takes the
+rest. In UIKit, give a placement a `DimensionRange`:
+
+```swift
+var split = UISplitArrangement.split
+var primary = split.defaultViewProperties
+var width = UISplitArrangement.DimensionRange()
+width.minimum = .absolute(250)
+width.preferred = .fractional(0.3)
+primary.width = width
+split.setViewProperties(primary, for: .primary)
+arrangementController.updateArrangement(split, animated: true)
+```
 
 The payoff on this device: when the secondary view is dismissed, the primary
 doesn't recenter across the whole display the way it would on iPad. It stays
@@ -208,6 +254,10 @@ the **trailing or bottom** region relative to the fold, and the secondary to the
 **leading or top**. That ordering is worth internalising before you pick which
 view is primary: the primary is the one that ends up where the thumb is, not the
 one that gets the larger area.
+
+If the default side is wrong for your content, set it: `overlayArrangementEdge(_:)`
+on the view in SwiftUI, or `edge` on the overlay's view properties in UIKit,
+chooses which horizontal edge that view takes in landscape.
 
 Because the relationship changes with the pose, you often want to change the
 subordinate view's presentation to match. Read the stacking state and adapt: in
@@ -233,8 +283,10 @@ views is:
 ### When not to use one
 
 - Arrangements provide no navigation infrastructure. Don't put a
-  `NavigationSplitView` or similar inside one.
-- Don't nest an arrangement inside `List` or `ScrollView`.
+  `NavigationSplitView` or a `TabView` inside one — in UIKit, a split view or
+  tab bar controller.
+- Don't nest an arrangement inside anything that lays out views itself: `List`,
+  `ScrollView`, a grid, a collection view, or a split view.
 - If you need expanding and collapsing column behavior, you want a real split
   view, not an arrangement.
 
