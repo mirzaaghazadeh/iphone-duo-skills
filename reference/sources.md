@@ -115,6 +115,30 @@ That pass produced three corrections — the direction coordinator's change
 handler, the `animated:` parameters on the UIKit arrangement mutators, and the
 meaning of `toolbarVerticalEdge`. They are marked ⚠ in `api-index.md`.
 
+Re-checked **October 23, 2026**, after the docs watcher reported changes. Apple
+rewrote `ReservedRegion` into a full article — querying, occlusion, division,
+where to check, inactive regions, right-to-left, identity — and expanded
+`UIViewReservedRegion`, `ArrangementView` and `UIArrangementViewController`.
+Newly relied on:
+
+- [`UISplitArrangement`](https://developer.apple.com/documentation/uikit/uisplitarrangement-swift.struct)
+  and [`UIOverlayArrangement`](https://developer.apple.com/documentation/uikit/uioverlayarrangement-swift.struct)
+  — placement order, `DimensionRange` sizing, the overlay `edge`, and the
+  primary-only fallback on an excluded axis.
+- [`updateArrangement(_:animated:)`](https://developer.apple.com/documentation/uikit/uiarrangementviewcontroller/updatearrangement(_:animated:))
+  and [`setViewController(_:for:animated:)`](https://developer.apple.com/documentation/uikit/uiarrangementviewcontroller/setviewcontroller(_:for:animated:))
+  — `animated` defaults to `false`.
+- [`ArrangementViewStyle`](https://developer.apple.com/documentation/swiftui/arrangementviewstyle),
+  [`overlayArrangementEdge(_:)`](https://developer.apple.com/documentation/swiftui/view/overlayarrangementedge(_:)),
+  [`splitArrangementLayoutRatio(_:)`](https://developer.apple.com/documentation/swiftui/view/splitarrangementlayoutratio(_:)),
+  [`splitArrangementLayoutSize(minWidth:idealWidth:maxWidth:minHeight:idealHeight:maxHeight:)`](https://developer.apple.com/documentation/swiftui/view/splitarrangementlayoutsize(minwidth:idealwidth:maxwidth:minheight:idealheight:maxheight:))
+  and [`splitArrangementFixedLayoutSize(horizontal:vertical:)`](https://developer.apple.com/documentation/swiftui/view/splitarrangementfixedlayoutsize(horizontal:vertical:)).
+
+That pass settled the query's default (active regions only, as the Tech Talks
+said) and surfaced one conflict the reference can't settle alone: Tech Talk
+111463 says a flat fold is inactive *with zero width*, while the article says an
+inactive region keeps a frame. Both are marked ⚠ in `api-index.md`.
+
 ## Developer article
 
 - [Preparing your app for iPhone Duo](https://developer.apple.com/documentation/technologyoverviews/preparing-your-app-for-iphone-duo)
@@ -130,9 +154,12 @@ meaning of `toolbarVerticalEdge`. They are marked ⚠ in `api-index.md`.
 
 ## Group Labs
 
-- [iPhone Duo Group Lab](https://developer.apple.com/videos/play/meet-with-apple/285/) (285)
-  and [a second session](https://developer.apple.com/videos/play/meet-with-apple/286/) (286)
-  — recorded Q&A with Apple engineers. Now watched by `scripts/check-sources.py`.
+- iPhone Duo Group Lab, [Day 1](https://developer.apple.com/videos/play/meet-with-apple/285/) (285),
+  [Day 2](https://developer.apple.com/videos/play/meet-with-apple/286/) (286) and
+  [Day 3](https://developer.apple.com/videos/play/meet-with-apple/287/) (287)
+  — recorded Q&A with Apple engineers. All three are watched by
+  `scripts/check-sources.py`; Day 3 was found by its landing-page link discovery
+  on October 23, 2026.
 
 ## Prepare guide
 

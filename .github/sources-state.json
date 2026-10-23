@@ -34,6 +34,12 @@
     "status": 200,
     "url": "https://developer.apple.com/tutorials/data/documentation/avkit/avcapturedevicedirectionmap.json"
   },
+  "api.GeometryProxy.reservedRegions": {
+    "hash": "799704a71b5f23dd",
+    "len": 1914,
+    "status": 200,
+    "url": "https://developer.apple.com/tutorials/data/documentation/swiftui/geometryproxy/reservedregions(kind:options:layoutdirectionbehavior:).json"
+  },
   "api.ReservedRegion": {
     "hash": "10f5cd82cc3ad50e",
     "len": 8636,
@@ -57,6 +63,24 @@
     "len": 595,
     "status": 200,
     "url": "https://developer.apple.com/tutorials/data/documentation/uikit/uihingeinteraction.json"
+  },
+  "api.UIOverlayArrangement": {
+    "hash": "4a3278c89c01ab09",
+    "len": 1605,
+    "status": 200,
+    "url": "https://developer.apple.com/tutorials/data/documentation/uikit/uioverlayarrangement-swift.struct.json"
+  },
+  "api.UISplitArrangement": {
+    "hash": "b1f597220d6c1eb3",
+    "len": 1895,
+    "status": 200,
+    "url": "https://developer.apple.com/tutorials/data/documentation/uikit/uisplitarrangement-swift.struct.json"
+  },
+  "api.UIView.reservedRegions": {
+    "hash": "503007a06f10c5fa",
+    "len": 582,
+    "status": 200,
+    "url": "https://developer.apple.com/tutorials/data/documentation/uikit/uiview/reservedregions(kind:options:).json"
   },
   "api.UIViewReservedRegion": {
     "hash": "cc67fab0b69ae3cf",
@@ -99,6 +123,12 @@
     "len": 494,
     "status": 200,
     "url": "https://developer.apple.com/videos/play/meet-with-apple/286/"
+  },
+  "lab.287": {
+    "hash": "02c423f670098311",
+    "len": 494,
+    "status": 200,
+    "url": "https://developer.apple.com/videos/play/meet-with-apple/287/"
   },
   "landing": {
     "hash": "d49e85d6341e4220",

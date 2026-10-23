@@ -50,6 +50,12 @@ SOURCES: list[tuple[str, str, str]] = [
     ("api.UIHinge", "docc", DOCC + "documentation/uikit/uihinge.json"),
     ("api.toolbarVerticalEdge", "docc", DOCC + "documentation/swiftui/environmentvalues/toolbarverticaledge.json"),
     ("api.CameraCaptureAccessory", "docc", DOCC + "documentation/swiftui/cameracaptureaccessory.json"),
+    # Added after the October rewrite: api-index.md now cites these for the
+    # query's default, split sizing and the primary-only fallback.
+    ("api.UIView.reservedRegions", "docc", DOCC + "documentation/uikit/uiview/reservedregions(kind:options:).json"),
+    ("api.GeometryProxy.reservedRegions", "docc", DOCC + "documentation/swiftui/geometryproxy/reservedregions(kind:options:layoutdirectionbehavior:).json"),
+    ("api.UISplitArrangement", "docc", DOCC + "documentation/uikit/uisplitarrangement-swift.struct.json"),
+    ("api.UIOverlayArrangement", "docc", DOCC + "documentation/uikit/uioverlayarrangement-swift.struct.json"),
     # The developer article. It lives under technologyoverviews, NOT under
     # uikit/ or swiftui/ — this watcher originally guessed those paths, so it
     # reported "no changes" while the article had been live for days. Derive
@@ -67,6 +73,7 @@ SOURCES: list[tuple[str, str, str]] = [
     ("talk.111466", "page", DEV + "videos/play/tech-talks/111466/"),
     ("lab.285", "page", DEV + "videos/play/meet-with-apple/285/"),
     ("lab.286", "page", DEV + "videos/play/meet-with-apple/286/"),
+    ("lab.287", "page", DEV + "videos/play/meet-with-apple/287/"),
 ]
 
 # A page watched as DocC JSON is linked publicly at a different URL. Without

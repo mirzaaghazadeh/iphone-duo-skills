@@ -170,7 +170,9 @@ wrong:
 - The direction coordinator's change handler receives an
   `AVCaptureDeviceDirectionMap`, not an `AVCaptureDeviceDescriptor` — it hands you
   *arrays* of forward- and backward-facing descriptors to choose from.
-- The UIKit arrangement mutators take an `animated:` parameter.
+- The UIKit arrangement mutators take an `animated:` parameter. (It defaults to
+  `false`, the October pass found, so the Tech Talks' shorter calls compile —
+  they just don't animate.)
 - `toolbarVerticalEdge` reports the system's preferred edge **whether or not a
   vertical bar is visible** — it isn't a "are items vertical right now" flag.
 
@@ -184,12 +186,22 @@ reserved-region query, and corrected three more:
 - A reserved region's `frame` **already includes** its `margins` — they aren't
   extra padding to add around it.
 
-Corrections are marked ⚠ in the API index. Still pending: the *Preparing your app
-for iPhone Duo* article.
+A third pass on **23 October 2026**, after Apple expanded the reserved-region and
+arrangement pages into full articles, settled one question and opened another:
+
+- The region query returns **only active regions** by default. The September
+  reference had read otherwise; it now agrees with the Tech Talks.
+- The Tech Talk says a flat fold is inactive with zero width; the reference now
+  says an inactive region keeps a frame you can leave room for. The skills say
+  not to depend on either.
+- A split arrangement shows **only its primary view** on a closed iPhone Duo held
+  in landscape, and along any axis you excluded.
+
+Corrections and open conflicts are marked ⚠ in the API index.
 
 `scripts/fetch-transcripts.py` re-fetches the Tech Talk transcripts from the
 WebVTT subtitle track in each video's HLS manifest, which is how this repo was
-researched. Re-run it when Xcode 27.1 ships and the pending documentation lands.
+researched. Re-run it when `scripts/check-sources.py` reports a new session.
 
 ## Maintenance
 
