@@ -191,9 +191,10 @@ arrangement pages into full articles, settled one question and opened another:
 
 - The region query returns **only active regions** by default. The September
   reference had read otherwise; it now agrees with the Tech Talks.
-- The Tech Talk says a flat fold is inactive with zero width; the reference now
-  says an inactive region keeps a frame you can leave room for. The skills say
-  not to depend on either.
+- The Tech Talk says a flat fold is inactive with zero width; the reference and
+  Group Lab Day 3 now say an inactive region keeps a frame you can leave room for
+  ahead of time. The skills follow the later sources, with a note to check the
+  frame in the simulator.
 - A split arrangement shows **only its primary view** on a closed iPhone Duo held
   in landscape, and along any axis you excluded.
 

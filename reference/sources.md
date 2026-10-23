@@ -137,7 +137,9 @@ Newly relied on:
 That pass settled the query's default (active regions only, as the Tech Talks
 said) and surfaced one conflict the reference can't settle alone: Tech Talk
 111463 says a flat fold is inactive *with zero width*, while the article says an
-inactive region keeps a frame. Both are marked ⚠ in `api-index.md`.
+inactive region keeps a frame. Group Lab Day 3, read the same day, sides with
+the article: an engineer describes querying the inactive fold in advance so the
+layout already avoids it. Both are marked ⚠ in `api-index.md`.
 
 ## Developer article
 
@@ -159,7 +161,8 @@ inactive region keeps a frame. Both are marked ⚠ in `api-index.md`.
   [Day 3](https://developer.apple.com/videos/play/meet-with-apple/287/) (287)
   — recorded Q&A with Apple engineers. All three are watched by
   `scripts/check-sources.py`; Day 3 was found by its landing-page link discovery
-  on October 23, 2026.
+  on October 23, 2026. Its HLS manifest lists a French subtitle track first, so
+  pick the rendition by language when reading it.
 
 ## Prepare guide
 

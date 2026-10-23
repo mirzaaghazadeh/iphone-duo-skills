@@ -42,9 +42,10 @@ Regions are **active or inactive**:
 
 - The fold's division region is active only while the device is partially
   folded; fully open, it is inactive. The Tech Talk adds that it then has zero
-  width, while Apple's reference says an inactive region keeps a frame you can
-  leave room for. The two sources disagree, so don't let a layout depend on the
-  inactive fold's width.
+  width, but the later reference and Group Lab Day 3 both say an inactive region
+  keeps a frame, and suggest reading it ahead of time so a layout already clears
+  the fold and nothing moves when the device bends. Check that frame in the
+  simulator before depending on its size.
 - The camera's occlusion region is active only while that camera is streaming.
 
 Note the asymmetry between the two cameras: the outer one is a permanent fact of

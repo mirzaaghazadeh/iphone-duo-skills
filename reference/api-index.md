@@ -79,11 +79,13 @@ Region kinds (`divisionRegionKind` / `occlusionRegionKind` in Objective-C):
   region is always active. The API also reports the Dynamic Island and window
   controls as occlusion regions.
 
-⚠ The Tech Talk says a flat fold is inactive **with a width of zero**. The
-October reference says of inactive regions in general that one "still has a
-frame, so you can leave room for it", and names folding as the case. Until that
-is settled on hardware, don't branch on an inactive fold's width — use the
-region's presence and `isActive`.
+⚠ The Tech Talk says a flat fold is inactive **with a width of zero**. Two later
+Apple sources say otherwise. The October reference says an inactive region
+"still has a frame, so you can leave room for it", naming folding as the case,
+and an engineer in Group Lab Day 3 describes querying the inactive fold ahead of
+time so a 50/50 layout already clears it and nothing moves when the device
+folds. Treat the talk's line as superseded, but check the inactive frame in the
+simulator before relying on its size.
 
 By default the query returns **only active regions**. Option `.includeInactive`
 adds the ones that exist but are not currently active — useful for stable
