@@ -1,10 +1,12 @@
 {
   "_discovered": {
-    "urls": []
+    "urls": [
+      "https://developer.apple.com/videos/play/meet-with-apple/287/"
+    ]
   },
   "api.ArrangementView": {
-    "hash": "abb86ea01100fd65",
-    "len": 1501,
+    "hash": "928db2976a531e9f",
+    "len": 3106,
     "status": 200,
     "url": "https://developer.apple.com/tutorials/data/documentation/swiftui/arrangementview.json"
   },
@@ -33,14 +35,14 @@
     "url": "https://developer.apple.com/tutorials/data/documentation/avkit/avcapturedevicedirectionmap.json"
   },
   "api.ReservedRegion": {
-    "hash": "95240095e3cf82d5",
-    "len": 1738,
+    "hash": "10f5cd82cc3ad50e",
+    "len": 8636,
     "status": 200,
     "url": "https://developer.apple.com/tutorials/data/documentation/swiftui/reservedregion.json"
   },
   "api.UIArrangementViewController": {
-    "hash": "77da9f4e1c711930",
-    "len": 1608,
+    "hash": "759488e576490b40",
+    "len": 3522,
     "status": 200,
     "url": "https://developer.apple.com/tutorials/data/documentation/uikit/uiarrangementviewcontroller.json"
   },
@@ -57,8 +59,8 @@
     "url": "https://developer.apple.com/tutorials/data/documentation/uikit/uihingeinteraction.json"
   },
   "api.UIViewReservedRegion": {
-    "hash": "e39938d8bc5c15f8",
-    "len": 723,
+    "hash": "cc67fab0b69ae3cf",
+    "len": 765,
     "status": 200,
     "url": "https://developer.apple.com/tutorials/data/documentation/uikit/uiviewreservedregion.json"
   },
@@ -99,8 +101,8 @@
     "url": "https://developer.apple.com/videos/play/meet-with-apple/286/"
   },
   "landing": {
-    "hash": "d31649b0d723e6ca",
-    "len": 1706,
+    "hash": "d49e85d6341e4220",
+    "len": 1743,
     "status": 200,
     "url": "https://developer.apple.com/iphone-duo/"
   },
