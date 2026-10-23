@@ -110,10 +110,13 @@ simulator and on an Android emulator.
 
 Ionic's `ion-tabs` is HTML, so it stays at the bottom while native bars move.
 Two routes: a stylesheet that turns the tab bar into a side pill on the edge iOS
-chose, or [`@rdlabo/ionic-theme-ios27`](https://github.com/rdlabo-dev/ionic-theme-ios27),
-which repositions existing `ion-buttons`, `ion-button`, `ion-back-button` and
-`ion-tab-bar` controls and projects them into native UI. The theme takes device
-state as input, so the two compose rather than compete.
+chose, or [`@rdlabo/capacitor-native-ui`](https://github.com/rdlabo-dev/ionic-theme-ios27/tree/main/packages/capacitor-native-ui),
+which renders existing `ion-buttons`, `ion-button`, `ion-back-button` and
+`ion-tab-bar` with UIKit while the originals, their state and their handlers stay
+in the web view. It takes device state as input, so the two compose rather than
+compete, and it lists the plugin in its own setup. The optional
+[`@rdlabo/ionic-theme-ios27`](https://github.com/rdlabo-dev/ionic-theme-ios27)
+adds iOS 27 styling on top.
 
 ## What to do, in order
 
