@@ -1,6 +1,6 @@
 # iPhone Duo Skills
 
-[English](README.md) | [简体中文](README_CN.md)
+[English](README.md) | [简体中文](README_CN.md) | [Français](README_FR.md) | [Türkçe](README_TR.md)
 
 ![iPhone Duo, partially folded, showing the inner display with the dock and controls running vertically down the right side](https://raw.githubusercontent.com/mirzaaghazadeh/iphone-duo-skills/main/assets/iphone-duo-hero.webp)
 
