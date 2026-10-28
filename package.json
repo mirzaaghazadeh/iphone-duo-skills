@@ -38,6 +38,7 @@
     "skills",
     "reference",
     "README.md",
+    "README_CN.md",
     "LICENSE"
   ],
   "publishConfig": {
