@@ -1,6 +1,8 @@
 # iPhone Duo 技能库 (iPhone Duo Skills)
 
-[English](README.md) | [简体中文](README_CN.md)
+[English](README.md) | [简体中文](README_CN.md) | [Français](README_FR.md) | [Türkçe](README_TR.md)
+
+> 本文是英文 [README](README.md) 的译文。如有出入，以英文版为准。
 
 ![iPhone Duo 半折叠状态，展示内屏右侧垂直排列的 Dock 与系统控制项](https://raw.githubusercontent.com/mirzaaghazadeh/iphone-duo-skills/main/assets/iphone-duo-hero.webp)
 
@@ -66,7 +68,7 @@ cp -r iphone-duo-skills/skills/* ~/.claude/skills/
 | **iphone-duo-vertical-bars** | SwiftUI · UIKit | 工具栏与标签栏适配。侧边垂直轴向、图标与文字协同、`AxisBehavior`、溢出菜单与可见性优先级。 |
 | **iphone-duo-hinge-and-scenes** | SwiftUI · UIKit | 铰链角度驱动动效、Split View 分屏多任务、多 Scene 架构、利用场景配件（Scene Accessory）跨双屏呈现 UI。 |
 | **iphone-duo-camera** | AVFoundation · AVKit | 相机摄录 App。虚拟前置相机与物理单摄选型、朝向协调器（Direction Coordinator）、镜像与取景预览。 |
-| **iphone-duo-dual-pane-patterns** | SwiftUI · UIKit | 双窗格内容规划。像素与点阵尺寸、安全区与布局令牌、精确铰链回调类型、姿态与模式映射、双屏付费墙与折痕感知引导页。 |
+| **iphone-duo-dual-pane-patterns** | SwiftUI · UIKit | 双窗格内容规划。像素与点阵尺寸、安全区与布局令牌、精确铰链回调类型、姿态与模式映射、铰链驱动动效、双屏付费墙与折痕感知引导页。 |
 | **iphone-duo-design-review** | 全技术栈通用 | 设计评审而非代码实现：设备姿态、侧边控件、非对称布局、折痕避让、模态弹窗（Sheets）。 |
 | **iphone-duo-games** | Unity · Unreal · Godot · SpriteKit · Metal | 游戏项目。各姿态下的全屏填充策略、宽高比自适应 vs 留黑边、屏幕虚拟触控避让折痕。 |
 | **iphone-duo-flutter** | Flutter · Dart | Flutter App 适配。`MediaQuery` 的真实行为、为何 `displayFeatures` 在 iOS 上无效、通过 Platform Channels 桥接原生能力。 |
@@ -93,7 +95,7 @@ cp -r iphone-duo-skills/skills/* ~/.claude/skills/
   阅读 `iphone-duo-games`。游戏虽然可以规避大部分系统 UI 控件的规范，但无法避开窗口动态缩放，且折痕对于屏幕触控按钮来说是真实的物理盲区与操作障碍。
 
 - **Capacitor、Ionic 或其他 WebView 混合应用**：
-  先看 `iphone-duo-capacitor`，再看 `iphone-duo-design-review`。核心关键在于：尽管相关 Web 规范已存在，但在 iOS 的 `WKWebView` 中默认未开启，因此折叠状态与折痕尺寸必须由原生端桥接传递给前端。
+  先看 `iphone-duo-capacitor`，再看 `iphone-duo-design-review`。核心关键在于：相关的标准 Web API 虽然已经存在，但在 `WKWebView` 中被一个只有 Safari 才能开启的实验性开关关闭，App 无法自行开启。因此即便对应的 CSS 已有规范，折叠状态与折痕尺寸也必须由原生端桥接传递给前端。
 
 - **Kotlin Multiplatform (KMP)、.NET MAUI 等其他生态**：
   虽然没有专属名称的独立技能，但其适配逻辑与 Flutter / React Native 技能完全一致：要么是*在现有跨平台层做尺寸变更与安全区监听*，要么是*编写原生桥接调用 iOS 27.1 API*。请参考相近的跨平台技能并配合 `iphone-duo-design-review`。
@@ -151,9 +153,9 @@ cp -r iphone-duo-skills/skills/* ~/.claude/skills/
 - SwiftUI 的 `reservedRegions` 查询带有 `layoutDirectionBehavior:` 参数（默认值为 `.mirrors`）。
 - 保留区域的 `frame` **已经包含**了其 `margins` —— 它们不是需要你在外部额外附加的外边距。
 
-**2026 年 10 月 23 日进行了第三轮核验**（在 Apple 将保留区域与 arrangement 页面扩展为完整专题文章后）：
-- 保留区域查询默认**仅返回活跃区域（Active Regions）**。
-- Tech Talk 称完全平展时折痕是非活跃且宽度为 0；但最新参考文档与 Group Lab Day 3 表明非活跃区域仍保留其 Frame，以便开发者提前为其留出布局空间，避免设备弯折时界面跳动。
+**2026 年 10 月 23 日进行了第三轮核验**（在 Apple 将保留区域与 arrangement 页面扩展为完整专题文章后），解决了一个问题，同时引出了另一个问题：
+- 保留区域查询默认**仅返回活跃区域（Active Regions）**。九月版参考文档此前的说法与此相反，现已与 Tech Talk 保持一致。
+- Tech Talk 称完全平展时折痕是非活跃且宽度为 0；但最新参考文档与 Group Lab Day 3 表明非活跃区域仍保留其 Frame，以便开发者提前为其留出布局空间，避免设备弯折时界面跳动。本技能库以较新的来源为准，并附注提醒你在模拟器中核实该 Frame。
 - 分割布局（Split Arrangement）在闭合横屏或排除的轴向上，**仅展示其主要视图（Primary View）**。
 
 在 API 索引文件中，已修正项与争议点均使用 ⚠ 明确标注。
@@ -183,4 +185,4 @@ python3 scripts/check-sources.py     # 刷新与 Apple 官方文档的对照基�
 
 基于 [MIT 协议](LICENSE) 开源。
 
-本项目与 Apple Inc. 无隶属关系，亦未获其背书。"iPhone" 与 "iPhone Duo" 为 Apple Inc. 的注册商标。
+本项目与 Apple Inc. 无隶属关系，亦未获其背书。"iPhone" 与 "iPhone Duo" 为 Apple Inc. 的商标。

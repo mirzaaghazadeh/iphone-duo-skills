@@ -39,6 +39,8 @@
     "reference",
     "README.md",
     "README_CN.md",
+    "README_FR.md",
+    "README_TR.md",
     "LICENSE"
   ],
   "publishConfig": {
