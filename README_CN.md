@@ -158,6 +158,9 @@ cp -r iphone-duo-skills/skills/* ~/.claude/skills/
 - Tech Talk 称完全平展时折痕是非活跃且宽度为 0；但最新参考文档与 Group Lab Day 3 表明非活跃区域仍保留其 Frame，以便开发者提前为其留出布局空间，避免设备弯折时界面跳动。本技能库以较新的来源为准，并附注提醒你在模拟器中核实该 Frame。
 - 分割布局（Split Arrangement）在闭合横屏或排除的轴向上，**仅展示其主要视图（Primary View）**。
 
+**2026 年 10 月 30 日进行了第四轮核验**，阅读了文档监控脚本此前一直在错误路径下查找的 *Registering a camera capture accessory on iPhone Duo* 一文，并再修正了一处：
+- UIKit **没有 `CameraCaptureAccessory`**。UIKit 需在视图控制器上注册 `UISceneAccessory.cameraCapture(sceneConfiguration:userInfo:)`，并通过返回的 `UISceneAccessoryRegistration` 观察可用性、开关内容。
+
 在 API 索引文件中，已修正项与争议点均使用 ⚠ 明确标注。
 
 ---
@@ -169,7 +172,7 @@ cp -r iphone-duo-skills/skills/* ~/.claude/skills/
 | 工作流 | 触发时机 | 功能 |
 |---|---|---|
 | `validate.yml` | 每次 Push 和 PR | 检查每个 `SKILL.md` 的 YAML frontmatter、确保 `name` 与目录一致且唯一、检查所有相对 Markdown 链接有效性、验证 npm 包构建配置 |
-| `watch-apple-docs.yml` | 每周五 06:00 UTC | 监控 16 个 Apple 官方页面（主页、Prepare 指南、HIG 及 API 参考），并在发生变更时自动创建或更新标签为 `apple-docs` 的 Issue |
+| `watch-apple-docs.yml` | 每周五 06:00 UTC | 监控 32 个 Apple 官方页面（主页、Prepare 指南、HIG、API 参考、专题文章及视频讲座），并在发生变更时自动创建或更新标签为 `apple-docs` 的 Issue |
 | `publish.yml` | 发布 GitHub Release 时 | 校验内容、确认版本号匹配 `package.json`，并通过带有 Provenance 的流程自动发布至 npm |
 
 本地运行校验与监控脚本：

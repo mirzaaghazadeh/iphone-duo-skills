@@ -221,6 +221,15 @@ tranché une question et en a ouvert une autre :
 - Un arrangement split n'affiche **que sa vue principale** sur un iPhone Duo
   fermé tenu en paysage, ainsi que le long de tout axe que vous avez exclu.
 
+Une quatrième passe, le **30 octobre 2026**, a lu *Registering a camera capture
+accessory on iPhone Duo*, que le watcher de docs cherchait au mauvais chemin, et
+a corrigé un point de plus :
+
+- UIKit n'a **pas de `CameraCaptureAccessory`**. Il enregistre un
+  `UISceneAccessory.cameraCapture(sceneConfiguration:userInfo:)` sur le view
+  controller et reçoit en retour un `UISceneAccessoryRegistration` à observer et
+  à activer ou désactiver.
+
 Les corrections et les contradictions encore ouvertes sont signalées par ⚠ dans
 l'index des API.
 
@@ -232,7 +241,7 @@ comme celui-ci est de se périmer sans que personne ne s'en aperçoive.
 | Workflow | Exécution | Rôle |
 |---|---|---|
 | `validate.yml` | à chaque push et PR | Vérifie que chaque `SKILL.md` a un frontmatter valide, que `name` correspond à son dossier et est unique, que les renvois sont résolus, et que le paquet npm se construit toujours |
-| `watch-apple-docs.yml` | le vendredi, 06:00 UTC | Compare 16 pages Apple — la page d'accueil, la checklist Prepare, la HIG et la référence d'API — et ouvre (ou commente) une issue étiquetée `apple-docs` quand quelque chose change |
+| `watch-apple-docs.yml` | le vendredi, 06:00 UTC | Compare 32 pages Apple — la page d'accueil, la checklist Prepare, la HIG, la référence d'API, les articles et les sessions — et ouvre (ou commente) une issue étiquetée `apple-docs` quand quelque chose change |
 | `publish.yml` | à chaque release GitHub | Valide, vérifie que le tag correspond à `package.json`, puis publie sur npm avec provenance |
 
 Les deux scripts fonctionnent aussi en local :

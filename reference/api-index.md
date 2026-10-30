@@ -219,9 +219,10 @@ Note the naming asymmetry: SwiftUI's default is `.automatic`, UIKit's is
 |---|---|---|
 | Observe the hinge | `onHingeChange` modifier | `UIHingeInteraction` |
 | Request a new scene | — | `UIWindowSceneActivation` action |
-| Pair UI to another display | `sceneAccessory` modifier | scene accessory API |
-| Outer-display camera UI | `CameraCaptureAccessory` | `CameraCaptureAccessory` |
-| React to accessory availability | `onAvailabilityChange` | observation tracking |
+| Pair UI to another display | `sceneAccessory(content:)` modifier | `UISceneAccessory`, passed to `registerSceneAccessory(_:)` on a view controller |
+| Outer-display camera UI | `CameraCaptureAccessory` | `UISceneAccessory.cameraCapture(sceneConfiguration:userInfo:)` |
+| React to accessory availability | `onAvailabilityChange(perform:)` | `isAvailable` on the `UISceneAccessoryRegistration` — observable |
+| Turn accessory content off | `CameraCaptureAccessory(isEnabled:content:)` | `isEnabled` on the registration |
 
 SwiftUI, verbatim:
 
@@ -269,6 +270,48 @@ regions for **layout**.
 New windows cannot be created while on the outer display — that is reserved for
 the inner display. Handle scene-request failures, and prefer
 `UIWindowSceneActivation`, which hides itself when new windows are unavailable.
+
+### Scene accessories
+
+⚠ UIKit has **no `CameraCaptureAccessory`** — this table used to list it in both
+columns. UIKit builds the accessory from a scene configuration and registers it
+on the view controller that shows the capture interface:
+
+```swift
+let configuration = UISceneConfiguration()
+configuration.delegateClass = ScriptSceneDelegate.self
+
+let accessory = UISceneAccessory.cameraCapture(sceneConfiguration: configuration,
+                                               userInfo: script)
+registration = registerSceneAccessory(accessory)   // keep a strong reference
+```
+
+The scene delegate reads `userInfo` back from
+`connectionOptions.sceneAccessoryUserInfo`, an `Any?`. The system gives the
+accessory's scene the role `UISceneSession.Role.windowCameraCaptureAccessory` —
+apps never set it, and a scene-manifest entry for it has no effect.
+
+| Symbol | Availability |
+|---|---|
+| `sceneAccessory(content:)`, `SceneAccessoryContent`, `onAvailabilityChange(perform:)` | iOS 27.0 |
+| `UISceneAccessory`, `UISceneAccessoryRegistration`, `registerSceneAccessory(_:)`, `unregisterSceneAccessory(_:)`, `sceneAccessoryUserInfo` | iOS 27.0 |
+| `CameraCaptureAccessory`, `UISceneAccessory.cameraCapture(sceneConfiguration:)` and `(sceneConfiguration:userInfo:)`, `windowCameraCaptureAccessory` | **iOS 27.1** |
+
+What the reference and *Registering a camera capture accessory on iPhone Duo*
+say:
+
+- `isEnabled` is your app's choice; `isAvailable` is the system's, and one
+  doesn't reflect the other. Turn content off with `isEnabled` (or the SwiftUI
+  binding) rather than unregistering; call `unregisterSceneAccessory(_:)` only
+  when the app stops offering the content.
+- `isAvailable` is observable in `updateProperties()` and `layoutSubviews()`.
+- The system presents the **top-most** registration of a kind. Navigating to a
+  view that registers its own makes the previous one unavailable; going back
+  restores it. Accessories of different kinds never compete.
+- Content goes away when capture stops, the app leaves the foreground, or the
+  device folds closed. It is on by default.
+- Simulator has no camera. Check the content's layout in previews, then test
+  presentation on a device.
 
 ## Camera (AVFoundation / AVKit)
 

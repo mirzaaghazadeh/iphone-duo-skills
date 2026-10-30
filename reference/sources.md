@@ -141,6 +141,21 @@ inactive region keeps a frame. Group Lab Day 3, read the same day, sides with
 the article: an engineer describes querying the inactive fold in advance so the
 layout already avoids it. Both are marked ⚠ in `api-index.md`.
 
+Re-checked **October 30, 2026**, after the watcher reported the Prepare page had
+grown 49 characters. By the time it was re-read the page matched the October 16
+text word for word, from three networks, so nothing changed there. The same
+pass found the capture-accessory article at its real path (see below) and
+relied on:
+
+- [`UISceneAccessory`](https://developer.apple.com/documentation/uikit/uisceneaccessory),
+  [`cameraCapture(sceneConfiguration:userInfo:)`](https://developer.apple.com/documentation/uikit/uisceneaccessory/cameracapture(sceneconfiguration:userinfo:)),
+  [`UISceneAccessoryRegistration`](https://developer.apple.com/documentation/uikit/uisceneaccessoryregistration)
+  and [`registerSceneAccessory(_:)`](https://developer.apple.com/documentation/uikit/uiviewcontroller/registersceneaccessory(_:))
+  — the UIKit side, which an earlier `api-index.md` row had as
+  `CameraCaptureAccessory`.
+- [`sceneAccessory(content:)`](https://developer.apple.com/documentation/swiftui/view/sceneaccessory(content:))
+  and [`onAvailabilityChange(perform:)`](https://developer.apple.com/documentation/swiftui/sceneaccessorycontent/onavailabilitychange(perform:)).
+
 ## Developer article
 
 - [Preparing your app for iPhone Duo](https://developer.apple.com/documentation/technologyoverviews/preparing-your-app-for-iphone-duo)
@@ -152,7 +167,14 @@ layout already avoids it. Both are marked ⚠ in `api-index.md`.
   `reservedRegions` third parameter, and the overlay arrangement's
   primary-to-trailing behaviour when folded.
 - Referenced from it: *Choosing a camera by the direction it faces* and
-  *Registering a camera capture accessory on iPhone Duo*.
+  [*Registering a camera capture accessory on iPhone Duo*](https://developer.apple.com/documentation/avfoundation/registering-a-camera-capture-accessory-on-iphone-duo).
+  The second lives under **avfoundation**. The watcher guessed `swiftui/`, a
+  404, so the article went unread until October 30, 2026. It is the source for
+  the UIKit accessory API (`UISceneAccessory.cameraCapture`,
+  `UISceneAccessoryRegistration`; UIKit has no `CameraCaptureAccessory`), the
+  top-most-registration rule, and turning content off with `isEnabled` rather
+  than unregistering. The watcher now also reads this article's references, so
+  a companion page at an unguessed path shows up as **UNTRACKED**.
 
 ## Group Labs
 
