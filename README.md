@@ -200,6 +200,15 @@ arrangement pages into full articles, settled one question and opened another:
 - A split arrangement shows **only its primary view** on a closed iPhone Duo held
   in landscape, and along any axis you excluded.
 
+A fourth pass on **30 October 2026** read *Registering a camera capture accessory
+on iPhone Duo*, which the docs watcher had been looking for at the wrong path,
+and corrected one more:
+
+- UIKit has **no `CameraCaptureAccessory`**. It registers a
+  `UISceneAccessory.cameraCapture(sceneConfiguration:userInfo:)` on the view
+  controller and gets back a `UISceneAccessoryRegistration` to observe and
+  toggle.
+
 Corrections and open conflicts are marked ⚠ in the API index.
 
 `scripts/fetch-transcripts.py` re-fetches the Tech Talk transcripts from the
@@ -214,7 +223,7 @@ drifting out of date without anyone noticing.
 | Workflow | Runs | Does |
 |---|---|---|
 | `validate.yml` | every push and PR | Checks every `SKILL.md` has valid frontmatter, that `name` matches its directory and is unique, that cross-references resolve, and that the npm package still builds |
-| `watch-apple-docs.yml` | Fridays, 06:00 UTC | Diffs 16 Apple pages — the landing page, Prepare checklist, HIG, and the API reference — and opens (or comments on) an issue labelled `apple-docs` when something changes |
+| `watch-apple-docs.yml` | Fridays, 06:00 UTC | Diffs 32 Apple pages — the landing page, Prepare checklist, HIG, API reference, articles and sessions — and opens (or comments on) an issue labelled `apple-docs` when something changes |
 | `publish.yml` | on a GitHub release | Validates, checks the tag matches `package.json`, then publishes to npm with provenance |
 
 Both scripts run locally too:
@@ -224,9 +233,10 @@ python3 scripts/validate-skills.py   # same checks CI runs
 python3 scripts/check-sources.py     # refresh the Apple docs baseline
 ```
 
-The watcher tracks two pages that still 404 (`preparing-your-app-for-iphone-duo`
-under UIKit and SwiftUI), so if Apple publishes them it reports **NEW** rather
-than staying silent. Its state lives in `.github/sources-state.json`.
+The watcher also reads the links on Apple's iPhone Duo landing page and the
+references in the *Preparing your app for iPhone Duo* article, and reports any
+page it doesn't track as **UNTRACKED** — guessed URLs have missed a published
+article twice. Its state lives in `.github/sources-state.json`.
 
 `publish.yml` needs an `NPM_TOKEN` secret. Because this account requires 2FA for
 publishing, an ordinary automation token won't work — it needs a **granular

@@ -56,13 +56,19 @@ SOURCES: list[tuple[str, str, str]] = [
     ("api.GeometryProxy.reservedRegions", "docc", DOCC + "documentation/swiftui/geometryproxy/reservedregions(kind:options:layoutdirectionbehavior:).json"),
     ("api.UISplitArrangement", "docc", DOCC + "documentation/uikit/uisplitarrangement-swift.struct.json"),
     ("api.UIOverlayArrangement", "docc", DOCC + "documentation/uikit/uioverlayarrangement-swift.struct.json"),
+    # Added with the capture-accessory article: UIKit has no
+    # CameraCaptureAccessory, and api-index.md now cites these instead.
+    ("api.UISceneAccessory", "docc", DOCC + "documentation/uikit/uisceneaccessory.json"),
+    ("api.UISceneAccessoryRegistration", "docc", DOCC + "documentation/uikit/uisceneaccessoryregistration.json"),
     # The developer article. It lives under technologyoverviews, NOT under
     # uikit/ or swiftui/ — this watcher originally guessed those paths, so it
     # reported "no changes" while the article had been live for days. Derive
     # URLs from the landing page rather than guessing them.
     ("prepare-article", "docc", DOCC + "documentation/technologyoverviews/preparing-your-app-for-iphone-duo.json"),
     ("article.camera-direction", "docc", DOCC + "documentation/avkit/choosing-a-camera-by-the-direction-it-faces.json"),
-    ("article.capture-accessory", "docc", DOCC + "documentation/swiftui/registering-a-camera-capture-accessory-on-iphone-duo.json"),
+    # Under avfoundation/, where the prepare article links it. Until October 30
+    # this watched a swiftui/ guess that 404s, and so missed the article.
+    ("article.capture-accessory", "docc", DOCC + "documentation/avfoundation/registering-a-camera-capture-accessory-on-iphone-duo.json"),
     # The six Tech Talks this repo was built from, plus the Group Labs. Watched
     # so a seventh session shows up rather than going unnoticed.
     ("talk.111461", "page", DEV + "videos/play/tech-talks/111461/"),
@@ -87,6 +93,10 @@ PUBLIC_EQUIVALENTS = [
 # Apple has added or moved something this watcher doesn't know about — which is
 # exactly how the prepare article was missed.
 LANDING_URL = DEV + "iphone-duo/"
+# The developer article links its companion articles as DocC references, which
+# the landing page doesn't. Reading them is how the capture-accessory path was
+# found to be wrong.
+ARTICLE_URL = DOCC + "documentation/technologyoverviews/preparing-your-app-for-iphone-duo.json"
 EXPECTED_LINK_PATTERNS = [
     r"/videos/play/tech-talks/1114(6[1-6])/",
     r"/design/human-interface-guidelines/designing-for-iphone-duo",
@@ -160,7 +170,7 @@ def docc_content(raw: bytes) -> str:
 
 
 def discover_links(tracked: set[str]) -> list[str]:
-    """Report documentation links on the landing page we aren't watching.
+    """Report documentation links on the landing page and article we aren't watching.
 
     The hardcoded list above is only as good as the URLs someone guessed. This
     reads what Apple actually links to, so a newly published page shows up even
@@ -184,6 +194,19 @@ def discover_links(tracked: set[str]) -> list[str]:
         url = m if m.startswith("http") else "https://developer.apple.com" + m
         url = url.rstrip("/") + "/"
         found.add(url)
+
+    status, raw = fetch(ARTICLE_URL)
+    if status == 200 and raw:
+        try:
+            refs = json.loads(raw.decode("utf-8", "replace")).get("references", {})
+        except json.JSONDecodeError:
+            refs = {}
+        for ref in refs.values():
+            u = ref.get("url", "") if isinstance(ref, dict) else ""
+            if "iphone-duo" in u and u.startswith(("/documentation/", "/design/")):
+                found.add(DEV + u.strip("/") + "/")
+    else:
+        print(f"  ?? prepare article returned {status}; skipping its references")
 
     # Normalise what we already watch to the same shape as the scraped links.
     known = {u.rstrip("/") + "/" for u in tracked}

@@ -156,10 +156,15 @@ is rotation. Most camera apps on this device want both.
 5. Set `videoGravity`, and `dynamicAspectRatio` for front-camera capture.
 6. Adopt `AVCaptureDeviceRotationCoordinator`, then disable sensor-orientation
    compensation.
-7. Consider a `CameraCaptureAccessory` so the subject sees something on the outer
-   display.
-8. Test opening, closing and flipping the device mid-session in Device Hub.
+7. Consider a camera capture accessory so the subject sees something on the
+   outer display — `CameraCaptureAccessory` in SwiftUI,
+   `UISceneAccessory.cameraCapture` in UIKit. See
+   `../iphone-duo-hinge-and-scenes/SKILL.md`.
+8. Test opening, closing and flipping the device mid-session **on a device**.
+   Simulator has no camera, so Device Hub's iPhone Duo simulator can exercise
+   the UI around capture but not capture itself.
 
-Apple's related articles: *Choosing a Camera by the Direction it Faces* and
-*Supporting Device Rotation in Your Camera App*. For the square sensor generally,
+Apple's related articles: *Choosing a Camera by the Direction it Faces*,
+*Registering a camera capture accessory on iPhone Duo* and *Supporting Device
+Rotation in Your Camera App*. For the square sensor generally,
 see *Support the Center Stage front camera in your iOS app* from WWDC26.

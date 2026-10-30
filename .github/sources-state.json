@@ -70,6 +70,18 @@
     "status": 200,
     "url": "https://developer.apple.com/tutorials/data/documentation/uikit/uioverlayarrangement-swift.struct.json"
   },
+  "api.UISceneAccessory": {
+    "hash": "90901f3589a15a32",
+    "len": 822,
+    "status": 200,
+    "url": "https://developer.apple.com/tutorials/data/documentation/uikit/uisceneaccessory.json"
+  },
+  "api.UISceneAccessoryRegistration": {
+    "hash": "337bc8dfa4944e84",
+    "len": 365,
+    "status": 200,
+    "url": "https://developer.apple.com/tutorials/data/documentation/uikit/uisceneaccessoryregistration.json"
+  },
   "api.UISplitArrangement": {
     "hash": "b1f597220d6c1eb3",
     "len": 1895,
@@ -101,10 +113,10 @@
     "url": "https://developer.apple.com/tutorials/data/documentation/avkit/choosing-a-camera-by-the-direction-it-faces.json"
   },
   "article.capture-accessory": {
-    "hash": "",
-    "len": 0,
-    "status": 404,
-    "url": "https://developer.apple.com/tutorials/data/documentation/swiftui/registering-a-camera-capture-accessory-on-iphone-duo.json"
+    "hash": "2528da0602c148ef",
+    "len": 4355,
+    "status": 200,
+    "url": "https://developer.apple.com/tutorials/data/documentation/avfoundation/registering-a-camera-capture-accessory-on-iphone-duo.json"
   },
   "hig": {
     "hash": "246a8aa6f40999a1",
@@ -137,8 +149,8 @@
     "url": "https://developer.apple.com/iphone-duo/"
   },
   "prepare": {
-    "hash": "0488b27374866a43",
-    "len": 6369,
+    "hash": "bf83475b2704047b",
+    "len": 6320,
     "status": 200,
     "url": "https://developer.apple.com/iphone-duo/prepare/"
   },
