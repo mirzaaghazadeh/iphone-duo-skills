@@ -5,7 +5,7 @@
     ]
   },
   "api.ArrangementView": {
-    "hash": "928db2976a531e9f",
+    "hash": "5bbf31fff9a7aa7e",
     "len": 3106,
     "status": 200,
     "url": "https://developer.apple.com/tutorials/data/documentation/swiftui/arrangementview.json"
@@ -47,7 +47,7 @@
     "url": "https://developer.apple.com/tutorials/data/documentation/swiftui/reservedregion.json"
   },
   "api.UIArrangementViewController": {
-    "hash": "759488e576490b40",
+    "hash": "683456d98f116681",
     "len": 3522,
     "status": 200,
     "url": "https://developer.apple.com/tutorials/data/documentation/uikit/uiarrangementviewcontroller.json"
@@ -101,8 +101,8 @@
     "url": "https://developer.apple.com/tutorials/data/documentation/uikit/uiviewreservedregion.json"
   },
   "api.toolbarVerticalEdge": {
-    "hash": "9c38e9649d9e294a",
-    "len": 582,
+    "hash": "e3013d38cc379b97",
+    "len": 643,
     "status": 200,
     "url": "https://developer.apple.com/tutorials/data/documentation/swiftui/environmentvalues/toolbarverticaledge.json"
   },
@@ -161,32 +161,32 @@
     "url": "https://developer.apple.com/tutorials/data/documentation/technologyoverviews/preparing-your-app-for-iphone-duo.json"
   },
   "talk.111461": {
-    "hash": "2bd84afefbd06f26",
-    "len": 15236,
+    "hash": "f98dcb59c87645b1",
+    "len": 15270,
     "status": 200,
     "url": "https://developer.apple.com/videos/play/tech-talks/111461/"
   },
   "talk.111462": {
-    "hash": "f25a74030dd59fd2",
-    "len": 23890,
+    "hash": "4157b05d49e5941b",
+    "len": 23924,
     "status": 200,
     "url": "https://developer.apple.com/videos/play/tech-talks/111462/"
   },
   "talk.111463": {
-    "hash": "229cedf8ceb91710",
-    "len": 26865,
+    "hash": "13071c9d3be3d8d9",
+    "len": 26899,
     "status": 200,
     "url": "https://developer.apple.com/videos/play/tech-talks/111463/"
   },
   "talk.111464": {
-    "hash": "56c40c1e983b3e84",
-    "len": 13643,
+    "hash": "1dc3ea96c397f871",
+    "len": 13677,
     "status": 200,
     "url": "https://developer.apple.com/videos/play/tech-talks/111464/"
   },
   "talk.111465": {
-    "hash": "83e06dd33da58745",
-    "len": 15178,
+    "hash": "672255d3649f210b",
+    "len": 15321,
     "status": 200,
     "url": "https://developer.apple.com/videos/play/tech-talks/111465/"
   },
