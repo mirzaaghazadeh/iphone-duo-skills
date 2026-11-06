@@ -156,6 +156,29 @@ relied on:
 - [`sceneAccessory(content:)`](https://developer.apple.com/documentation/swiftui/view/sceneaccessory(content:))
   and [`onAvailabilityChange(perform:)`](https://developer.apple.com/documentation/swiftui/sceneaccessorycontent/onavailabilitychange(perform:)).
 
+Re-checked **November 6, 2026**, after the watcher flagged eight pages. Each was
+diffed against an archived copy whose hash matched the watcher's previous state,
+so these are the real changes:
+
+- [`ArrangementView`](https://developer.apple.com/documentation/swiftui/arrangementview)
+  and [`UIArrangementViewController`](https://developer.apple.com/documentation/uikit/uiarrangementviewcontroller)
+  now say "overlay and split" instead of "split and overlay", and the two
+  sentences describing the styles are swapped. Nothing else changed.
+- [`toolbarVerticalEdge`](https://developer.apple.com/documentation/swiftui/environmentvalues/toolbarverticaledge)
+  has a new one-line abstract, and the old abstract moved into the body. The
+  rest was already on the page in October, including when it returns `nil` and
+  that the system picks the edge from locale and device. The repo hadn't
+  recorded either, so `api-index.md` and the vertical-bars skill now do.
+- All five changed Tech Talks gained links under Resources: the developer
+  article on 111461–111464, and three camera articles on 111465. One of those
+  three wasn't yet relied on here: [*Supporting device rotation in your camera app*](https://developer.apple.com/documentation/avfoundation/supporting-device-rotation-in-your-camera-app),
+  an AVCam sample under **avfoundation**. It is the source for the camera
+  skill's rotation rules: one rotation coordinator per camera, no coordinator
+  built with a `nil` preview layer, read both angles before observing them, and
+  reapply the capture angle to a new output. Its path has no `iphone-duo` in it,
+  so link discovery missed it. The watcher now tracks it and also reads each
+  session's Resources list.
+
 ## Developer article
 
 - [Preparing your app for iPhone Duo](https://developer.apple.com/documentation/technologyoverviews/preparing-your-app-for-iphone-duo)

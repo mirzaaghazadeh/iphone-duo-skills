@@ -161,6 +161,10 @@ cp -r iphone-duo-skills/skills/* ~/.claude/skills/
 **2026 年 10 月 30 日进行了第四轮核验**，阅读了文档监控脚本此前一直在错误路径下查找的 *Registering a camera capture accessory on iPhone Duo* 一文，并再修正了一处：
 - UIKit **没有 `CameraCaptureAccessory`**。UIKit 需在视图控制器上注册 `UISceneAccessory.cameraCapture(sceneConfiguration:userInfo:)`，并通过返回的 `UISceneAccessoryRegistration` 观察可用性、开关内容。
 
+**2026 年 11 月 6 日进行了第五轮核验**，将文档监控脚本标记的每个页面与存档副本逐一比对。Apple 只是调整了语序或新增了链接，但本轮补齐了两处空白：
+- `toolbarVerticalEdge` 仅在系统从不放置垂直栏的情况下才为 `nil`。垂直栏在从右到左的语言中保持在同一物理侧，因此其 `.leading` / `.trailing` 取值会随语言区域而变化。
+- Tech Talk 111465 现已链接 *Supporting device rotation in your camera app*。旋转协调器（Rotation Coordinator）只绑定一个摄像头，因此折叠导致的每次摄像头切换都需要新建一个。
+
 在 API 索引文件中，已修正项与争议点均使用 ⚠ 明确标注。
 
 ---
@@ -172,7 +176,7 @@ cp -r iphone-duo-skills/skills/* ~/.claude/skills/
 | 工作流 | 触发时机 | 功能 |
 |---|---|---|
 | `validate.yml` | 每次 Push 和 PR | 检查每个 `SKILL.md` 的 YAML frontmatter、确保 `name` 与目录一致且唯一、检查所有相对 Markdown 链接有效性、验证 npm 包构建配置 |
-| `watch-apple-docs.yml` | 每周五 06:00 UTC | 监控 32 个 Apple 官方页面（主页、Prepare 指南、HIG、API 参考、专题文章及视频讲座），并在发生变更时自动创建或更新标签为 `apple-docs` 的 Issue |
+| `watch-apple-docs.yml` | 每周五 06:00 UTC | 监控 33 个 Apple 官方页面（主页、Prepare 指南、HIG、API 参考、专题文章及视频讲座），并在发生变更时自动创建或更新标签为 `apple-docs` 的 Issue |
 | `publish.yml` | 发布 GitHub Release 时 | 校验内容、确认版本号匹配 `package.json`，并通过带有 Provenance 的流程自动发布至 npm |
 
 本地运行校验与监控脚本：

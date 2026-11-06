@@ -69,6 +69,10 @@ SOURCES: list[tuple[str, str, str]] = [
     # Under avfoundation/, where the prepare article links it. Until October 30
     # this watched a swiftui/ guess that 404s, and so missed the article.
     ("article.capture-accessory", "docc", DOCC + "documentation/avfoundation/registering-a-camera-capture-accessory-on-iphone-duo.json"),
+    # A general AVCam sample, linked from Tech Talk 111465 since November 6,
+    # 2026. The camera skill relies on it for the rule that a rotation
+    # coordinator stays bound to one camera, which a fold breaks.
+    ("article.camera-rotation", "docc", DOCC + "documentation/avfoundation/supporting-device-rotation-in-your-camera-app.json"),
     # The six Tech Talks this repo was built from, plus the Group Labs. Watched
     # so a seventh session shows up rather than going unnoticed.
     ("talk.111461", "page", DEV + "videos/play/tech-talks/111461/"),
@@ -97,6 +101,15 @@ LANDING_URL = DEV + "iphone-duo/"
 # the landing page doesn't. Reading them is how the capture-accessory path was
 # found to be wrong.
 ARTICLE_URL = DOCC + "documentation/technologyoverviews/preparing-your-app-for-iphone-duo.json"
+# Each session lists its companion pages under Resources, as absolute links in
+# <li class="document"> items (the site chrome uses relative links). These need
+# not contain "iphone-duo": talk 111465 added an AVFoundation sample on
+# November 6, 2026 that neither scan above would match.
+RESOURCE_LINK = re.compile(
+    r'<li class="document">\s*<a href="(https://developer\.apple\.com/'
+    r'(?:documentation|design/human-interface-guidelines)/[^"#?]+)"',
+    re.I,
+)
 EXPECTED_LINK_PATTERNS = [
     r"/videos/play/tech-talks/1114(6[1-6])/",
     r"/design/human-interface-guidelines/designing-for-iphone-duo",
@@ -169,8 +182,11 @@ def docc_content(raw: bytes) -> str:
     return re.sub(r"\s+", " ", " ".join(p for p in parts if p)).strip()
 
 
-def discover_links(tracked: set[str]) -> list[str]:
-    """Report documentation links on the landing page and article we aren't watching.
+def discover_links(tracked: set[str], sessions: dict[str, bytes]) -> list[str]:
+    """Report documentation links we aren't watching.
+
+    Reads the landing page, the prepare article's references, and the
+    Resources list of each session in `sessions` (raw HTML by source key).
 
     The hardcoded list above is only as good as the URLs someone guessed. This
     reads what Apple actually links to, so a newly published page shows up even
@@ -208,6 +224,10 @@ def discover_links(tracked: set[str]) -> list[str]:
     else:
         print(f"  ?? prepare article returned {status}; skipping its references")
 
+    for raw in sessions.values():
+        for u in RESOURCE_LINK.findall(raw.decode("utf-8", "replace")):
+            found.add(u.rstrip("/") + "/")
+
     # Normalise what we already watch to the same shape as the scraped links.
     known = {u.rstrip("/") + "/" for u in tracked}
     for u in tracked:
@@ -217,8 +237,11 @@ def discover_links(tracked: set[str]) -> list[str]:
                 public = public[: -len(".json")]
             known.add(public.rstrip("/") + "/")
     known |= {u.rstrip("/") + "/" for u in PUBLIC_EQUIVALENTS}
+    # Apple's documentation paths ignore case, and its links don't agree on it:
+    # talk 111465 links ".../documentation/AVFoundation/...".
+    known = {u.lower() for u in known}
 
-    unknown = sorted(u for u in found if u not in known)
+    unknown = sorted(u for u in found if u.lower() not in known)
     return unknown
 
 
@@ -231,6 +254,7 @@ def main() -> int:
 
     state: dict[str, dict] = {}
     changes: list[str] = []
+    sessions: dict[str, bytes] = {}  # raw session pages, for link discovery
     first_run = not prev
 
     for key, kind, url in SOURCES:
@@ -248,6 +272,8 @@ def main() -> int:
         digest = hashlib.sha256(content.encode("utf-8")).hexdigest()[:16] if content else ""
 
         state[key] = {"url": url, "status": status, "hash": digest, "len": len(content)}
+        if exists and "/videos/play/" in url:
+            sessions[key] = raw
         old = prev.get(key)
 
         if old is None:
@@ -267,11 +293,11 @@ def main() -> int:
     # Catch anything Apple links that this script doesn't already watch.
     tracked_urls = {url for _, _, url in SOURCES}
     seen_before = set(prev.get("_discovered", {}).get("urls", []))
-    unknown = discover_links(tracked_urls)
+    unknown = discover_links(tracked_urls, sessions)
     new_links = [u for u in unknown if u not in seen_before]
     if new_links:
         for u in new_links:
-            changes.append(f"**UNTRACKED** landing page links a page we don't watch — {u}")
+            changes.append(f"**UNTRACKED** Apple links a page we don't watch — {u}")
     state["_discovered"] = {"urls": sorted(set(unknown) | seen_before)}
     print(f"  -- link discovery: {len(unknown)} untracked, {len(new_links)} new")
 

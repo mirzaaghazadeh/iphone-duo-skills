@@ -1,6 +1,6 @@
 ---
 name: iphone-duo-camera
-description: Build camera capture for iPhone Duo's two front cameras — the virtual front camera, the inner under-display and outer ultra-wide devices, AVCaptureDeviceDirectionCoordinator, preview mirroring and video gravity, and dual-display capture. Use when an app captures photo or video and must handle the device opening, closing or flipping.
+description: Build camera capture for iPhone Duo's two front cameras — the virtual front camera, the inner under-display and outer ultra-wide devices, AVCaptureDeviceDirectionCoordinator, the rotation coordinator, preview mirroring and video gravity, and dual-display capture. Use when an app captures photo or video and must handle the device opening, closing or flipping.
 ---
 
 # Camera on iPhone Duo
@@ -133,7 +133,8 @@ Control this with `videoGravity` on `AVCaptureVideoPreviewLayer`.
 `dynamicAspectRatio` on the `AVCaptureDevice` to pick a landscape aspect ratio
 that fills the inner display.
 
-**Rotation.** Adopt `AVCaptureDeviceRotationCoordinator` so previews and captures
+**Rotation.** Adopt `AVCaptureDevice.RotationCoordinator`
+(`AVCaptureDeviceRotationCoordinator` in Objective-C) so previews and captures
 stay upright. On iPhone Duo it updates when the app moves between displays, which
 is what keeps rotation consistent across both. Once you have adopted it, **turn
 off camera-sensor-orientation compensation** — it is enabled on all of iPhone
@@ -142,7 +143,30 @@ the job.
 
 Note that direction and rotation are separate coordinators solving separate
 problems. Which camera to stream is direction; which way its output is oriented
-is rotation. Most camera apps on this device want both.
+is rotation. Most camera apps on this device want both, and a fold involves
+both: the direction handler picks the new camera, and that camera needs its own
+rotation coordinator.
+
+Apple's AVCam sample, *Supporting device rotation in your camera app*, gives
+the rules:
+
+- **One rotation coordinator per camera.** A coordinator is bound to one device
+  for its lifetime, so a camera switch means a new coordinator. Do it in the same
+  step as reconfiguring the session. Invalidate the old coordinator's
+  observations first, so an angle for the previous camera can't land after the
+  new one's.
+- **Give it a preview layer that is already in a window.** One created with a
+  `nil` layer never reports a preview angle, even after a layer appears.
+  Create it again from `didMoveToWindow()` on the view that hosts the preview
+  layer.
+- **Read both angles, then observe them.** Set
+  `videoRotationAngleForHorizonLevelPreview` on the preview layer's connection
+  and `videoRotationAngleForHorizonLevelCapture` on each output's video
+  connection. Key-value observing reports only later changes, so without the
+  first read the preview stays sideways until the device next rotates. The two
+  angles can differ.
+- **Reapply the capture angle when you add an output.** A new output starts at
+  the default angle.
 
 ## Checklist
 
@@ -154,8 +178,9 @@ is rotation. Most camera apps on this device want both.
    forward-facing descriptor, reconfigure the session, re-decide mirroring, and
    update UI. Move devices across actors as `AVCaptureDeviceDescriptor`.
 5. Set `videoGravity`, and `dynamicAspectRatio` for front-camera capture.
-6. Adopt `AVCaptureDeviceRotationCoordinator`, then disable sensor-orientation
-   compensation.
+6. Adopt `AVCaptureDevice.RotationCoordinator` — a new one for each camera you
+   switch to, once the preview layer is in a window — then disable
+   sensor-orientation compensation.
 7. Consider a camera capture accessory so the subject sees something on the
    outer display — `CameraCaptureAccessory` in SwiftUI,
    `UISceneAccessory.cameraCapture` in UIKit. See

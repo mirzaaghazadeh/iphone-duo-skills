@@ -136,6 +136,13 @@ visible.** So it is not a "are my items going vertical right now?" flag. It's
 you need to align your own custom bars and edge-anchored UI with the system's
 placement.
 
+`nil` is narrower: it means the system **never** places a vertical bar in this
+context — hardware without one, or a size class or orientation that doesn't use
+one. Apple says the system picks the edge from locale and device. The bar keeps
+its physical side in right-to-left languages, but `HorizontalEdge` is
+`.leading` / `.trailing`, so the value you read changes with the locale. Place
+your own bars from the value rather than from a hard-coded side.
+
 Two behavioral details worth knowing: a vertical bar has no scroll edge effect by
 default, but it *does* get a background when Reduce Transparency is on, so keep
 custom content legible either way. And flexible spacers collapse to zero on the
