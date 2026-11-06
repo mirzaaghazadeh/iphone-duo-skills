@@ -210,6 +210,12 @@ edge for a vertical bar in the current context — **whether or not one is
 visible**. It is not a flag for "are items vertical right now"; use it to align
 your own custom bars with the system's placement.
 
+It is `nil` only where the system never places a vertical bar: hardware without
+one, or a size class or orientation that doesn't use one. It is read-only, and
+the system picks the edge from locale and device. The bar keeps its physical
+side in right-to-left languages, so expect `.leading` and `.trailing` to swap
+with the locale.
+
 Note the naming asymmetry: SwiftUI's default is `.automatic`, UIKit's is
 `.standard`.
 
@@ -323,7 +329,9 @@ say:
 | Read the current facing | `deviceDirections` on the coordinator, or the map passed to the change handler |
 | Group cameras by facing | ⚠ `AVCaptureDeviceDirectionMap` (AVKit) |
 | Pass a device across actors | `AVCaptureDeviceDescriptor` (AVKit) — sendable |
-| Keep captures upright | `AVCaptureDeviceRotationCoordinator` |
+| Keep captures upright | `AVCaptureDevice.RotationCoordinator` (`AVCaptureDeviceRotationCoordinator` in Objective-C) — one per camera |
+| Rotate the preview | `videoRotationAngleForHorizonLevelPreview` → the preview layer connection's `videoRotationAngle` |
+| Rotate photos and movies | `videoRotationAngleForHorizonLevelCapture` → each output's video connection `videoRotationAngle` |
 | Fit the preview | `videoGravity` on `AVCaptureVideoPreviewLayer` |
 | Use the square sensor fully | `dynamicAspectRatio` on `AVCaptureDevice` |
 
@@ -349,5 +357,26 @@ AVFoundation.
 Virtual front camera trade-off: automatic switching, but only the capabilities
 common to both physical cameras — 1080p, 60 fps, and **no depth**.
 
+What *Supporting device rotation in your camera app* says. It's Apple's AVCam
+sample, not an iPhone Duo page, but Tech Talk 111465 links it for rotation:
+
+- A rotation coordinator is **bound to one device for its lifetime**. Switching
+  cameras means making a new one, and a fold switches cameras. Invalidate the
+  old coordinator's observations first, so an angle for the previous camera
+  can't arrive after the new one's.
+- A coordinator created with a `nil` preview layer **never** reports a preview
+  angle, even after a layer exists. Make a new one once the layer is in a window
+  (`didMoveToWindow()` on the view that hosts it), since the coordinator
+  measures the layer's position in the view hierarchy. Creating one with only
+  the device is still useful, because it keeps captures level before a preview
+  appears.
+- The two angles can differ: the preview angle also accounts for where the layer
+  sits in the interface. Both support key-value observing and update on the
+  main queue. Read each once before observing, because an observation reports
+  only later changes.
+- An output added to a session starts at the default angle. Apply the current
+  capture angle every time you add one, for example when switching between
+  photo and video.
+
 Related Apple articles: *Choosing a Camera by the Direction it Faces*,
-*Supporting Device Rotation in Your Camera App*.
+[*Supporting device rotation in your camera app*](https://developer.apple.com/documentation/avfoundation/supporting-device-rotation-in-your-camera-app).

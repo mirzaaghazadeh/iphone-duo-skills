@@ -229,6 +229,18 @@ okudu ve bir düzeltme daha getirdi:
   geri dönen `UISceneAccessoryRegistration` ile erişilebilirlik izlenir ve
   içerik açılıp kapatılır.
 
+Beşinci tur **6 Kasım 2026** tarihinde yapıldı; izleyicinin işaretlediği her
+sayfayı arşivlenmiş bir kopyayla karşılaştırdı. Apple yalnızca metnin sırasını
+değiştirmiş ya da bağlantı eklemişti, ama bu tur iki eksiği kapattı:
+
+- `toolbarVerticalEdge`, yalnızca sistemin hiçbir zaman dikey çubuk
+  yerleştirmediği durumlarda `nil` olur. Çubuk sağdan sola dillerde aynı fiziksel
+  tarafta kaldığından `.leading` / `.trailing` değeri yerel ayara göre değişir.
+- Tech Talk 111465 artık *Supporting device rotation in your camera app*
+  makalesine bağlantı veriyor. Bir rotation coordinator tek bir kameraya
+  bağlıdır; bu yüzden katlamanın yol açtığı her kamera değişikliği yeni bir tane
+  gerektirir.
+
 Düzeltmeler ve hâlâ açık olan çelişkiler API dizininde ⚠ ile işaretlenmiştir.
 
 ## Bakım
@@ -239,7 +251,7 @@ riski, kimse fark etmeden güncelliğini yitirmesidir.
 | Workflow | Ne zaman çalışır | Ne yapar |
 |---|---|---|
 | `validate.yml` | her push ve PR'da | Her `SKILL.md` dosyasının frontmatter'ının geçerli olduğunu, `name` alanının klasör adıyla eşleştiğini ve benzersiz olduğunu, çapraz bağlantıların çözüldüğünü ve npm paketinin hâlâ derlendiğini denetler |
-| `watch-apple-docs.yml` | cuma günleri, 06:00 UTC | 32 Apple sayfasını — ana sayfa, Prepare kontrol listesi, HIG, API referansı, makaleler ve oturumlar — karşılaştırır ve bir şey değiştiğinde `apple-docs` etiketli bir issue açar (ya da mevcut issue'ya yorum yazar) |
+| `watch-apple-docs.yml` | cuma günleri, 06:00 UTC | 33 Apple sayfasını — ana sayfa, Prepare kontrol listesi, HIG, API referansı, makaleler ve oturumlar — karşılaştırır ve bir şey değiştiğinde `apple-docs` etiketli bir issue açar (ya da mevcut issue'ya yorum yazar) |
 | `publish.yml` | her GitHub release'inde | Doğrular, release tag'inin `package.json` sürümüyle eşleştiğini kontrol eder, ardından provenance ile npm'e yayımlar |
 
 İki betik yerelde de çalışır:

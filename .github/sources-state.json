@@ -112,6 +112,12 @@
     "status": 200,
     "url": "https://developer.apple.com/tutorials/data/documentation/avkit/choosing-a-camera-by-the-direction-it-faces.json"
   },
+  "article.camera-rotation": {
+    "hash": "db139151291ca38c",
+    "len": 5845,
+    "status": 200,
+    "url": "https://developer.apple.com/tutorials/data/documentation/avfoundation/supporting-device-rotation-in-your-camera-app.json"
+  },
   "article.capture-accessory": {
     "hash": "2528da0602c148ef",
     "len": 4355,
