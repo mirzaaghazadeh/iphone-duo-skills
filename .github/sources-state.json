@@ -41,8 +41,8 @@
     "url": "https://developer.apple.com/tutorials/data/documentation/swiftui/geometryproxy/reservedregions(kind:options:layoutdirectionbehavior:).json"
   },
   "api.ReservedRegion": {
-    "hash": "10f5cd82cc3ad50e",
-    "len": 8636,
+    "hash": "6021242b8a5e2066",
+    "len": 8624,
     "status": 200,
     "url": "https://developer.apple.com/tutorials/data/documentation/swiftui/reservedregion.json"
   },
@@ -95,8 +95,8 @@
     "url": "https://developer.apple.com/tutorials/data/documentation/uikit/uiview/reservedregions(kind:options:).json"
   },
   "api.UIViewReservedRegion": {
-    "hash": "cc67fab0b69ae3cf",
-    "len": 765,
+    "hash": "50669ffd3c625b20",
+    "len": 6863,
     "status": 200,
     "url": "https://developer.apple.com/tutorials/data/documentation/uikit/uiviewreservedregion.json"
   },
