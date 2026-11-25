@@ -245,6 +245,16 @@ and keep the default layout.
 Gate the feature on the guide being present rather than on the device model, and
 don't read it as a proxy for "this is an iPhone Duo".
 
+The snippet asks for the right edge because this app is portrait only, and the
+bar was on the right on both displays. If your app rotates, don't hard-code the
+side. Read `traitCollection.verticalBarEdge` (iOS 27.1): map `.leading` /
+`.trailing` to the matching `NSDirectionalRectEdge` for
+`.bar(onEdge:extent:)`, and treat `.unspecified` (no vertical bar in this
+context) like `null`. Rebuild the tracker when the edge changes, using
+`registerForTraitChanges(UITraitCollection.systemTraitsAffectingVerticalBarEdge)`.
+`../iphone-duo-vertical-bars/SKILL.md` explains why the edge changes with the
+locale.
+
 ### Reproducing island growth in the simulator
 
 - **What worked:** a throwaway SwiftUI app with a Widget Extension whose widget
