@@ -165,6 +165,9 @@ cp -r iphone-duo-skills/skills/* ~/.claude/skills/
 - `toolbarVerticalEdge` 仅在系统从不放置垂直栏的情况下才为 `nil`。垂直栏在从右到左的语言中保持在同一物理侧，因此其 `.leading` / `.trailing` 取值会随语言区域而变化。
 - Tech Talk 111465 现已链接 *Supporting device rotation in your camera app*。旋转协调器（Rotation Coordinator）只绑定一个摄像头，因此折叠导致的每次摄像头切换都需要新建一个。
 
+**2026 年 11 月 25 日进行了第六轮核验**，通读了 UIKit `UIViewReservedRegion` 的完整文章（其内容与本项目已遵循的 SwiftUI 规则一致），并对照 iOS 27.2 SDK 核对了 UIKit 符号名称。本轮修正了一处：
+- UIKit 的垂直栏 trait 是 **`verticalBarEdge`**，而不是 `toolbarVerticalEdge`。它是非可选的 `UIVerticalBarEdge`，由 `.unspecified` 代替 SwiftUI 中的 `nil`。
+
 在 API 索引文件中，已修正项与争议点均使用 ⚠ 明确标注。
 
 ---
@@ -176,7 +179,7 @@ cp -r iphone-duo-skills/skills/* ~/.claude/skills/
 | 工作流 | 触发时机 | 功能 |
 |---|---|---|
 | `validate.yml` | 每次 Push 和 PR | 检查每个 `SKILL.md` 的 YAML frontmatter、确保 `name` 与目录一致且唯一、检查所有相对 Markdown 链接有效性、验证 npm 包构建配置 |
-| `watch-apple-docs.yml` | 每周五 06:00 UTC | 监控 33 个 Apple 官方页面（主页、Prepare 指南、HIG、API 参考、专题文章及视频讲座），并在发生变更时自动创建或更新标签为 `apple-docs` 的 Issue |
+| `watch-apple-docs.yml` | 每周五 06:00 UTC | 监控 34 个 Apple 官方页面（主页、Prepare 指南、HIG、API 参考、专题文章及视频讲座），并在发生变更时自动创建或更新标签为 `apple-docs` 的 Issue |
 | `publish.yml` | 发布 GitHub Release 时 | 校验内容、确认版本号匹配 `package.json`，并通过带有 Provenance 的流程自动发布至 npm |
 
 本地运行校验与监控脚本：

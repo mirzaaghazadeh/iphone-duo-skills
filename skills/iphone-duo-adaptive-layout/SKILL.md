@@ -115,6 +115,31 @@ frames and the content share coordinates. Two places this bites:
   there and calls it again when the regions change, so you don't need an
   observer of your own.
 
+Apple's `UIViewReservedRegion` page shows the UIKit pattern in Objective-C: turn
+occlusion frames into Auto Layout constants. In Swift, a row of buttons pinned to
+the top moves down below any region that overlaps the strip it needs:
+
+```swift
+final class ControlsView: UIView {
+    private let barHeight: CGFloat = 60
+    let buttonBar = UIView()
+    // Activated in init with the bar's height, leading and trailing constraints.
+    private lazy var barTop = buttonBar.topAnchor.constraint(equalTo: topAnchor)
+
+    override func updateConstraints() {
+        let barArea = CGRect(x: 0, y: 0, width: bounds.width, height: barHeight)
+        barTop.constant = reservedRegions(kind: .occlusion)
+            .filter { $0.frame.intersects(barArea) }
+            .map(\.frame.maxY)
+            .max() ?? 0
+        super.updateConstraints()
+    }
+}
+```
+
+Test against the strip the control needs, not the whole view: an occlusion region
+can be anywhere, and one that doesn't overlap the bar shouldn't move it.
+
 In SwiftUI the query takes a third parameter, `layoutDirectionBehavior`
 (default `.mirrors`), which flips region frames for right-to-left layouts so a
 custom `Layout` doesn't have to. Pass `.fixed` for the physical frames.

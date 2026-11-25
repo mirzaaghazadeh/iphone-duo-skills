@@ -106,6 +106,12 @@
     "status": 200,
     "url": "https://developer.apple.com/tutorials/data/documentation/swiftui/environmentvalues/toolbarverticaledge.json"
   },
+  "api.verticalBarEdge": {
+    "hash": "fdc1aff931f5b1e4",
+    "len": 444,
+    "status": 200,
+    "url": "https://developer.apple.com/tutorials/data/documentation/uikit/uitraitcollection/verticalbaredge.json"
+  },
   "article.camera-direction": {
     "hash": "51641ab1c897d881",
     "len": 8129,

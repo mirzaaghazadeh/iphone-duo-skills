@@ -124,9 +124,9 @@ Opted-in custom views must either fit the bar's fixed width or lay out verticall
 on their own. Revisit their metrics — a control panel might hide its labels and
 shrink slightly when vertical to free up room.
 
-To branch on this, read `toolbarVerticalEdge` (environment value in SwiftUI,
-trait in UIKit). It's readable from the content view or from inside the item's
-own view.
+To branch on this, read the `toolbarVerticalEdge` environment value in SwiftUI,
+or `traitCollection.verticalBarEdge` in UIKit. ⚠ The UIKit trait has a different
+name. It's readable from the content view or from inside the item's own view.
 
 Read the semantics carefully, because they're easy to get backwards. It is a
 `HorizontalEdge?`, and it reports **which edge the system prefers for the
@@ -142,6 +142,12 @@ one. Apple says the system picks the edge from locale and device. The bar keeps
 its physical side in right-to-left languages, but `HorizontalEdge` is
 `.leading` / `.trailing`, so the value you read changes with the locale. Place
 your own bars from the value rather than from a hard-coded side.
+
+UIKit's `verticalBarEdge` means the same thing but isn't optional. It is a
+`UIVerticalBarEdge`, and `.unspecified` stands in for `nil`. To hear when it
+changes, pass `UITraitCollection.systemTraitsAffectingVerticalBarEdge` to
+`registerForTraitChanges(_:handler:)`. Apple notes the handler can fire when the
+edge itself hasn't moved, so compare the new value with the old one.
 
 Two behavioral details worth knowing: a vertical bar has no scroll edge effect by
 default, but it *does* get a background when Reduce Transparency is on, so keep

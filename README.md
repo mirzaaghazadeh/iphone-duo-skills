@@ -220,6 +220,14 @@ pass filled two gaps:
   rotation coordinator is bound to one camera, so each camera switch a fold
   causes needs a new one.
 
+A sixth pass on **25 November 2026** read the full UIKit `UIViewReservedRegion`
+article, which repeats the SwiftUI rules this repo already followed, and
+checked UIKit names against the iOS 27.2 SDK. It corrected one:
+
+- UIKit's vertical-bar trait is **`verticalBarEdge`**, not `toolbarVerticalEdge`.
+  It is a non-optional `UIVerticalBarEdge`, and `.unspecified` takes the place
+  of SwiftUI's `nil`.
+
 Corrections and open conflicts are marked ⚠ in the API index.
 
 `scripts/fetch-transcripts.py` re-fetches the Tech Talk transcripts from the
@@ -234,7 +242,7 @@ drifting out of date without anyone noticing.
 | Workflow | Runs | Does |
 |---|---|---|
 | `validate.yml` | every push and PR | Checks every `SKILL.md` has valid frontmatter, that `name` matches its directory and is unique, that cross-references resolve, and that the npm package still builds |
-| `watch-apple-docs.yml` | Fridays, 06:00 UTC | Diffs 33 Apple pages — the landing page, Prepare checklist, HIG, API reference, articles and sessions — and opens (or comments on) an issue labelled `apple-docs` when something changes |
+| `watch-apple-docs.yml` | Fridays, 06:00 UTC | Diffs 34 Apple pages — the landing page, Prepare checklist, HIG, API reference, articles and sessions — and opens (or comments on) an issue labelled `apple-docs` when something changes |
 | `publish.yml` | on a GitHub release | Validates, checks the tag matches `package.json`, then publishes to npm with provenance |
 
 Both scripts run locally too:
