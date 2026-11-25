@@ -241,6 +241,14 @@ ajouter des liens, mais la passe a comblé deux lacunes :
   camera app*. Un rotation coordinator est lié à une seule caméra : chaque
   changement de caméra provoqué par un pliage en demande un nouveau.
 
+Une sixième passe, le **25 novembre 2026**, a lu l'article UIKit complet
+`UIViewReservedRegion`, qui reprend les règles SwiftUI déjà suivies ici, et a
+vérifié les noms UIKit dans le SDK iOS 27.2. Elle a corrigé un point :
+
+- Le trait UIKit de la barre verticale est **`verticalBarEdge`**, et non
+  `toolbarVerticalEdge`. C'est un `UIVerticalBarEdge` non optionnel, où
+  `.unspecified` remplace le `nil` de SwiftUI.
+
 Les corrections et les contradictions encore ouvertes sont signalées par ⚠ dans
 l'index des API.
 
@@ -252,7 +260,7 @@ comme celui-ci est de se périmer sans que personne ne s'en aperçoive.
 | Workflow | Exécution | Rôle |
 |---|---|---|
 | `validate.yml` | à chaque push et PR | Vérifie que chaque `SKILL.md` a un frontmatter valide, que `name` correspond à son dossier et est unique, que les renvois sont résolus, et que le paquet npm se construit toujours |
-| `watch-apple-docs.yml` | le vendredi, 06:00 UTC | Compare 33 pages Apple — la page d'accueil, la checklist Prepare, la HIG, la référence d'API, les articles et les sessions — et ouvre (ou commente) une issue étiquetée `apple-docs` quand quelque chose change |
+| `watch-apple-docs.yml` | le vendredi, 06:00 UTC | Compare 34 pages Apple — la page d'accueil, la checklist Prepare, la HIG, la référence d'API, les articles et les sessions — et ouvre (ou commente) une issue étiquetée `apple-docs` quand quelque chose change |
 | `publish.yml` | à chaque release GitHub | Valide, vérifie que le tag correspond à `package.json`, puis publie sur npm avec provenance |
 
 Les deux scripts fonctionnent aussi en local :

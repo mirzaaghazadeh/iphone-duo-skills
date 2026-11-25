@@ -6,7 +6,9 @@ the framework and the minimum SDK. Use this as a lookup table; the skills in
 
 > **Verified against the published API reference on 25 September 2026, and
 > again on 23 October 2026** after Apple expanded the reserved-region and
-> arrangement pages into full articles. The signatures below are taken from the
+> arrangement pages into full articles, and on 25 November 2026, when the UIKit
+> region page caught up. UIKit symbol names were also checked against the
+> iOS 27.2 SDK that day. The signatures below are taken from the
 > reference rather than from the Tech Talk sessions. Where the two disagree, or
 > where the reference corrected an earlier reading, the line is marked ⚠.
 
@@ -106,7 +108,9 @@ type and the method pages, that the default returns only active regions — whic
 matches the Tech Talks. Filtering on `isActive` is still the right habit once you
 pass `.includeInactive`.
 
-Coordinates, from the October reference:
+Coordinates, from the October reference. Since November `UIViewReservedRegion`
+says the same for UIKit, except for the `Layout` and `Identifiable` points,
+which are SwiftUI's:
 
 - `frame` is in the **queried view's own coordinate space**, in points, with
   `(0, 0)` at its top-leading corner. Only regions that overlap the view come
@@ -118,7 +122,10 @@ Coordinates, from the October reference:
 - Query in the view that positions the content, so the frames and the content
   share coordinates.
 - UIKit tracks the regions you read in `updateConstraints()` and calls it again
-  when they change — the natural place to read them.
+  when they change — the natural place to read them. The class page's example
+  keeps only the occlusion frames that intersect the strip a control needs, and
+  sets a constraint's `constant` to the largest `maxY` among them, so the
+  control sits below the lowest one.
 - `ReservedRegion` is `Identifiable`; its `ReservedRegion.ID` is stable across
   queries, so it can drive a `ForEach` or tell an old region from a new one.
 
@@ -185,7 +192,7 @@ not considered.
 | Custom back/close | `ToolbarItem` with `cancellationAction` placement | an item in `leadingItemGroups: [UIBarButtonItemGroup]` |
 | Prominent action | `topBarPinnedTrailing` placement | `pinnedTrailingGroup` |
 | Force an axis | `.axisBehavior(_:)` taking a `ToolbarItemAxisBehavior` | `UIBarButtonItem.axisBehavior` of type `UIBarButtonItem.AxisBehavior` |
-| Detect a vertical bar | `toolbarVerticalEdge` environment value | `toolbarVerticalEdge` trait |
+| Detect a vertical bar | `toolbarVerticalEdge` environment value | ⚠ `traitCollection.verticalBarEdge` |
 | Consolidate overflow | `ToolbarOverflowMenu` | `UINavigationItem.additionalOverflowItems`, a `UIDeferredMenuElement?` |
 | Control collapse order | `ToolbarItemVisibilityPriority` | `UIBarButtonItemVisibilityPriority` |
 | Group items (instead of manual spacers) | `ToolbarItemGroup` | `UIBarButtonItemGroup` |
@@ -204,6 +211,7 @@ deployment target.** The toolbar APIs are older than the foldable-specific ones:
 | `UIBarButtonItemVisibilityPriority` (`.standard` / `.low` / `.high`, plus `init(rawValue:)`) | iOS 27.0 |
 | `ToolbarOverflowMenu` | iOS 27.0 |
 | `toolbarVerticalEdge` | **iOS 27.1** |
+| `UITraitCollection.verticalBarEdge` (`UIVerticalBarEdge`) | **iOS 27.1** |
 
 ⚠ `toolbarVerticalEdge` is a `HorizontalEdge?` reporting the system's *preferred*
 edge for a vertical bar in the current context — **whether or not one is
@@ -215,6 +223,14 @@ one, or a size class or orientation that doesn't use one. It is read-only, and
 the system picks the edge from locale and device. The bar keeps its physical
 side in right-to-left languages, so expect `.leading` and `.trailing` to swap
 with the locale.
+
+⚠ UIKit has **no `toolbarVerticalEdge` trait**, although this index listed one
+until November 2026. It has `UITraitCollection.verticalBarEdge`, a non-optional
+`UIVerticalBarEdge` (`.leading`, `.trailing`, `.unspecified`) with the same
+meaning. `.unspecified` takes the place of `nil`. Pass
+`UITraitCollection.systemTraitsAffectingVerticalBarEdge` to
+`registerForTraitChanges(_:handler:)` to hear about changes. The SDK warns that
+the handler can fire while the edge stays the same.
 
 Note the naming asymmetry: SwiftUI's default is `.automatic`, UIKit's is
 `.standard`.

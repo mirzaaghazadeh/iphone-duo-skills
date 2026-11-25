@@ -56,6 +56,9 @@ SOURCES: list[tuple[str, str, str]] = [
     ("api.GeometryProxy.reservedRegions", "docc", DOCC + "documentation/swiftui/geometryproxy/reservedregions(kind:options:layoutdirectionbehavior:).json"),
     ("api.UISplitArrangement", "docc", DOCC + "documentation/uikit/uisplitarrangement-swift.struct.json"),
     ("api.UIOverlayArrangement", "docc", DOCC + "documentation/uikit/uioverlayarrangement-swift.struct.json"),
+    # UIKit's counterpart to toolbarVerticalEdge, which api-index.md had named
+    # toolbarVerticalEdge until November 25, 2026.
+    ("api.verticalBarEdge", "docc", DOCC + "documentation/uikit/uitraitcollection/verticalbaredge.json"),
     # Added with the capture-accessory article: UIKit has no
     # CameraCaptureAccessory, and api-index.md now cites these instead.
     ("api.UISceneAccessory", "docc", DOCC + "documentation/uikit/uisceneaccessory.json"),

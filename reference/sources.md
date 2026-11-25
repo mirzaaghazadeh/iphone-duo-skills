@@ -179,6 +179,30 @@ so these are the real changes:
   so link discovery missed it. The watcher now tracks it and also reads each
   session's Resources list.
 
+Re-checked **November 25, 2026**, after the watcher flagged two pages on
+November 20:
+
+- [`UIViewReservedRegion`](https://developer.apple.com/documentation/uikit/uiviewreservedregion)
+  grew from a 765-character stub to a full article (+6,098). It is the UIKit
+  version of the October `ReservedRegion` article, with every section except
+  right-to-left and identity. Its rules were already recorded here from the
+  SwiftUI article and the UIKit method page. The new part is an Objective-C
+  example that reads occlusion regions in `updateConstraints()` and moves a
+  button bar below them through a constraint's `constant`. The adaptive-layout
+  skill now has a Swift version, typechecked against the iOS 27.2 SDK.
+- [`ReservedRegion`](https://developer.apple.com/documentation/swiftui/reservedregion)
+  lost 12 characters. The only archived copy predates the October rewrite, so
+  the exact edit can't be recovered. Each claim the repo takes from the page
+  was checked against the current text, and all still hold.
+
+The same pass found an error in this repo, not in Apple's pages. `api-index.md`
+and the vertical-bars skill called UIKit's vertical-bar trait
+`toolbarVerticalEdge`. The iOS 27.2 SDK and the reference call it
+[`verticalBarEdge`](https://developer.apple.com/documentation/uikit/uitraitcollection/verticalbaredge),
+a non-optional [`UIVerticalBarEdge`](https://developer.apple.com/documentation/uikit/uiverticalbaredge)
+with `.unspecified` in place of `nil`. Both files now use that name, and the
+watcher tracks the trait's page.
+
 ## Developer article
 
 - [Preparing your app for iPhone Duo](https://developer.apple.com/documentation/technologyoverviews/preparing-your-app-for-iphone-duo)

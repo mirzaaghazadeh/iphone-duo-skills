@@ -241,6 +241,15 @@ değiştirmiş ya da bağlantı eklemişti, ama bu tur iki eksiği kapattı:
   bağlıdır; bu yüzden katlamanın yol açtığı her kamera değişikliği yeni bir tane
   gerektirir.
 
+Altıncı tur **25 Kasım 2026** tarihinde yapıldı; UIKit `UIViewReservedRegion`
+makalesinin tamamını okudu (bu repoda zaten izlenen SwiftUI kurallarını
+tekrarlıyor) ve UIKit adlarını iOS 27.2 SDK'sıyla karşılaştırdı. Bir noktayı
+düzeltti:
+
+- UIKit'in dikey çubuk trait'i `toolbarVerticalEdge` değil,
+  **`verticalBarEdge`**'dir. İsteğe bağlı olmayan bir `UIVerticalBarEdge`
+  türündedir; SwiftUI'daki `nil`'in yerini `.unspecified` alır.
+
 Düzeltmeler ve hâlâ açık olan çelişkiler API dizininde ⚠ ile işaretlenmiştir.
 
 ## Bakım
@@ -251,7 +260,7 @@ riski, kimse fark etmeden güncelliğini yitirmesidir.
 | Workflow | Ne zaman çalışır | Ne yapar |
 |---|---|---|
 | `validate.yml` | her push ve PR'da | Her `SKILL.md` dosyasının frontmatter'ının geçerli olduğunu, `name` alanının klasör adıyla eşleştiğini ve benzersiz olduğunu, çapraz bağlantıların çözüldüğünü ve npm paketinin hâlâ derlendiğini denetler |
-| `watch-apple-docs.yml` | cuma günleri, 06:00 UTC | 33 Apple sayfasını — ana sayfa, Prepare kontrol listesi, HIG, API referansı, makaleler ve oturumlar — karşılaştırır ve bir şey değiştiğinde `apple-docs` etiketli bir issue açar (ya da mevcut issue'ya yorum yazar) |
+| `watch-apple-docs.yml` | cuma günleri, 06:00 UTC | 34 Apple sayfasını — ana sayfa, Prepare kontrol listesi, HIG, API referansı, makaleler ve oturumlar — karşılaştırır ve bir şey değiştiğinde `apple-docs` etiketli bir issue açar (ya da mevcut issue'ya yorum yazar) |
 | `publish.yml` | her GitHub release'inde | Doğrular, release tag'inin `package.json` sürümüyle eşleştiğini kontrol eder, ardından provenance ile npm'e yayımlar |
 
 İki betik yerelde de çalışır:
